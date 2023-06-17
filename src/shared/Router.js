@@ -20,7 +20,7 @@ function Router() {
         <Route path="/roomlist" element={<RoomList />} />
         {/* <Route path="/room/:id" element={<OneRoom />} /> */}
 
-        <Route path="/auth" element={<Kakao />} />
+        <Route path="/auth/kakao/callback" element={<Kakao />} />
         <Route path="/socialkakao" element={<SocialKakao />} />
       </Routes>
     </BrowserRouter>
