@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 function Header() {
   return (
@@ -9,9 +10,12 @@ function Header() {
           Title
         </div>
       </div>
-      <button className="mr-[98px] bg-[#2F3131] text-white py-[12px] px-[20px] rounded-[50px] text-[16px]">
+      <Link
+        to="/SocialKakao"
+        className="mr-[98px] bg-[#2F3131] text-white py-[12px] px-[20px] rounded-[50px] text-[16px]"
+      >
         로그인
-      </button>
+      </Link>
     </div>
   );
 }
