@@ -16,7 +16,9 @@ const SocialKakao = () => {
 
   const REDIRECT_URI = "http://localhost:3000/auth/kakao/callback"; //Redirect URI
 
-  const CLIENT_ID = `${process.env.REACT_APP_KAKAO_REDIRECT_URL}`; //REST API KEY
+  //https://front-black-delta.vercel.app/SocialKakao
+
+  const CLIENT_ID = `${process.env.REACT_APP_KAKAO_REDIRECT_URL}`; //REST API KEY 나중에 이름변경
   const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=code`;
   const handleLogin = () => {
     window.location.href = KAKAO_AUTH_URL;
