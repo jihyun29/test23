@@ -1,3 +1,13 @@
+# Branch
+- dev : Main에 Merge전 Test하는 branch
+- jungwoon : 정운님의 작업사항 올리는 branch
+- jihyun : 지현님의 작업사항 올리는 branch
+
+# merge 순서
+1. 각자 branch에 push
+2. dev에 merge 후 test 진행
+3. Test 결과 성공시 main에 최종 merge진행
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
