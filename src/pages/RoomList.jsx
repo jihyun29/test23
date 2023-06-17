@@ -4,6 +4,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 function RoomList() {
   const navigate = useNavigate();
   const { state } = useLocation();
+  console.log(state);
   const titleList = [
     "연애 중 초능력을 가지면 좋곘는가?",
     "연애 시 비밀번호를 공유해야 하는가?",
