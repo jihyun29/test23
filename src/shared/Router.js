@@ -6,6 +6,8 @@ import Home from "../pages/Home";
 // import OneRoom from "../pages/OneRoom";
 import Room from "../pages/Room";
 import RoomList from "../pages/RoomList";
+import Kakao from "../components/feature/Kakao";
+import SocialKakao from "../components/feature/SocialKakao";
 
 function Router() {
   return (
@@ -17,6 +19,9 @@ function Router() {
         <Route path="/room" element={<Room />} />
         <Route path="/roomlist" element={<RoomList />} />
         {/* <Route path="/room/:id" element={<OneRoom />} /> */}
+
+        <Route path="/auth" element={<Kakao />} />
+        <Route path="/socialkakao" element={<SocialKakao />} />
       </Routes>
     </BrowserRouter>
   );
