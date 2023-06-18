@@ -46,15 +46,15 @@ function Category() {
   return (
     <>
       <Header />
-      <div className="flex w-full h-full">
+      <div className="flex w-full h-[80%]">
         <div className="w-[25%] h-full overflow-hidden">
           <button
             onClick={goHomeHandler}
-            className="text-[#777777] text-[18px] font-bold mt-[97px] ml-[108px]"
+            className="text-[#777777] text-[18px] font-bold mt-[10%] ml-[108px]"
           >
             ← 메인으로
           </button>
-          <div className="flex flex-col justify-between w-[320px] h-[160px] ml-[40px] px-[20px] border mt-[110px] bg-[#F1F1F1] rounded-[24px]">
+          <div className="flex flex-col justify-between w-[320px] h-[160px] ml-[40px] px-[20px] border mt-[30%] bg-[#F1F1F1] rounded-[24px]">
             <p className="mt-[26px] text-[#777777] text-[23px]">
               지금 가장 많은 사람들이 선택한 토론방은{" "}
               <span className="bg-black text-white w-fit px-[8px] rounded-[8px] mt-[5px] mr-[0px]">
@@ -67,11 +67,11 @@ function Category() {
             </button>
           </div>
         </div>
-        <div className="flex flex-col items-center w-[50%] h-full">
-          <p className="mt-[131px] font-semibold text-[32px] text-[#2F3131] font-mono">
+        <div className="flex flex-col justify-evenly items-center w-[50%] h-full">
+          <p className="font-semibold text-[32px] text-[#2F3131] font-mono">
             입장하고픈 토론방의 분야를 선택해주세요
           </p>
-          <div className="grid grid-cols-3 w-[664px] h-[664px] mt-[67px] gap-3">
+          <div className="grid grid-cols-3 w-[664px] h-[664px] gap-3">
             {categoryList.map((category, index) => {
               return (
                 <CategoryCard
@@ -84,11 +84,11 @@ function Category() {
               );
             })}
           </div>
-          <div className="flex justify-center w-full ">
+          <div className="flex justify-center items-center w-full">
             <button
               // disabled
               onClick={enterRoomList}
-              className="bg-black text-white mt-[67px] px-[173px] py-[40px] rounded-[60px] text-[24px] font-bold"
+              className="bg-black text-white px-[173px] py-[40px] rounded-[60px] text-[24px] font-bold"
             >
               입장하기
             </button>

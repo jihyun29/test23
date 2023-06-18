@@ -10,7 +10,7 @@ function Home() {
   return (
     <>
       <Header />
-      <div className="flex flex-col w-full h-full justify-between">
+      <div className="flex flex-col w-full h-[80%] justify-between">
         <div className="flex flex-col items-center w-full h-[288px] mt-[129px]">
           <p className="text-[48px] text-[#1B1B1B] font-[900]">
             말 많고 입이 멈추질 않는 프로펠러 돌아가는 소리가 들리는 사람에게
