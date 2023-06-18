@@ -1,6 +1,5 @@
 import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Header from "../components/Header";
 import Category from "../pages/Category";
 import Home from "../pages/Home";
 // import OneRoom from "../pages/OneRoom";
@@ -12,7 +11,6 @@ import SocialKakao from "../pages/kakaoLogin/SocialKakao";
 function Router() {
   return (
     <BrowserRouter>
-      <Header />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/category" element={<Category />} />
