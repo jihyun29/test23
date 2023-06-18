@@ -1,6 +1,6 @@
 # Branch
 - dev : Main에 Merge전 Test하는 branch
-- jungwoon : dev brach backup 용
+- backUp : dev brach backup 용
 - jihyun : 지현님의 작업사항 올리는 branch
 
 # merge 순서
