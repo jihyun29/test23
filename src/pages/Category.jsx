@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import * as icons from "../icons";
 
 function Category() {
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const id = [1, 2, 3, 4, 5, 6, 7, 8, 9];
   const categoryList = [
     "프로게이머",
     "연예/이슈",
@@ -27,11 +29,15 @@ function Category() {
   ];
   const example = "회사생활";
   const navigate = useNavigate();
-  const inviteRoomHandler = () => {
-    navigate("/roomlist", { state: "연애" });
+  const enterRoomList = () => {
+    navigate("/roomlist", { state: selectedCategory });
   };
   const goHomeHandler = () => {
     navigate(`/`);
+  };
+  const categoryBtnClickHandler = (category) => {
+    setSelectedCategory(category);
+    console.log(selectedCategory);
   };
   return (
     <div className="flex w-full h-full">
@@ -60,13 +66,22 @@ function Category() {
           입장하고픈 토론방의 분야를 선택해주세요
         </p>
         <div className="grid grid-cols-3 w-[664px] h-[664px] mt-[67px] gap-3">
-          {categoryList.map((category, index) => (
-            <CategoryCard category={category} icon={iconList[index]} />
-          ))}
+          {categoryList.map((category, index) => {
+            return (
+              <CategoryCard
+                key={id[index]}
+                category={category}
+                selectedCategory={selectedCategory}
+                icon={iconList[index]}
+                onClickHandler={categoryBtnClickHandler}
+              />
+            );
+          })}
         </div>
         <div className="flex justify-center w-full ">
           <button
-            onClick={inviteRoomHandler}
+            // disabled
+            onClick={enterRoomList}
             className="bg-black text-white mt-[67px] px-[173px] py-[40px] rounded-[60px] text-[24px] font-bold"
           >
             입장하기
@@ -81,13 +96,31 @@ function Category() {
 export default Category;
 
 //components로 빼야될 것
-const CategoryCard = ({ category, icon = null }) => {
+const CategoryCard = ({
+  selectedCategory,
+  category,
+  icon = null,
+  onClickHandler,
+}) => {
+  const bgStyle =
+    selectedCategory === category
+      ? "flex flex-col items-center border rounded-[24px] bg-[#2F3131]"
+      : "flex flex-col items-center border rounded-[24px] bg-[#F1F1F1]";
+  const ftStyle =
+    selectedCategory === category
+      ? "mt-[13.3px] text-[18px] font-bold text-[#33F39E]"
+      : "mt-[13.3px] text-[18px] font-bold text-[#777777]";
   return (
-    <div className=" flex flex-col items-center border border-[#F1F1F1] rounded-[24px]">
+    <div
+      onClick={() => {
+        console.log(category);
+        onClickHandler(category);
+      }}
+      className={bgStyle}
+    >
       <div className="w-[80px] h-[80px] mt-[41.6px] rounded-[20px]">{icon}</div>
-      <p className="mt-[13.3px] text-[18px] font-bold text-[#777777]">
-        {category}
-      </p>
+
+      <p className={ftStyle}>{category}</p>
     </div>
   );
 };
