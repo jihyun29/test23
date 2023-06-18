@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import Header from "../components/Header";
 
 function RoomList() {
   const navigate = useNavigate();
   const { state } = useLocation();
+  console.log(state);
   const titleList = [
     "연애 중 초능력을 가지면 좋곘는가?",
     "연애 시 비밀번호를 공유해야 하는가?",
@@ -89,38 +91,43 @@ function RoomList() {
   };
 
   return (
-    <div className="flex flex-col w-full h-full">
-      <div className="flex flex-col w-full h-[20%] border border-black gap-4">
-        <div className="mx-auto mt-5">
-          <p>{state}</p>
+    <>
+      <Header />
+      <div className="flex flex-col w-full h-full">
+        <div className="w-full h-[112px] border border-green-500"></div>
+        <div className="flex flex-col w-full h-[240px] border border-red-500 gap-4">
+          <div className="mx-auto mt-5">
+            <p>{state}</p>
+          </div>
+          <div className="flex flex-col mr-auto gap-3">
+            <button
+              onClick={goCategoryBtnClick}
+              className="bg-slate-300 ml-[20px] p-[12px] rounded-lg"
+            >
+              카테고리로
+            </button>
+            <button
+              onClick={createRoomBtnClick}
+              className="bg-slate-300 ml-[20px] p-[12px] rounded-lg"
+            >
+              방 생성하기
+            </button>
+          </div>
         </div>
-        <div className="flex flex-col mr-auto gap-3">
-          <button
-            onClick={goCategoryBtnClick}
-            className="bg-slate-300 ml-[20px] p-[12px] rounded-lg"
-          >
-            카테고리로
-          </button>
-          <button
-            onClick={createRoomBtnClick}
-            className="bg-slate-300 ml-[20px] p-[12px] rounded-lg"
-          >
-            방 생성하기
-          </button>
+        <div className="w-full h-[84px]"></div>
+        <div className="flex flex-col w-full h-[756px] border border-blue-500 gap-[10px] overflow-auto p-3">
+          {roomList.map((item) => (
+            <ListOne
+              key={item.roomNumber}
+              title={item.title}
+              talker={item.talker}
+              listener={item.listener}
+              roomNumber={item.roomNumber}
+            />
+          ))}
         </div>
       </div>
-      <div className="flex flex-col w-full h-full border border-black gap-[10px] overflow-auto p-3">
-        {roomList.map((item) => (
-          <ListOne
-            key={item.roomNumber}
-            title={item.title}
-            talker={item.talker}
-            listener={item.listener}
-            roomNumber={item.roomNumber}
-          />
-        ))}
-      </div>
-    </div>
+    </>
   );
 }
 

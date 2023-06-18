@@ -7,5 +7,17 @@ import { ReactComponent as Learning } from "./learning.svg";
 import { ReactComponent as Work } from "./work.svg";
 import { ReactComponent as Food } from "./food.svg";
 import { ReactComponent as Surprise } from "./surprise.svg";
+import { ReactComponent as LoginLogo } from "./loginLogo.svg";
 
-export { Sports, Game, Idol, Strange, Couple, Learning, Work, Food, Surprise };
+export {
+  Sports,
+  Game,
+  Idol,
+  Strange,
+  Couple,
+  Learning,
+  Work,
+  Food,
+  Surprise,
+  LoginLogo,
+};
