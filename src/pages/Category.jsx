@@ -35,7 +35,9 @@ function Category() {
       return alert("카테고리를 선택해주세요.");
     } else if (selectedCategory === "랜덤") {
       const randomNumber = Math.round(Math.random() * 7);
-      const randomSubject = categoryList[randomNumber];
+      const randomSubject = categoryList.filter((item) => item !== "랜덤")[
+        randomNumber
+      ];
       return navigate("/roomlist", { state: randomSubject });
     }
     navigate("/roomlist", { state: selectedCategory });
@@ -45,7 +47,6 @@ function Category() {
   };
   const categoryBtnClickHandler = (category) => {
     setSelectedCategory(category);
-    console.log(selectedCategory);
   };
   return (
     <>
@@ -124,7 +125,6 @@ const CategoryCard = ({
   return (
     <div
       onClick={() => {
-        console.log(category);
         onClickHandler(category);
       }}
       className={bgStyle}
