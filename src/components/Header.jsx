@@ -1,11 +1,14 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { Debate } from "../icons";
 
 function Header() {
   return (
     <div className="flex justify-between items-center w-full h-[72px] border-b border-[#DEE5ED]">
-      <div className="flex items-center ml-[98px] gap-[9px]">
-        <div className="text-[38px]">🍔</div>
+      <div className="flex items-center ml-[98px] gap-[15px]">
+        <div className="w-[38px] h-[38px]">
+          <Debate />
+        </div>
         <div className="text-[20px] text-[#ABABAB] font-[700] leading-[24px]">
           Title
         </div>

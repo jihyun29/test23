@@ -31,6 +31,9 @@ function Category() {
   const example = "회사생활";
   const navigate = useNavigate();
   const enterRoomList = () => {
+    if (selectedCategory === null) {
+      return alert("카테고리를 선택해주세요.");
+    }
     navigate("/roomlist", { state: selectedCategory });
   };
   const goHomeHandler = () => {
