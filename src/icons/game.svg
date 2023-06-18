@@ -1,7 +1,7 @@
 <svg width="80" height="80">
- <g class="layer">
+ <g className="layer">
   <title>Layer 1</title>
-  <g id="svg_1">
+  <g id="svg_1" stroke="white">
    <path d="m1,79.13l63.01,0l0,-22.68l-63.01,0l0,22.68zm2.52,-20.16l57.97,0l0,17.64l-57.97,0l0,-17.64z" id="svg_2"/>
    <rect height="2.52" id="svg_3" width="2.52" x="6.04" y="71.57"/>
    <rect height="2.52" id="svg_4" width="2.52" x="11.08" y="71.57"/>
