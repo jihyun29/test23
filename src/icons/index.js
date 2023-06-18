@@ -8,6 +8,7 @@ import { ReactComponent as Work } from "./work.svg";
 import { ReactComponent as Food } from "./food.svg";
 import { ReactComponent as Surprise } from "./surprise.svg";
 import { ReactComponent as LoginLogo } from "./loginLogo.svg";
+import { ReactComponent as Debate } from "./debate.svg";
 
 export {
   Sports,
@@ -20,4 +21,5 @@ export {
   Food,
   Surprise,
   LoginLogo,
+  Debate,
 };
