@@ -2,7 +2,7 @@ import Router from "./shared/Router";
 
 function App() {
   return (
-    <div className="w-[1440px] h-[1264px] mx-auto">
+    <div className="flex flex-col justify-center items-center w-[1440px] h-[1264px] mx-auto">
       <Router />
     </div>
   );
