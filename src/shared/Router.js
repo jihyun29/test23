@@ -6,8 +6,8 @@ import Home from "../pages/Home";
 // import OneRoom from "../pages/OneRoom";
 import Room from "../pages/Room";
 import RoomList from "../pages/RoomList";
-import Kakao from "../components/feature/Kakao";
-import SocialKakao from "../components/feature/SocialKakao";
+import Kakao from "../pages/kakaoLogin/Kakao";
+import SocialKakao from "../pages/kakaoLogin/SocialKakao";
 
 function Router() {
   return (
