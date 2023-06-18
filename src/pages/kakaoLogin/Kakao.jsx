@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import axios from "axios";
 import { useCookies } from "react-cookie";
-import Home from "../Home";
 
 const Kakao = (props) => {
   const [cookie, setCookie, removeCookie] = useCookies(["authorization"]);

@@ -8,6 +8,7 @@ import RoomList from "../pages/RoomList";
 import Kakao from "../pages/kakaoLogin/Kakao";
 import SocialKakao from "../pages/kakaoLogin/SocialKakao";
 import Footer from "../components/Footer";
+import Prompt from "../components/feature/Prompt";
 
 function Router() {
   return (
@@ -25,6 +26,7 @@ function Router() {
           <Route path="/prompt" element={<Prompt />} />
         </Routes>
       </BrowserRouter>
+      <Footer />
     </>
   );
 }
