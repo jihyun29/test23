@@ -11,7 +11,7 @@ function Category() {
     "연예/이슈",
     "스포츠/운동",
     "병맛",
-    "연애/결혼/육아",
+    "랜덤",
     "교양",
     "회사생활",
     "음식/요리/맛집",
@@ -33,6 +33,10 @@ function Category() {
   const enterRoomList = () => {
     if (selectedCategory === null) {
       return alert("카테고리를 선택해주세요.");
+    } else if (selectedCategory === "랜덤") {
+      const randomNumber = Math.round(Math.random() * 7);
+      const randomSubject = categoryList[randomNumber];
+      return navigate("/roomlist", { state: randomSubject });
     }
     navigate("/roomlist", { state: selectedCategory });
   };

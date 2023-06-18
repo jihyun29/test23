@@ -1,8 +1,21 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Debate } from "../icons";
+import { Profile } from "../icons";
 
 function Header() {
+  const userIcon = localStorage.getItem("authorization") ? (
+    <div className="mr-[98px]">
+      <Profile />
+    </div>
+  ) : (
+    <Link
+      to="/SocialKakao"
+      className="mr-[98px] bg-[#2F3131] text-white py-[12px] px-[20px] rounded-[50px] text-[16px]"
+    >
+      로그인
+    </Link>
+  );
   return (
     <div className="flex justify-between items-center w-full h-[7%] border-b border-[#DEE5ED]">
       <div className="flex items-center ml-[98px] gap-[15px]">
@@ -13,12 +26,7 @@ function Header() {
           Title
         </div>
       </div>
-      <Link
-        to="/SocialKakao"
-        className="mr-[98px] bg-[#2F3131] text-white py-[12px] px-[20px] rounded-[50px] text-[16px]"
-      >
-        로그인
-      </Link>
+      {userIcon}
     </div>
   );
 }
