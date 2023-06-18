@@ -4,7 +4,6 @@ import * as icons from "../icons";
 
 function Category() {
   const [selectedCategory, setSelectedCategory] = useState(null);
-  const [selectedCategoryId, setSelectedCategoryId] = useState(0);
   const id = [1, 2, 3, 4, 5, 6, 7, 8, 9];
   const categoryList = [
     "프로게이머",
@@ -36,8 +35,7 @@ function Category() {
   const goHomeHandler = () => {
     navigate(`/`);
   };
-  const categoryBtnClickHandler = (id, category) => {
-    setSelectedCategoryId(id);
+  const categoryBtnClickHandler = (category) => {
     setSelectedCategory(category);
     console.log(selectedCategory);
   };
@@ -72,9 +70,8 @@ function Category() {
             return (
               <CategoryCard
                 key={id[index]}
-                id={id[index]}
-                selectedId={selectedCategoryId}
                 category={category}
+                selectedCategory={selectedCategory}
                 icon={iconList[index]}
                 onClickHandler={categoryBtnClickHandler}
               />
@@ -83,6 +80,7 @@ function Category() {
         </div>
         <div className="flex justify-center w-full ">
           <button
+            // disabled
             onClick={enterRoomList}
             className="bg-black text-white mt-[67px] px-[173px] py-[40px] rounded-[60px] text-[24px] font-bold"
           >
@@ -99,25 +97,24 @@ export default Category;
 
 //components로 빼야될 것
 const CategoryCard = ({
-  id,
-  selectedId,
+  selectedCategory,
   category,
   icon = null,
   onClickHandler,
 }) => {
   const bgStyle =
-    selectedId === id
+    selectedCategory === category
       ? "flex flex-col items-center border rounded-[24px] bg-[#2F3131]"
       : "flex flex-col items-center border rounded-[24px] bg-[#F1F1F1]";
   const ftStyle =
-    selectedId === id
+    selectedCategory === category
       ? "mt-[13.3px] text-[18px] font-bold text-[#33F39E]"
       : "mt-[13.3px] text-[18px] font-bold text-[#777777]";
   return (
     <div
       onClick={() => {
-        console.log(id, category);
-        onClickHandler(id, category);
+        console.log(category);
+        onClickHandler(category);
       }}
       className={bgStyle}
     >
