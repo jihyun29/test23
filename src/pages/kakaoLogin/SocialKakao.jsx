@@ -1,31 +1,41 @@
 //socialKaka0
-
+import { useEffect } from "react";
 import React from "react";
 import { LoginLogo } from "../../icons";
+import { useNavigate } from "react-router-dom";
+import { useCookies } from "react-cookie";
+import { useLocation } from "react-router-dom";
+import queryString from "query-string";
 
 //restapi 방법
 const SocialKakao = () => {
-  // const Rest_api_key = process.env.REACT_APP_KAKAO_REDIRECT_URL; //REST API KEY
-  // // const Rest_api_key = ""; //REST API KEY
-  // const redirect_uri = "http://localhost:3000/auth"; //Redirect URI
+  const [cookie, setCookie, removeCookie] = useCookies(["authorization"]);
 
-  // // oauth 요청 URL
-  // const kakaoURL = `https://kauth.kakao.com/oauth/authorize?client_id=${Rest_api_key}&redirect_uri=${redirect_uri}&response_type=code`;
-  // const handleLogin = () => {
-  //   window.location.href = kakaoURL;
-  // };
+  const navigate = useNavigate();
 
-  const REDIRECT_URI =
-    "https://front-black-delta.vercel.app/auth/kakao/callback"; //Redirect URI
+  useEffect(() => {
+    // 현재 URL에서 쿼리 파라미터 추출
+    const urlParams = new URLSearchParams(window.location.search);
+    const token = urlParams.get("token");
+    console.log("urlparan", urlParams);
+    console.log("token ", token);
 
-  const CLIENT_ID = `${process.env.REACT_APP_KAKAO_REDIRECT_URL}`; //REST API KEY 나중에 이름변경
-  const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=code`;
-  const handleLogin = () => {
-    window.location.href = KAKAO_AUTH_URL;
-  };
-  //인가코드 추출방법
-  const code = new URL(window.location.href).searchParams.get(`code`);
-  console.log(code);
+    if (token) {
+      localStorage.setItem("authorization", JSON.stringify(`Bearer ${token}`));
+      setCookie("authorization", `Bearer ${token}`);
+      console.log("token");
+      navigate("/");
+    }
+    // 추출한 토큰을 로컬 스토리지에 저장
+  }, [navigate]);
+
+  const { search } = useLocation();
+  const token = queryString.parse(search);
+
+  // query에 token이 있다면 localStorage에 저장
+  if (Object.keys(token).length > 0) {
+    sessionStorage.setItem("RefreshToken", token.token);
+  }
 
   return (
     <div className="flex flex-col justify-between w-[600px] h-[671px] border border-[#777777] m-auto px-[114px] rounded-[20px]">
@@ -37,12 +47,11 @@ const SocialKakao = () => {
         <LoginLogo />
       </div>
       <div className="flex flex-col justify-center mb-[78px]">
-        <img
-          onClick={() => handleLogin()}
-          src="img/kakao_login_medium_narrow.png"
-          alt={"kakao-login"}
-          className="w-[371px] h-[80px] rounded-[8px] cursor-pointer"
-        />
+        <div className="App">
+          <a href="http://52.79.240.44:3000/auth/kakao">
+            <img src="//k.kakaocdn.net/14/dn/btqCn0WEmI3/nijroPfbpCa4at5EIsjyf0/o.jpg" />
+          </a>
+        </div>
         <p className="text-[14px] text-[#777777] leading-[18.5px] mx-auto mt-[15px]">
           카카오톡 소셜 로그인을 통해 내 계정 정보로 접속할 수 있습니다.
         </p>
