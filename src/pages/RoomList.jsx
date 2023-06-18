@@ -69,13 +69,13 @@ function RoomList() {
       title: "연애 중에도 개인 시간을 가져야 하는가?",
       talker: 1,
       listener: 8,
-      roomNumber: "아",
+      roomNumber: "자",
     },
     {
       title: "연애 중에도 개인 시간을 가져야 하는가?",
       talker: 1,
       listener: 8,
-      roomNumber: "아",
+      roomNumber: "차",
     },
   ]);
 
@@ -105,17 +105,15 @@ function RoomList() {
   return (
     <>
       <Header />
-      <div className="flex flex-col w-full h-full">
-        <div>
+      <div className="flex flex-col w-full h-[80%]">
+        <div className="relative flex flex-col w-full h-[20%] bg-[#464747]">
           <button
             onClick={goCategoryBtnClick}
-            className="ml-[108px] text-[24px] font-bold text-[#777777]"
+            className="absolute ml-[50px] text-[24px] font-bold text-white top-[5%]"
           >
             ← 카테고리 선택
           </button>
-        </div>
-        <div className="relative flex flex-col w-full h-[240px] bg-[#464747] gap-4">
-          <div className="absolute right-[127px] top-[100px] ">
+          <div className="absolute right-[5%] top-[10%] ">
             <div className="w-fit text-[24px] text-white font-medium ml-auto">
               {state}
             </div>
@@ -126,25 +124,23 @@ function RoomList() {
               다양한 토론 주제에 대해 이야기해요
             </div>
           </div>
-          <div className="flex flex-col mr-auto gap-3"></div>
+          <button
+            onClick={createRoomBtnClick}
+            className="absolute bg-[#777777] text-[22px] text-white font-bold px-[30px] py-[10px] rounded-[8px] mt-[2%] right-[5%] bottom-[10%]"
+          >
+            {" "}
+            방 생성하기
+          </button>
         </div>
-        <div className="flex flex-col justify-between w-full h-[140px] px-[80px]">
-          <div className="w-fit ml-auto">
-            <button
-              onClick={createRoomBtnClick}
-              className="bg-[#777777] text-[22px] text-[#E2E2E2] px-[39px] py-[14.5px] rounded-[8px] "
-            >
-              {" "}
-              방 생성하기
-            </button>
-          </div>
-          <div className="flex items-center w-full h-[60px] mt-auto border-b-2 border-[#777777]">
+        <div className="flex flex-col justify-between w-full h-[6%] px-[80px]">
+          <div className="w-fit ml-auto"></div>
+          <div className="flex items-center w-full h-[4rem] mt-auto border-b-2 border-[#777777]">
             <div className="flex justify-center ml-[37px] w-[51px]">Num</div>
             <p className="ml-[97px] w-[695px]">방제목</p>
             <p className="ml-[70px]">인원</p>
           </div>
         </div>
-        <div className="flex flex-col w-full h-[700px] px-[80px] overflow-hidden border">
+        <div className="flex flex-col w-full h-[700px] px-[80px] overflow-hidden">
           {roomList.map((item, index) => (
             <ListOne
               key={item.roomNumber}
@@ -156,6 +152,7 @@ function RoomList() {
             />
           ))}
         </div>
+        <div className="m-auto">Pagenation</div>
       </div>
     </>
   );
@@ -176,7 +173,7 @@ function ListOne({ number, title, talker, listener, roomNumber }) {
       ? ["font-semibold text-[#C6C6C6]", true]
       : ["font-semibold text-[#35C585]", false];
   return (
-    <div className="flex items-center w-full h-[70px] border-b">
+    <div className="flex items-center w-full h-[5rem] border-b">
       <div className="flex justify-center w-[51px] ml-[37px]">{number + 1}</div>
       <div className="ml-[97px] w-[695px]">{title}</div>
       <div className="flex justify-between gap-4">

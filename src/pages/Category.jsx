@@ -5,17 +5,16 @@ import Header from "../components/Header";
 
 function Category() {
   const [selectedCategory, setSelectedCategory] = useState(null);
-  const id = [1, 2, 3, 4, 5, 6, 7, 8, 9];
   const categoryList = [
-    "프로게이머",
+    "게임/프로게이머",
     "연예/이슈",
     "스포츠/운동",
-    "병맛",
+    "연애",
     "랜덤",
-    "교양",
+    "결혼/육아",
     "회사생활",
-    "음식/요리/맛집",
-    "세상에 이런 일이",
+    "학교생활",
+    "밸런스 게임",
   ];
   const iconList = [
     <icons.Game />,
@@ -80,7 +79,7 @@ function Category() {
             {categoryList.map((category, index) => {
               return (
                 <CategoryCard
-                  key={id[index]}
+                  key={category}
                   category={category}
                   selectedCategory={selectedCategory}
                   icon={iconList[index]}

@@ -23,7 +23,7 @@ function Header() {
           <Debate />
         </div>
         <div className="text-[20px] text-[#ABABAB] font-[700] leading-[24px]">
-          Title
+          AHGARI 파이터
         </div>
       </div>
       {userIcon}
