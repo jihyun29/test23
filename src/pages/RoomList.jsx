@@ -109,7 +109,7 @@ function RoomList() {
         <div>
           <button
             onClick={goCategoryBtnClick}
-            className="ml-[108px] py-[20px] text-[24px] font-bold text-[#777777]"
+            className="ml-[108px] text-[24px] font-bold text-[#777777]"
           >
             ← 카테고리 선택
           </button>
@@ -119,7 +119,7 @@ function RoomList() {
             <div className="w-fit text-[24px] text-white font-medium ml-auto">
               {state}
             </div>
-            <div className="text-[#ABABAB] w-fit  ml-auto mt-[20px]">
+            <div className="text-[#ABABAB] w-fit  ml-auto ">
               연애할 때 나만 이럴까?
             </div>
             <div className="text-[#ABABAB] w-fit ml-auto">
@@ -128,11 +128,11 @@ function RoomList() {
           </div>
           <div className="flex flex-col mr-auto gap-3"></div>
         </div>
-        <div className="flex flex-col justify-betweenw-full h-[140px] px-[80px]">
+        <div className="flex flex-col justify-between w-full h-[140px] px-[80px]">
           <div className="w-fit ml-auto">
             <button
               onClick={createRoomBtnClick}
-              className="bg-[#777777] text-[22px] text-[#E2E2E2] px-[39px] py-[14.5px] rounded-[8px] mt-[16px]"
+              className="bg-[#777777] text-[22px] text-[#E2E2E2] px-[39px] py-[14.5px] rounded-[8px] "
             >
               {" "}
               방 생성하기
@@ -144,7 +144,7 @@ function RoomList() {
             <p className="ml-[70px]">인원</p>
           </div>
         </div>
-        <div className="flex flex-col w-full h-[700px] px-[80px] overflow-hidden">
+        <div className="flex flex-col w-full h-[700px] px-[80px] overflow-hidden border">
           {roomList.map((item, index) => (
             <ListOne
               key={item.roomNumber}

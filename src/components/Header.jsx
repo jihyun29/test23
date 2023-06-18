@@ -4,7 +4,7 @@ import { Debate } from "../icons";
 
 function Header() {
   return (
-    <div className="flex justify-between items-center w-full h-[72px] border-b border-[#DEE5ED]">
+    <div className="flex justify-between items-center w-full h-[7%] border-b border-[#DEE5ED]">
       <div className="flex items-center ml-[98px] gap-[15px]">
         <div className="w-[38px] h-[38px]">
           <Debate />
