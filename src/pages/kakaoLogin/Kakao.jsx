@@ -3,48 +3,31 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import axios from "axios";
-// import { useDispatch } from "react-redux";
-// import { actionCreators as userActions } from "../../shared/user";
+import { useCookies } from "react-cookie";
+import Home from "../Home";
 
 const Kakao = (props) => {
-  // const dispatch = useDispatch();
-  // const href = window.location.href;
-  // let params = new URL(document.URL).searchParams;
-  // let code = params.get("code");
-  // React.useEffect(async () => {
-  //   await dispatch(userActions.auth(code));
-  // }, []);
+  const [cookie, setCookie, removeCookie] = useCookies(["authorization"]);
 
   const navigate = useNavigate();
 
-  const code = new URL(window.location.href).searchParams.get("code");
-
   useEffect(() => {
-    axios
-      .post(`${process.env.REACT_APP_BACKEND_SERVER_URL}kakaoLogin${code}`)
-      .then((r) => {
-        console.log(r.data); // 토큰과 함께 오는 정보들을 출력해보자
+    // 현재 URL에서 쿼리 파라미터 추출
+    const urlParams = new URLSearchParams(window.location.search);
+    const token = urlParams.get("token");
+    console.log("urlparan", urlParams);
+    console.log("token ", token);
 
-        // / 토큰을 받아서 localStorage같은 곳에 저장하는 코드를 여기에 쓴다.
-        localStorage.setItem("name", r.data.user_name); // 일단 이름만 저장했다.
+    if (token) {
+      localStorage.setItem("authorization", JSON.stringify(`Bearer ${token}`));
 
-        navigate("/"); //
-      });
-  }, []);
+      setCookie("authorization", `Bearer ${token}`, { path: "/" });
+      console.log("token");
+      navigate("/");
+    }
+    // 추출한 토큰을 로컬 스토리지에 저장
+  }, [navigate]);
 
-  // useEffect(() => {
-  //   (async () => {
-  //     try {
-  //       const res = await axios.get(`api/code=${code}`);
-  //       const token = res.headers.authorization;
-  //       window.localStorage.setItem("token", token);
-  //       navigate("/");
-  //     } catch (e) {
-  //       console.error(e);
-  //       navigate("/");
-  //     }
-  //   })();
-  // }, []);
   return (
     <div>
       <div>
