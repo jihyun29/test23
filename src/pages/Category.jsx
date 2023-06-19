@@ -27,7 +27,7 @@ function Category() {
   //   <icons.Food />,
   //   <icons.Surprise />,
   // ];
-  const example = "회사생활";
+  const example = "게임/프로게이머";
   const navigate = useNavigate();
   const enterRoomList = () => {
     if (selectedCategory === null) {
@@ -61,16 +61,13 @@ function Category() {
           <div className="flex flex-col justify-between w-[26vh] h-[20%] ml-[10%] px-[2.5vh] border mt-[25%] bg-[#F1F1F1] rounded-[24px]">
             <div className="mt-[26px] text-[#777777] text-[1.8vh] font-sans">
               <p>지금 가장 많은 사람들이</p>
-              <p>
-                선택한 토론방은
-                <span className="bg-black text-white w-fit px-[0.3vw] rounded-[8px] mt-[5px] mr-[0px]">
-                  {example}
-                </span>
-                ?
-              </p>
+              <p>선택한 토론방은?</p>
+              <span className="bg-black text-white w-fit px-[0.3vw] rounded-[8px] mt-[5px] mr-[0px]">
+                {example}
+              </span>
             </div>
-            <button className="text-[#35C585] text-[16px] font-bold ml-auto mb-[1.5vh]">
-              바로 선택하기 <span className="text-[20px]">➤</span>
+            <button className="text-[#35C585] text-[2vh] font-bold ml-auto mb-[1.5vh]">
+              바로 선택하기 ➤
             </button>
           </div>
         </div>
