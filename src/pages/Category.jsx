@@ -59,11 +59,11 @@ function Category() {
             ← 메인으로
           </button>
           <div className="flex flex-col justify-between w-[26vh] h-[20%] ml-[10%] px-[2.5vh] border mt-[25%] bg-[#F1F1F1] rounded-[24px]">
-            <div className="mt-[26px] text-[#777777] text-[1.8vh]">
+            <div className="mt-[26px] text-[#777777] text-[1.8vh] font-sans">
               <p>지금 가장 많은 사람들이</p>
               <p>
                 선택한 토론방은
-                <span className="bg-black text-white w-fit px-[8px] rounded-[8px] mt-[5px] mr-[0px]">
+                <span className="bg-black text-white w-fit px-[0.3vw] rounded-[8px] mt-[5px] mr-[0px]">
                   {example}
                 </span>
                 ?
@@ -75,7 +75,7 @@ function Category() {
           </div>
         </div>
         <div className="flex flex-col justify-evenly items-center w-[50vw] h-full">
-          <p className="font-semibold text-[3vh] text-[#2F3131] font-mono">
+          <p className="font-semibold text-[3vh] text-[#2F3131] font-sans">
             입장하고픈 토론방의 분야를 선택해주세요
           </p>
           <div className="grid grid-cols-3 w-[45vh] h-[45vh] gap-3">
