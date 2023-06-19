@@ -5,7 +5,7 @@ import { Profile } from "../icons";
 
 function Header() {
   const userIcon = localStorage.getItem("authorization") ? (
-    <div className="w-[5vh] h-[5vh]">
+    <div className="w-[5vh] h-[5vh] mr-[9vw]">
       <Profile />
     </div>
   ) : (
