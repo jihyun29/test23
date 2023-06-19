@@ -8,8 +8,10 @@ function Room() {
   const socket = useRef(null);
 
   const [totalChat, setTotalChat] = useState([]);
+  const videoBox = useRef(null);
   const InputValue = useRef("");
 
+  let myStream;
   // 컴포넌트가 마운트 됐을 때 : 소켓 연결
   // 리랜더링 시 : 소켓 연결 유지
   // 언마운트 시 : 소켓 연결 끊기
@@ -47,10 +49,29 @@ function Room() {
     navigate("/category");
   };
 
+  const getMedia = async () => {
+    try {
+      myStream = await navigator.mediaDevices.getUserMedia({
+        audio: true,
+        video: true,
+      });
+      videoBox.current.srcObject = myStream;
+      console.log(videoBox);
+      console.log(myStream);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  getMedia();
+
   return (
     <div className="flex w-full h-full mt-[20px] border gap-3">
       <div>
         <button onClick={goHomeBtnClick}>Go Home</button>
+      </div>
+      <div>
+        <video className="w-[400px] h-[400px] border" ref={videoBox} autoPlay />
       </div>
       <form onSubmit={chatSubmitHandler}>
         <h3> 현재 방 : {state}</h3>
