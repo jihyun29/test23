@@ -105,19 +105,19 @@ function RoomList() {
   return (
     <>
       <Header />
-      <div className="flex flex-col w-full h-[80%]">
-        <div className="relative flex flex-col w-full h-[20%] bg-[#464747]">
+      <div className="flex flex-col w-full h-[80vh]">
+        <div className="relative flex flex-col w-full h-[20vh] bg-[#464747]">
           <button
             onClick={goCategoryBtnClick}
-            className="absolute ml-[50px] text-[24px] font-bold text-white top-[5%]"
+            className="absolute ml-[50px] text-[2.5vh] font-bold text-white top-[5%]"
           >
             ← 카테고리 선택
           </button>
           <div className="absolute right-[5%] top-[10%] ">
-            <div className="w-fit text-[24px] text-white font-medium ml-auto">
+            <div className="w-fit text-[2.7vh] text-white font-medium ml-auto">
               {state}
             </div>
-            <div className="text-[#ABABAB] w-fit  ml-auto ">
+            <div className="text-[#ABABAB] w-fit  ml-auto">
               연애할 때 나만 이럴까?
             </div>
             <div className="text-[#ABABAB] w-fit ml-auto">
@@ -126,13 +126,13 @@ function RoomList() {
           </div>
           <button
             onClick={createRoomBtnClick}
-            className="absolute bg-[#777777] text-[22px] text-white font-bold px-[30px] py-[10px] rounded-[8px] mt-[2%] right-[5%] bottom-[10%]"
+            className="absolute bg-[#777777] text-[2.3vh] text-white font-bold px-[30px] py-[10px] rounded-[8px] mt-[2%] right-[5%] bottom-[10%]"
           >
             {" "}
             방 생성하기
           </button>
         </div>
-        <div className="flex flex-col justify-between w-full h-[6%] px-[80px]">
+        <div className="flex flex-col justify-between w-full h-[5vh] px-[80px]">
           <div className="w-fit ml-auto"></div>
           <div className="flex items-center w-full h-[4rem] mt-auto border-b-2 border-[#777777]">
             <div className="flex justify-center ml-[37px] w-[51px]">Num</div>
@@ -140,7 +140,7 @@ function RoomList() {
             <p className="ml-[70px]">인원</p>
           </div>
         </div>
-        <div className="flex flex-col w-full h-[700px] px-[80px] overflow-hidden">
+        <div className="flex flex-col w-full h-[53vh] px-[80px] overflow-hidden">
           {roomList.map((item, index) => (
             <ListOne
               key={item.roomNumber}
@@ -152,7 +152,7 @@ function RoomList() {
             />
           ))}
         </div>
-        <div className="m-auto">Pagenation</div>
+        <div className="mx-auto h-[2vh]">Pagenation</div>
       </div>
     </>
   );

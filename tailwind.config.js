@@ -8,12 +8,12 @@ module.exports = {
             transform: "translateX(0px)",
           },
           "100%": {
-            transform: "translateX(-25%)",
+            transform: "translateX(-20%)",
           },
         },
       },
       animation: {
-        flowText: "textLoop 8s linear infinite",
+        flowText: "textLoop 10s linear infinite",
       },
     },
   },

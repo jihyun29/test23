@@ -16,17 +16,17 @@ function Category() {
     "학교생활",
     "밸런스 게임",
   ];
-  const iconList = [
-    <icons.Game />,
-    <icons.Idol />,
-    <icons.Sports />,
-    <icons.Strange />,
-    <icons.Couple />,
-    <icons.Learning />,
-    <icons.Work />,
-    <icons.Food />,
-    <icons.Surprise />,
-  ];
+  // const iconList = [
+  //   <icons.Game />,
+  //   <icons.Idol />,
+  //   <icons.Sports />,
+  //   <icons.Strange />,
+  //   <icons.Couple />,
+  //   <icons.Learning />,
+  //   <icons.Work />,
+  //   <icons.Food />,
+  //   <icons.Surprise />,
+  // ];
   const example = "회사생활";
   const navigate = useNavigate();
   const enterRoomList = () => {
@@ -50,39 +50,42 @@ function Category() {
   return (
     <>
       <Header />
-      <div className="flex w-full h-[80%]">
-        <div className="w-[25%] h-full overflow-hidden">
+      <div className="flex w-full h-[80vh]">
+        <div className="w-[25vw] h-full overflow-hidden">
           <button
             onClick={goHomeHandler}
-            className="text-[#777777] text-[18px] font-bold mt-[10%] ml-[108px]"
+            className="text-[#777777] text-[1.8vh] font-bold mt-[10%] ml-[10%]"
           >
             ← 메인으로
           </button>
-          <div className="flex flex-col justify-between w-[320px] h-[160px] ml-[40px] px-[20px] border mt-[30%] bg-[#F1F1F1] rounded-[24px]">
-            <p className="mt-[26px] text-[#777777] text-[23px]">
-              지금 가장 많은 사람들이 선택한 토론방은{" "}
-              <span className="bg-black text-white w-fit px-[8px] rounded-[8px] mt-[5px] mr-[0px]">
-                {example}
-              </span>{" "}
-              ?
-            </p>
-            <button className="text-[#35C585] text-[16px] font-bold ml-[151px] mb-[18px]">
+          <div className="flex flex-col justify-between w-[26vh] h-[20%] ml-[10%] px-[2.5vh] border mt-[25%] bg-[#F1F1F1] rounded-[24px]">
+            <div className="mt-[26px] text-[#777777] text-[1.8vh]">
+              <p>지금 가장 많은 사람들이</p>
+              <p>
+                선택한 토론방은
+                <span className="bg-black text-white w-fit px-[8px] rounded-[8px] mt-[5px] mr-[0px]">
+                  {example}
+                </span>
+                ?
+              </p>
+            </div>
+            <button className="text-[#35C585] text-[16px] font-bold ml-auto mb-[1.5vh]">
               바로 선택하기 <span className="text-[20px]">➤</span>
             </button>
           </div>
         </div>
-        <div className="flex flex-col justify-evenly items-center w-[50%] h-full">
-          <p className="font-semibold text-[32px] text-[#2F3131] font-mono">
+        <div className="flex flex-col justify-evenly items-center w-[50vw] h-full">
+          <p className="font-semibold text-[3vh] text-[#2F3131] font-mono">
             입장하고픈 토론방의 분야를 선택해주세요
           </p>
-          <div className="grid grid-cols-3 w-[664px] h-[664px] gap-3">
+          <div className="grid grid-cols-3 w-[45vh] h-[45vh] gap-3">
             {categoryList.map((category, index) => {
               return (
                 <CategoryCard
                   key={category}
                   category={category}
                   selectedCategory={selectedCategory}
-                  icon={iconList[index]}
+                  // icon={iconList[index]}
                   onClickHandler={categoryBtnClickHandler}
                 />
               );
@@ -92,7 +95,7 @@ function Category() {
             <button
               // disabled
               onClick={enterRoomList}
-              className="bg-black text-white px-[173px] py-[40px] rounded-[60px] text-[24px] font-bold"
+              className="bg-black text-white px-[20vh] py-[4vh] rounded-[60px] text-[2.5vh] font-bold"
             >
               입장하기
             </button>
@@ -119,8 +122,8 @@ const CategoryCard = ({
       : "flex flex-col items-center border rounded-[24px] bg-[#F1F1F1]";
   const ftStyle =
     selectedCategory === category
-      ? "mt-[13.3px] text-[18px] font-bold text-[#33F39E]"
-      : "mt-[13.3px] text-[18px] font-bold text-[#777777]";
+      ? "mt-[5%] text-[1.5vh] font-bold text-[#33F39E]"
+      : "mt-[5%] text-[1.5vh] font-bold text-[#777777]";
   return (
     <div
       onClick={() => {
@@ -128,7 +131,9 @@ const CategoryCard = ({
       }}
       className={bgStyle}
     >
-      <div className="w-[80px] h-[80px] mt-[41.6px] rounded-[20px]">{icon}</div>
+      <div className="w-[40%] h-[40%] mt-[25%] rounded-[20px] bg-black">
+        {/* {icon} */}
+      </div>
 
       <p className={ftStyle}>{category}</p>
     </div>
