@@ -10,24 +10,23 @@ import queryString from "query-string";
 //restapi 방법
 const SocialKakao = () => {
   const [cookie, setCookie, removeCookie] = useCookies(["authorization"]);
-
+  const kakaoLogin = `${process.env.REACT_APP_BACKEND_SERVER_URL}/auth/kakao/callback`;
   const navigate = useNavigate();
+  useEffect(() => {
+    // 현재 URL에서 쿼리 파라미터 추출
+    const urlParams = new URLSearchParams(window.location.search);
+    const token = urlParams.get("token");
+    console.log("urlparan", urlParams);
+    console.log("token ", token);
 
-  // useEffect(() => {
-  //   // 현재 URL에서 쿼리 파라미터 추출
-  //   const urlParams = new URLSearchParams(window.location.search);
-  //   const token = urlParams.get("token");
-  //   console.log("urlparan", urlParams);
-  //   console.log("token ", token);
-
-  //   if (token) {
-  //     localStorage.setItem("authorization", JSON.stringify(`Bearer ${token}`));
-  //     setCookie("authorization", `Bearer ${token}`);
-  //     console.log("token");
-  //     navigate("/");
-  //   }
-  //   // 추출한 토큰을 로컬 스토리지에 저장
-  // }, [navigate]);
+    if (token) {
+      localStorage.setItem("authorization", JSON.stringify(`Bearer ${token}`));
+      setCookie("authorization", `Bearer ${token}`);
+      console.log("token");
+      navigate("/");
+    }
+    // 추출한 토큰을 로컬 스토리지에 저장
+  }, [navigate]);
 
   const { search } = useLocation();
   const token = queryString.parse(search);
@@ -36,7 +35,6 @@ const SocialKakao = () => {
   if (Object.keys(token).length > 0) {
     sessionStorage.setItem("RefreshToken", token.token);
   }
-
   return (
     <div className="flex flex-col justify-between w-[600px] h-[671px] border border-[#777777] m-auto px-[114px] rounded-[20px]">
       <div className="w-[131px] h-[60ox] mt-[117px]">
@@ -48,7 +46,7 @@ const SocialKakao = () => {
       </div>
       <div className="flex flex-col justify-center mb-[78px]">
         <div className="App">
-          <a href="http://52.79.240.44:3000/auth/kakao">
+          <a href={kakaoLogin}>
             <img src="//k.kakaocdn.net/14/dn/btqCn0WEmI3/nijroPfbpCa4at5EIsjyf0/o.jpg" />
           </a>
         </div>
@@ -61,16 +59,16 @@ const SocialKakao = () => {
 };
 export default SocialKakao;
 
-// //TODO: 소셜로그인 - kakao
+//TODO: 소셜로그인 - kakao
 // export function kakaoSignIn(code:string)
 // {
-//   return new Promise(async (resolve,reject)=>{
-//     await post(`/auth/kakao`,code)
-//       .then((data)=>{
-//         resolve(data)
-//       })
-//       .catch((error)=>{
-//         reject(error)
-//       })
-//   })
+// return new Promise(async (resolve,reject)=>{
+//   await post(`/auth/kakao`,code)
+//     .then((data)=>{
+//       resolve(data)
+//     })
+//     .catch((error)=>{
+//       reject(error)
+//     })
+// })
 // }
