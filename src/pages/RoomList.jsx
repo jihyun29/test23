@@ -172,7 +172,7 @@ function ListOne({ number, title, talker, listener, roomNumber }) {
       ? ["font-semibold text-[#C6C6C6] text-[1.3vh]", true]
       : ["font-semibold text-[#35C585] text-[1.3vh]", false];
   return (
-    <div className="flex items-center w-full h-[5rem] border-b">
+    <div className="flex items-center w-full h-[10%] border-b">
       <div className="flex justify-center w-[51px] ml-[3vw] text-[1.3vh]">
         {number + 1}
       </div>
