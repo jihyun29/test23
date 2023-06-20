@@ -19,8 +19,8 @@ function Header() {
   return (
     <div className="flex justify-between items-center w-full h-[8vh] border-b border-[#DEE5ED]">
       <div className="flex items-center ml-[9vw] gap-[1.5rem]">
-        <div className="w-[5vh] h-[5vh] border">
-          <Debate width="5vh" height="5vh" />
+        <div className="w-[5vh] h-[5vh] border rounded-[100%]">
+          <Debate width="100%" height="100%" />
         </div>
         <div className="text-[3vh] text-[#ABABAB] font-bold">AHGARI 파이터</div>
       </div>
