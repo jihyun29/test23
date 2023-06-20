@@ -268,9 +268,9 @@ function Room() {
               <icon.Mute width="8vh" />
             </button>
           </div>
-          <div className="flex">
+          <div className="flex w-[10vh]">
             <button
-              className="text-white my-2 ml-auto"
+              className="text-white my-2 ml-auto w-full border text-[3vh]"
               onClick={gameStartBtnClickhandler}
             >
               start
