@@ -28,7 +28,7 @@ function Prompt() {
   }, []);
 
   useEffect(() => {
-    const timer = setInterval(() => {
+    const time = setInterval(() => {
       setRemainingTime((prevTime) => prevTime - 1000);
     });
   }, 1000);

@@ -16,17 +16,17 @@ function Category() {
     "학교생활",
     "밸런스 게임",
   ];
-  // const iconList = [
-  //   <icons.Game />,
-  //   <icons.Idol />,
-  //   <icons.Sports />,
-  //   <icons.Strange />,
-  //   <icons.Couple />,
-  //   <icons.Learning />,
-  //   <icons.Work />,
-  //   <icons.Food />,
-  //   <icons.Surprise />,
-  // ];
+  const iconList = [
+    <icons.Game width="100%" height="100%" />,
+    <icons.Idol width="100%" height="100%" />,
+    <icons.Health width="100%" height="100%" />,
+    <icons.Love width="100%" height="100%" />,
+    <icons.Random width="100%" height="100%" />,
+    <icons.Marriage width="100%" height="100%" />,
+    <icons.Business width="100%" height="100%" />,
+    <icons.School width="100%" height="100%" />,
+    <icons.Balance width="100%" height="100%" />,
+  ];
   const example = "게임/프로게이머";
   const navigate = useNavigate();
   const enterRoomList = () => {
@@ -82,7 +82,7 @@ function Category() {
                   key={category}
                   category={category}
                   selectedCategory={selectedCategory}
-                  // icon={iconList[index]}
+                  icon={iconList[index]}
                   onClickHandler={categoryBtnClickHandler}
                 />
               );
@@ -128,10 +128,9 @@ const CategoryCard = ({
       }}
       className={bgStyle}
     >
-      <div className="w-[40%] h-[40%] mt-[25%] rounded-[20px] bg-black">
-        {/* {icon} */}
+      <div className="w-[40%] h-[40%] mt-[25%] rounded-[100%] bg-black">
+        {icon}
       </div>
-
       <p className={ftStyle}>{category}</p>
     </div>
   );
