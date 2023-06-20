@@ -77,10 +77,10 @@ function Room() {
   getMedia();
 
   return (
-    <div className="flex w-[100vw] h-[88vh] gap-3 bg-black">
+    <div className="flex w-[100vw] h-[100vh] gap-3 bg-black">
       <div className="flex flex-col w-[75%] h-full py-[1%] pl-[1%] gap-[1%]">
         {/* 주제 + 비디오 */}
-        <div className="relative flex flex-col gap-[2%] p-[1%] h-[46%] bg-[#1E1E1E] rounded-2xl">
+        <div className="relative flex flex-col gap-[2%] p-[1%] h-[50%] bg-[#1E1E1E] rounded-2xl">
           <div className="w-full h-[15%]">
             <div className="flex h-full justify-between gap-[1%]">
               <div className="flex w-[10%] items-center justify-center bg-[#2F3131] text-white rounded-lg">
@@ -116,7 +116,7 @@ function Room() {
           </div>
         </div>
         {/* Progress bar */}
-        <div className="flex justify-center items-center w-full h-[10%] bg-[#1E1E1E] rounded-2xl text-white">
+        <div className="flex justify-center items-center w-full h-[7%] bg-[#1E1E1E] rounded-2xl text-white">
           progress bar
         </div>
         {/* 닉네임 */}
@@ -135,7 +135,7 @@ function Room() {
           text prompt
         </div>
         {/* 기능 버튼들 */}
-        <div className="flex justify-between w-full h-[8%] px-[1%]">
+        <div className="flex justify-between w-full h-[7%] px-[1%]">
           <div className="flex w-[40%] gap-[8%]">
             {/* 뒤로 가기 버튼 */}
             <button className="text-white my-2">

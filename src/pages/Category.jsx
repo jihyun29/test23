@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import * as icons from "../icons";
 import Header from "../components/Header";
+import Footer from "../components/Footer";
 
 function Category() {
   const [selectedCategory, setSelectedCategory] = useState(null);
@@ -100,6 +101,7 @@ function Category() {
         </div>
         <div></div>
       </div>
+      <Footer />
     </>
   );
 }

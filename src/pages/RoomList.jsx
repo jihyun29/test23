@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import Footer from "../components/Footer";
 import Header from "../components/Header";
 
 function RoomList() {
@@ -153,6 +154,7 @@ function RoomList() {
         </div>
         <div className="mx-auto h-[2vh]">Pagenation</div>
       </div>
+      <Footer />
     </>
   );
 }
