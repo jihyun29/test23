@@ -55,7 +55,7 @@ function Category() {
         <div className="w-[25vw] h-full overflow-hidden">
           <button
             onClick={goHomeHandler}
-            className="text-[#777777] text-[1.8vh] font-bold mt-[10%] ml-[10%]"
+            className="text-[#777777] text-[2.5vh] font-bold mt-[10%] ml-[10%]"
           >
             ← 메인으로
           </button>
