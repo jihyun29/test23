@@ -247,19 +247,16 @@ function RoomList() {
 
         {/* 빙 리스트 본문 */}
         <div className="flex flex-col w-full h-[52vh] px-[6.4vw] overflow-hidden">
-          {roomList.slice(offset, offset + limit).map((item, index) => {
-            console.log(page, offset); //Test
-            return (
-              <ListOne
-                key={item.roomNumber}
-                number={index + limit * (page - 1)}
-                title={item.title}
-                talker={item.talker}
-                listener={item.listener}
-                roomNumber={item.roomNumber}
-              />
-            );
-          })}
+          {roomList.slice(offset, offset + limit).map((item, index) => (
+            <ListOne
+              key={item.roomNumber}
+              number={index + limit * (page - 1)}
+              title={item.title}
+              talker={item.talker}
+              listener={item.listener}
+              roomNumber={item.roomNumber}
+            />
+          ))}
         </div>
         {/* 빙 리스트 본문 */}
 
@@ -284,7 +281,6 @@ export default RoomList;
 // 방 리스트 1개 컴포넌트
 function ListOne({ number, title, talker, listener, roomNumber }) {
   const navigate = useNavigate();
-  console.log(number); //Test
   // 방 입장 시 방 넘버 넘겨줌
   const btnClickHandler = () => {
     // socket.emit("enter_room", roomNumber);

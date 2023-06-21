@@ -288,13 +288,13 @@ function Room() {
         <div className="flex justify-between w-full h-[7%] px-[1%]">
           <div className="flex w-[40%] gap-[8%]">
             <button className="text-white my-2">
-              <icon.MoveRoom width="8vh" />
+              <icon.MoveRoom width="8vh" height="100%" />
             </button>
             <button className="text-white my-2">
-              <icon.VideoOff width="8vh" />
+              <icon.VideoOff width="8vh" height="100%" />
             </button>
             <button className="text-white my-2">
-              <icon.Mute width="8vh" />
+              <icon.Mute width="8vh" height="100%" />
             </button>
           </div>
           <div className="flex w-[10vh]">
@@ -310,7 +310,7 @@ function Room() {
               className="text-white my-2 ml-auto"
               onClick={goHomeBtnClick}
             >
-              <icon.Exit width="10vh" />
+              <icon.Exit width="8vh" height="100%" />
             </button>
           </div>
         </div>
