@@ -246,7 +246,7 @@ function RoomList() {
         {/* 방리스트 타이틀 */}
 
         {/* 빙 리스트 본문 */}
-        <div className="flex flex-col w-full h-[53vh] px-[6.4vw] overflow-hidden">
+        <div className="flex flex-col w-full h-[52vh] px-[6.4vw] overflow-hidden">
           {roomList.slice(offset, offset + limit).map((item, index) => {
             console.log(page, offset); //Test
             return (
@@ -264,7 +264,7 @@ function RoomList() {
         {/* 빙 리스트 본문 */}
 
         {/* 페이지네이션 부분 */}
-        <div className="flex justify-center h-[2vh] items-end gap-[0.5vh]">
+        <div className="flex justify-center h-[3vh] items-center gap-[0.5vh]">
           <Pagination
             total={roomList.length}
             limit={limit}
@@ -329,7 +329,7 @@ function ListOne({ number, title, talker, listener, roomNumber }) {
   );
 }
 
-// 문제점 : 다른 페이지 넘버에 갔다가 이전 페이지 넘버로 이동 시 두개가 합쳐지는 현상 발생
+// 문제점 : 다른 페이지 넘버에 갔다가 이전 페이지 넘버로 이동 시 두개가 합쳐지는 현상 발생 => map함수로 컴포넌트 그릴때 각 컴포넌트가 다른 Id를 가지고 있으면 문제 발생하지 않음
 function Pagination({ total, limit, page, setPage }) {
   const numPages = Math.ceil(total / limit);
 
@@ -338,7 +338,7 @@ function Pagination({ total, limit, page, setPage }) {
       <button
         onClick={() => setPage(page - 1)}
         disabled={page === 1}
-        className="disabled:text-gray-400 disabled:cursor-default"
+        className="h-[90%] disabled:text-gray-400 disabled:cursor-default"
       >
         &lt;
       </button>
@@ -349,7 +349,7 @@ function Pagination({ total, limit, page, setPage }) {
             key={i + 1}
             onClick={() => setPage(i + 1)}
             aria-current={page === i + 1 ? "page" : null}
-            className="border-none rounded-[100%] px-2 bg-black text-[white] text-[1rem] hover:bg-[tomato] hover:cursor-pointer translate-y-[-2px] aria-[current]:bg-green-500 aria-[current]:font-bold"
+            className="w-[2vh] h-[2vh] rounded-[100%] px-[0.5vh] bg-black text-[white] text-[1vh] hover:bg-[tomato] hover:cursor-pointer translate-y-[-2px] aria-[current]:bg-green-500 aria-[current]:font-bold"
           >
             {i + 1}
           </button>
@@ -357,7 +357,7 @@ function Pagination({ total, limit, page, setPage }) {
       <button
         onClick={() => setPage(page + 1)}
         disabled={page === numPages}
-        className="disabled:text-gray-400 disabled:cursor-default"
+        className="h-[90%] disabled:text-gray-400 disabled:cursor-default"
       >
         &gt;
       </button>

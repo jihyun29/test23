@@ -80,6 +80,7 @@ function Room() {
   // ---------- 소켓 부분 -----------
 
   // ---------- 룰렛 그리기 -----------
+  // 문제점 : 룰렛 다른 참여자들도 보이도록 설정 필요
   useEffect(() => {
     if (isRoulette) {
       // const $c = document.querySelector("canvas");
