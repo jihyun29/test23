@@ -81,7 +81,101 @@ function RoomList() {
       listener: 8,
       roomNumber: "차",
     },
+    {
+      title: "연애 중에도 개인 시간을 가져야 하는가?",
+      talker: 1,
+      listener: 8,
+      roomNumber: "카",
+    },
+    {
+      title: "연애 중에도 개인 시간을 가져야 하는가?",
+      talker: 1,
+      listener: 8,
+      roomNumber: "타",
+    },
+    {
+      title: "연애 중에도 개인 시간을 가져야 하는가?",
+      talker: 1,
+      listener: 8,
+      roomNumber: "파",
+    },
+    {
+      title: "연애 중에도 개인 시간을 가져야 하는가?",
+      talker: 1,
+      listener: 8,
+      roomNumber: "하",
+    },
+    {
+      title: "연애 중에도 개인 시간을 가져야 하는가?",
+      talker: 1,
+      listener: 8,
+      roomNumber: "갸",
+    },
+    {
+      title: "연애 중에도 개인 시간을 가져야 하는가?",
+      talker: 1,
+      listener: 8,
+      roomNumber: "냐",
+    },
+    {
+      title: "연애 중에도 개인 시간을 가져야 하는가?",
+      talker: 1,
+      listener: 8,
+      roomNumber: "댜",
+    },
+    {
+      title: "연애 중에도 개인 시간을 가져야 하는가?",
+      talker: 1,
+      listener: 8,
+      roomNumber: "랴",
+    },
+    {
+      title: "연애 중에도 개인 시간을 가져야 하는가?",
+      talker: 1,
+      listener: 8,
+      roomNumber: "먀",
+    },
+    {
+      title: "연애 중에도 개인 시간을 가져야 하는가?",
+      talker: 1,
+      listener: 8,
+      roomNumber: "뱌",
+    },
+    {
+      title: "연애 중에도 개인 시간을 가져야 하는가?",
+      talker: 1,
+      listener: 8,
+      roomNumber: "샤",
+    },
+    {
+      title: "연애 중에도 개인 시간을 가져야 하는가?",
+      talker: 1,
+      listener: 8,
+      roomNumber: "야",
+    },
+    {
+      title: "연애 중에도 개인 시간을 가져야 하는가?",
+      talker: 1,
+      listener: 8,
+      roomNumber: "쟈",
+    },
+    {
+      title: "연애 중에도 개인 시간을 가져야 하는가?",
+      talker: 1,
+      listener: 8,
+      roomNumber: "챠",
+    },
+    {
+      title: "연애 중에도 개인 시간을 가져야 하는가?",
+      talker: 1,
+      listener: 8,
+      roomNumber: "캬",
+    },
   ]);
+
+  const limit = 10;
+  const [page, setPage] = useState(1);
+  const offset = (page - 1) * limit;
 
   // 카테고리로 이동하는 함수
   const goCategoryBtnClick = () => {
@@ -153,21 +247,31 @@ function RoomList() {
 
         {/* 빙 리스트 본문 */}
         <div className="flex flex-col w-full h-[53vh] px-[6.4vw] overflow-hidden">
-          {roomList.map((item, index) => (
-            <ListOne
-              key={item.roomNumber}
-              number={index}
-              title={item.title}
-              talker={item.talker}
-              listener={item.listener}
-              roomNumber={item.roomNumber}
-            />
-          ))}
+          {roomList.slice(offset, offset + limit).map((item, index) => {
+            console.log(page, offset); //Test
+            return (
+              <ListOne
+                key={item.roomNumber}
+                number={index + limit * (page - 1)}
+                title={item.title}
+                talker={item.talker}
+                listener={item.listener}
+                roomNumber={item.roomNumber}
+              />
+            );
+          })}
         </div>
         {/* 빙 리스트 본문 */}
 
         {/* 페이지네이션 부분 */}
-        <div className="mx-auto h-[2vh]">Pagenation</div>
+        <div className="flex justify-center h-[2vh] items-end gap-[0.5vh]">
+          <Pagination
+            total={roomList.length}
+            limit={limit}
+            page={page}
+            setPage={setPage}
+          />
+        </div>
         {/* 페이지네이션 부분 */}
       </div>
       <Footer />
@@ -180,7 +284,7 @@ export default RoomList;
 // 방 리스트 1개 컴포넌트
 function ListOne({ number, title, talker, listener, roomNumber }) {
   const navigate = useNavigate();
-
+  console.log(number); //Test
   // 방 입장 시 방 넘버 넘겨줌
   const btnClickHandler = () => {
     // socket.emit("enter_room", roomNumber);
@@ -222,5 +326,41 @@ function ListOne({ number, title, talker, listener, roomNumber }) {
       </div>
       {/* 입장하기 버튼 */}
     </div>
+  );
+}
+
+// 문제점 : 다른 페이지 넘버에 갔다가 이전 페이지 넘버로 이동 시 두개가 합쳐지는 현상 발생
+function Pagination({ total, limit, page, setPage }) {
+  const numPages = Math.ceil(total / limit);
+
+  return (
+    <>
+      <button
+        onClick={() => setPage(page - 1)}
+        disabled={page === 1}
+        className="disabled:text-gray-400 disabled:cursor-default"
+      >
+        &lt;
+      </button>
+      {Array(numPages)
+        .fill()
+        .map((_, i) => (
+          <button
+            key={i + 1}
+            onClick={() => setPage(i + 1)}
+            aria-current={page === i + 1 ? "page" : null}
+            className="border-none rounded-[100%] px-2 bg-black text-[white] text-[1rem] hover:bg-[tomato] hover:cursor-pointer translate-y-[-2px] aria-[current]:bg-green-500 aria-[current]:font-bold"
+          >
+            {i + 1}
+          </button>
+        ))}
+      <button
+        onClick={() => setPage(page + 1)}
+        disabled={page === numPages}
+        className="disabled:text-gray-400 disabled:cursor-default"
+      >
+        &gt;
+      </button>
+    </>
   );
 }
