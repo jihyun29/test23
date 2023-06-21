@@ -7,6 +7,7 @@ function Room() {
   const navigate = useNavigate();
   // 방 리스트 페이지에서 페이지 이동 시 넘겨는 State : 방 넘버
   const { state } = useLocation();
+  const { roomNumber, defaultTitle } = state;
 
   const titleList = [
     "연애 중 초능력을 가지면 좋겠는가?",
@@ -25,7 +26,7 @@ function Room() {
   const colors = ["#919191", "#C6C6C6"];
 
   // 타이틀 설정 시 사용되는 State
-  const [title, setTitle] = useState("");
+  const [title, setTitle] = useState(defaultTitle);
   // 룰렛 표시 여부에 사용되는 State
   const [isRoulette, setIsRoulette] = useState(false);
   // 채팅 표시를 위해 사용되는 State
@@ -60,12 +61,12 @@ function Room() {
     socket.current = io("http://localhost:4000", {
       withCredentials: true,
     });
-    socket.current.emit("enter_room", state);
+    socket.current.emit("enter_room", roomNumber);
     // 페이지 언마운트 시 소켓 연결 해제
     return () => {
       socket.current.disconnect();
     };
-  }, [state]);
+  }, [roomNumber, state]);
 
   useEffect(() => {
     // 소켓이 연결되어 있지 않다면 홈페이지로 이동
@@ -206,7 +207,7 @@ function Room() {
       {/* 룰렛 */}
       {isRoulette ? (
         <div className="absolute w-[100vw] h-[100vh] top-0 left-0 bg-slate-200/40 z-[2]">
-          <div className="relative flex justify-center items-center w-[75vh] h-[75vh] top-[12.5%] left-[25vw] z-[3] border border-black">
+          <div className="relative flex justify-center items-center w-[75vh] h-[75vh] top-[12.5%] left-[25vw] z-[3]">
             <canvas
               ref={change}
               className="w-full h-full rounded-[100%] border-[2vh] border-gray-400 outline outline-[3vh]"

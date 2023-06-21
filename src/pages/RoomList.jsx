@@ -188,8 +188,6 @@ function RoomList() {
     const randomTalker = Math.round(Math.random() * 2);
     const randomListener = Math.round(Math.random() * 8);
     const title = titleList[randomTitle];
-    console.log(randomTitle);
-    console.log(title);
     setRoomList([
       ...roomList,
       {
@@ -199,7 +197,12 @@ function RoomList() {
         roomNumber: `${roomList.length + 1}`,
       },
     ]);
-    navigate("/room", { state: roomList.length + 1 });
+    navigate("/room", {
+      state: {
+        roomNumber: roomList.length + 1,
+        defaultTitle: titleList[randomTitle],
+      },
+    });
   };
 
   return (
@@ -284,7 +287,9 @@ function ListOne({ number, title, talker, listener, roomNumber }) {
   // 방 입장 시 방 넘버 넘겨줌
   const btnClickHandler = () => {
     // socket.emit("enter_room", roomNumber);
-    navigate("/room", { state: roomNumber });
+    navigate("/room", {
+      state: { roomNumber: roomNumber, defaultTitle: title },
+    });
   };
 
   // 방이 꽉 찰 경우 접속 불가하도록 설정
