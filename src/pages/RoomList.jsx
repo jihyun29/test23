@@ -240,8 +240,8 @@ function RoomList() {
           <div className="flex justify-center ml-[3vw] w-[51px] text-[1.3vh]">
             Num
           </div>
-          <p className="ml-[7.5vw] w-[50vw]">방제목</p>
-          <p className="ml-[50px]">인원</p>
+          <p className="ml-[7.5vw] w-[50vw] text-[1.3vh]">방제목</p>
+          <p className="ml-[50px] text-[1.3vh]">인원</p>
         </div>
         {/* 방리스트 타이틀 */}
 
