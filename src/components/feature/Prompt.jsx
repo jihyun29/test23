@@ -3,68 +3,37 @@ import { useState } from "react";
 import { useEffect } from "react";
 
 function Prompt() {
-  const arr = [
+  const promptTextList = [
     "토론을 시작하겟습니다",
     "찬성 발언해주세요",
     "반대 발언해주세요",
     "토론이 종료되었습니다",
   ];
 
-  const durations = [5000, 150000, 150000, 30000];
+  const durations = [5000, 10000, 10000, 3000];
 
   const [index, setIndex] = useState(0);
-  const [remainingTime, setRemainingTime] = useState(durations[0]);
+  let remainTime = durations[index];
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setIndex((prevIndex) => (prevIndex + 1) % arr.length);
-    }, durations[index]);
-
-    setRemainingTime(durations[index]);
-
-    return () => {
-      clearInterval(interval);
-    };
-  }, []);
-
-  useEffect(() => {
-    const time = setInterval(() => {
-      setRemainingTime((prevTime) => prevTime - 1000);
-    });
-  }, 1000);
-  // const [counter, setCounter] = useState(0);
-
-  // useEffect(() => {
-  //   const index = setInterval(() => {
-  //     setCounter((value) => value + 1);
-  //   }, 1000);
-  // }, []);
-
-  const formatTime = (time) => {
-    const minutes = +Math.floor(time / 60000);
-
-    const seconds = Math.floor((time % 60000) / 1000);
-
-    return `${minutes}분 ${seconds}초`;
+  const time = () => {
+    if (remainTime === 0) {
+      setIndex(index + 1);
+      remainTime = durations[index];
+    }
+    remainTime -= 1000;
+    console.log(index);
+    console.log(remainTime);
   };
 
-  return (
-    <div>
-      {arr[index]}
-      <div>남은 시간: {formatTime(remainingTime)}</div>
-    </div>
-  );
+  if (index > 3) {
+    clearInterval(time);
+  }
+  useEffect(() => {
+    setInterval(time, 1000);
+    return clearInterval(time);
+  }, []);
 
-  // return (
-  //   <div>
-  //     <div>
-  //       {Mention.map((item) => (
-  //         <div key={item.id}>{item.ment}</div>
-  //       ))}
-  //     </div>
-  //     <h1>{counter}</h1>
-  //   </div>
-  // );
+  return <div>{promptTextList[index]}</div>;
 }
 
 export default Prompt;

@@ -211,6 +211,7 @@ function RoomList() {
       <div className="flex flex-col w-full h-[80vh]">
         {/* 배너 부분 */}
         <div className="relative flex flex-col w-full h-[20vh] bg-[#464747]">
+          {/* <img src="../../public/img/game.jpg" /> */}
           <button
             onClick={goCategoryBtnClick}
             className="absolute ml-[2vh] text-[2.5vh] font-bold text-white top-[10%]"

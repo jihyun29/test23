@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { io } from "socket.io-client";
 import * as icon from "../icons";
+import Prompt from "../components/feature/Prompt";
 
 function Room() {
   const navigate = useNavigate();
@@ -146,14 +147,14 @@ function Room() {
   const chatSubmitHandler = (event) => {
     const myChat = InputValue.current.value;
     event.preventDefault();
-    socket.current.emit("send_chat", myChat, state);
+    socket.current.emit("send_chat", myChat, roomNumber);
     setTotalChat([...totalChat, `You: ${myChat}`]);
     InputValue.current.value = "";
   };
 
   // 나가기 버튼 클릭 시 실행되는 함수
   const goHomeBtnClick = () => {
-    navigate("/roomlist");
+    navigate("/category");
   };
 
   // 내 비디오, 오디오 정보 가져오는 함수
@@ -283,7 +284,7 @@ function Room() {
         </div>
         {/* text prompt  */}
         <div className="flex justify-center items-center w-full h-[14%] bg-[#2F3131] text-[#C6C6C6] font-bold rounded-2xl text-[2vh]">
-          text prompt
+          <Prompt />
         </div>
         {/* 기능 버튼들 */}
         <div className="flex justify-between w-full h-[7%] px-[1%]">
