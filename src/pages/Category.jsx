@@ -36,6 +36,8 @@ function Category() {
     <icons.Balance width="100%" height="100%" />,
   ];
 
+  const imgSrc = [];
+
   // 가장 많이 선택된 카테고리
   const example = "게임/프로게이머";
 
