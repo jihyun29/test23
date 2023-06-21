@@ -5,8 +5,10 @@ import Header from "../components/Header";
 
 function RoomList() {
   const navigate = useNavigate();
+  // 카테고리 페이지로부터 선택된 카테고리 전달 받음
   const { state } = useLocation();
-  console.log(state);
+
+  // 더미 데이터
   const titleList = [
     "연애 중 초능력을 가지면 좋곘는가?",
     "연애 시 비밀번호를 공유해야 하는가?",
@@ -17,6 +19,7 @@ function RoomList() {
     "연애 중에 썸타는 상대방에게 선물을 주어야 하는가?",
     "연애 중에도 개인 시간을 가져야 하는가?",
   ];
+  // 방 리스트 만들기 위해 더미데이터 이용
   const [roomList, setRoomList] = useState([
     {
       title: "연애 중 초능력을 가지면 좋곘는가?",
@@ -80,10 +83,12 @@ function RoomList() {
     },
   ]);
 
+  // 카테고리로 이동하는 함수
   const goCategoryBtnClick = () => {
     navigate("/category");
   };
 
+  // 방생성 함수 : 지금은 랜덤으로 생성 & 내 화면에만 표시됨으로 향후 수정 필요
   const createRoomBtnClick = () => {
     const randomTitle = Math.round(Math.random() * 7);
     const randomTalker = Math.round(Math.random() * 2);
@@ -107,6 +112,7 @@ function RoomList() {
     <>
       <Header />
       <div className="flex flex-col w-full h-[80vh]">
+        {/* 배너 부분 */}
         <div className="relative flex flex-col w-full h-[20vh] bg-[#464747]">
           <button
             onClick={goCategoryBtnClick}
@@ -133,6 +139,9 @@ function RoomList() {
             방 생성하기
           </button>
         </div>
+        {/* 배너 부분 */}
+
+        {/* 방리스트 타이틀 */}
         <div className="flex items-center w-[87vw] h-[5vh] mx-[6.4vw] mt-auto border-b-2 border-[#777777]">
           <div className="flex justify-center ml-[3vw] w-[51px] text-[1.3vh]">
             Num
@@ -140,6 +149,9 @@ function RoomList() {
           <p className="ml-[7.5vw] w-[50vw]">방제목</p>
           <p className="ml-[50px]">인원</p>
         </div>
+        {/* 방리스트 타이틀 */}
+
+        {/* 빙 리스트 본문 */}
         <div className="flex flex-col w-full h-[53vh] px-[6.4vw] overflow-hidden">
           {roomList.map((item, index) => (
             <ListOne
@@ -152,7 +164,11 @@ function RoomList() {
             />
           ))}
         </div>
+        {/* 빙 리스트 본문 */}
+
+        {/* 페이지네이션 부분 */}
         <div className="mx-auto h-[2vh]">Pagenation</div>
+        {/* 페이지네이션 부분 */}
       </div>
       <Footer />
     </>
@@ -161,33 +177,50 @@ function RoomList() {
 
 export default RoomList;
 
+// 방 리스트 1개 컴포넌트
 function ListOne({ number, title, talker, listener, roomNumber }) {
   const navigate = useNavigate();
+
+  // 방 입장 시 방 넘버 넘겨줌
   const btnClickHandler = () => {
     // socket.emit("enter_room", roomNumber);
     navigate("/room", { state: roomNumber });
   };
+
+  // 방이 꽉 찰 경우 접속 불가하도록 설정
   const talkerStyle = talker === 2 ? "text-red-600" : null;
   const listenerStyle = listener === 8 ? "text-red-600" : null;
   const [style, disabled] =
     talker + listener === 10
       ? ["font-semibold text-[#C6C6C6] text-[1.3vh]", true]
       : ["font-semibold text-[#35C585] text-[1.3vh]", false];
+
   return (
     <div className="flex items-center w-full h-[10%] border-b">
+      {/* 방 넘버 */}
       <div className="flex justify-center w-[51px] ml-[3vw] text-[1.3vh]">
         {number + 1}
       </div>
+      {/* 방 넘버 */}
+
+      {/* 방제목 */}
       <div className="ml-[7.5vw] w-[50vw] text-[1.3vh]">{title}</div>
+      {/* 방제목 */}
+
+      {/* 인원 */}
       <div className="flex justify-between gap-4 text-[1.3vh]">
         <p className={talkerStyle}>발표자 : {talker}/2</p>
         <p className={listenerStyle}>참여자 : {listener}/8</p>
       </div>
+      {/* 인원 */}
+
+      {/* 입장하기 버튼 */}
       <div className="ml-[4vw]">
         <button disabled={disabled} onClick={btnClickHandler} className={style}>
           입장하기
         </button>
       </div>
+      {/* 입장하기 버튼 */}
     </div>
   );
 }
