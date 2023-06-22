@@ -10,7 +10,7 @@ function RoomList() {
 
   // 더미 데이터
   const titleList = [
-    "연애 중 초능력을 가지면 좋곘는가?",
+    "연애 중 초능력을 가지면 좋겠는가?",
     "연애 시 비밀번호를 공유해야 하는가?",
     "연애 중 굿모닝 콜을 받아야 하는가?",
     "연애 중에 솔직한 연애 고백을 해야 하는가?",
@@ -22,7 +22,7 @@ function RoomList() {
   // 방 리스트 만들기 위해 더미데이터 이용
   const [roomList, setRoomList] = useState([
     {
-      title: "연애 중 초능력을 가지면 좋곘는가?",
+      title: "연애 중 초능력을 가지면 좋겠는가?",
       talker: 1,
       listener: 4,
       roomNumber: "가",
@@ -211,7 +211,7 @@ function RoomList() {
       <div className="flex flex-col w-full h-[80vh]">
         {/* 배너 부분 */}
         <div className="relative flex flex-col w-full h-[20vh] bg-[#464747]">
-          {/* <img src="../../public/img/game.jpg" /> */}
+          <img src="../../public/img/game.jpg" />
           <button
             onClick={goCategoryBtnClick}
             className="absolute ml-[2vh] text-[2.5vh] font-bold text-white top-[10%]"
@@ -304,13 +304,17 @@ function ListOne({ number, title, talker, listener, roomNumber }) {
   return (
     <div className="flex items-center w-full h-[10%] border-b">
       {/* 방 넘버 */}
-      <div className="flex justify-center w-[51px] ml-[3vw] text-[1.3vh]">
+      <div className="flex justify-center itmes-center w-[51px] ml-[3vw] text-[1.3vh]">
         {number + 1}
       </div>
       {/* 방 넘버 */}
 
       {/* 방제목 */}
-      <div className="ml-[7.5vw] w-[50vw] text-[1.3vh]">{title}</div>
+      <div className="ml-[7.5vw] w-[50vw] text-[1.3vh]">
+        <p onClick={btnClickHandler} className="w-fit hover:cursor-pointer">
+          {title}
+        </p>
+      </div>
       {/* 방제목 */}
 
       {/* 인원 */}

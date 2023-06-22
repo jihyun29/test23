@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import * as icons from "../icons";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import { game } from "../api/api";
 
 function Category() {
   const navigate = useNavigate();
@@ -40,6 +41,9 @@ function Category() {
 
   // 가장 많이 선택된 카테고리
   const example = "게임/프로게이머";
+
+  // const kategorie = game.kategorie;
+  // console.log(kategorie);
 
   // 입장하기 버튼 클릭 시 실행되는 함수
   // 1. 방 리스트 페이지로 이동

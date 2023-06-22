@@ -1,7 +1,6 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@import "reset.css";
 
 @font-face {
   font-family: "SUITE Variable", sans-serif;

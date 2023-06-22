@@ -10,6 +10,7 @@ function Room() {
   const { state } = useLocation();
   const { roomNumber, defaultTitle } = state;
 
+  // 더미데이터
   const titleList = [
     "연애 중 초능력을 가지면 좋겠는가?",
     "연애 시 비밀번호를 공유해야 하는가?",
@@ -30,8 +31,9 @@ function Room() {
   // 채팅 표시를 위해 사용되는 State
   const [totalChat, setTotalChat] = useState([]);
 
+  // 비디오 끄기, 음소거 아이콘 변경에 사용되는 State
   const [isMuted, setIsMuted] = useState(false);
-  const [isVideoOff, setIsVideoOff] = useState(false);
+  const [isVideoOff, setIsVideoOff] = useState(true);
 
   const socket = useRef(null);
 
@@ -183,29 +185,17 @@ function Room() {
     }, 1);
   };
 
+  // 룰렛 닫는 함수
   const closeRoulette = () => {
     setIsRoulette(false);
   };
-  // useEffect(() => {
-  //   if (!isMuted && !isVideoOff) {
-  //     getMedia();
-  //   }
-  // }, [isMuted, isVideoOff]);
 
-  // 내 비디오, 오디오 스트림
-  // let muted = false;
-  // let cameraOff = false;
-
+  // 내 오디오 음소거 함수
   const muteClickHandler = async () => {
     (await myStream)
       .getAudioTracks()
       .forEach((track) => (track.enabled = !track.enabled));
-    console.log((await myStream).getAudioTracks());
-    // if (!muted) {
-    //   muted = true;
-    // } else {
-    //   muted = false;
-    // }
+    // console.log((await myStream).getAudioTracks());
     if (!isMuted) {
       setIsMuted(true);
     } else {
@@ -213,16 +203,12 @@ function Room() {
     }
   };
 
+  // 내 비디오 끄기 함수
   const cameraOffClickHandler = async () => {
     (await myStream)
       .getVideoTracks()
       .forEach((track) => (track.enabled = !track.enabled));
-    console.log((await myStream).getVideoTracks());
-    // if (!cameraOff) {
-    //   cameraOff = true;
-    // } else {
-    //   cameraOff = false;
-    // }
+    // console.log((await myStream).getVideoTracks());
     if (!isVideoOff) {
       setIsVideoOff(true);
     } else {
@@ -238,16 +224,10 @@ function Room() {
         audio: true,
         video: true,
       });
+      Stream.getVideoTracks().forEach(
+        (track) => (track.enabled = !track.enabled)
+      );
       return Stream;
-      // if (isMuted) {
-      //   myStream.getAudioTracks().forEach((track) => (track.enabled = false));
-      // }
-      // if (isVideoOff) {
-      //   myStream.getVideoTracks().forEach((track) => (track.enabled = false));
-      // }
-      // vedio html요소와 내 오디오, 비동 장비 연결\
-      // myVideoBox.current.srcObject = myStream;
-      // yourVideoBox.current.srcObject = myStream;
     } catch (e) {
       console.log(e);
     }
@@ -264,7 +244,7 @@ function Room() {
       myVideoBox.current.srcObject = await myStream;
       yourVideoBox.current.srcObject = await myStream;
     }, 0);
-  }, [isMuted, isVideoOff]);
+  }, [isMuted, isVideoOff, myStream]);
 
   return (
     <div className="relative flex w-[100vw] h-[100vh] gap-3 bg-black">
@@ -317,7 +297,7 @@ function Room() {
             <icon.Versus width="100%" height="100%" />
           </div>
           {/* 비디오 */}
-          <div className="flex justify-between items-center w-full h-[85%] ov">
+          <div className="flex justify-between items-center w-full h-[85%]">
             {/* 비디오 html : srcObject는 내 오디오, 비디오 장비,연결 시 자동으로 Play되는 autoPlay 속성 적용 */}
             {/* playsinline : 모바일 기기가 비디오를 재생할 때 전체화면이 되지 않도록 설정 */}
             <video
@@ -328,7 +308,7 @@ function Room() {
               muted
             />
             <video
-              className="w-[48%] h-full rounded-2xl border border-red-500"
+              className="w-[48%] h-full rounded-2xl"
               ref={yourVideoBox}
               autoPlay
               playsInline
