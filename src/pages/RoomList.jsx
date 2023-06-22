@@ -1,8 +1,10 @@
+import Lottie from "lottie-react";
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import image from "../images";
+import lottie from "../lottie";
 
 function RoomList() {
   const navigate = useNavigate();
@@ -243,21 +245,32 @@ function RoomList() {
       <Header />
       <div className="flex flex-col w-full h-[80vh]">
         {/* 배너 부분 */}
-        <div className="relative flex flex-col w-full h-[20vh] bg-[#464747]">
-          <img
+        <div className="relative flex flex-col w-full h-[20vh] bg-white">
+          <div className="relative w-full h-full overflow-hidden">
+            <Lottie
+              animationData={lottie.heartback}
+              className="absolute w-full"
+            />
+            <Lottie
+              animationData={lottie.heart3}
+              className="absolute left-[45%] h-full"
+            />
+          </div>
+          {/* [#464747] */}
+          {/* <img
             className="h-full object-cover"
             src={imageSrc}
             alt="카테고리에 따른 이미지"
             auto
-          />
+          /> */}
           <button
             onClick={goCategoryBtnClick}
-            className="absolute ml-[2vh] text-[2.5vh] font-bold text-white top-[10%]"
+            className="absolute ml-[2vh] text-[2.5vh] font-bold text-[#ABABAB] top-[10%]"
           >
             ← 카테고리 선택
           </button>
           <div className="absolute right-[5%] top-[10%] ">
-            <div className="w-fit text-[2.7vh] text-white font-medium ml-auto">
+            <div className="w-fit text-[2.7vh] text-black font-medium ml-auto">
               {state}
             </div>
             <div className="text-[#ABABAB] w-fit  ml-auto">

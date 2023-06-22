@@ -1,7 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Debate } from "../icons";
+// import { Debate } from "../icons";
 import { Profile } from "../icons";
+import lottie from "../lottie";
+import Lottie from "lottie-react";
 
 function Header() {
   const userIcon = localStorage.getItem("authorization") ? (
@@ -20,7 +22,7 @@ function Header() {
     <div className="flex justify-between items-center w-full h-[8vh] border-b border-[#DEE5ED]">
       <div className="flex items-center ml-[9vw] gap-[1.5rem]">
         <div className="w-[5vh] h-[5vh] border rounded-[100%]">
-          <Debate width="100%" height="100%" />
+          <Lottie animationData={lottie.title} className="w-full h-full" />
         </div>
         <div className="text-[3vh] text-[#ABABAB] font-bold">AHGARI 파이터</div>
       </div>

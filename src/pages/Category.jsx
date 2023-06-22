@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Lottie from "lottie-react";
 import * as icons from "../icons";
+import lottie from "../lottie";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 
@@ -34,6 +36,18 @@ function Category() {
     <icons.Business width="100%" height="100%" />,
     <icons.School width="100%" height="100%" />,
     <icons.Balance width="100%" height="100%" />,
+  ];
+
+  const lottieList = [
+    lottie.game,
+    lottie.topic,
+    lottie.sport,
+    lottie.love,
+    lottie.random,
+    lottie.marriage,
+    lottie.work,
+    lottie.school,
+    lottie.versus,
   ];
 
   const imgSrc = [];
@@ -113,7 +127,7 @@ function Category() {
                   key={category}
                   category={category}
                   selectedCategory={selectedCategory}
-                  icon={iconList[index]}
+                  icon={lottieList[index]}
                   onClickHandler={categoryBtnClickHandler}
                 />
               );
@@ -170,8 +184,9 @@ const CategoryCard = ({
       }}
       className={bgStyle}
     >
-      <div className="w-[40%] h-[40%] mt-[25%] rounded-[100%] bg-black">
-        {icon}
+      <div className="w-[40%] h-[40%] mt-[25%] rounded-[100%] bg-white overflow-hidden">
+        {/* {icon} */}
+        <Lottie animationData={icon} className="w-full h-full" />
       </div>
       <p className={ftStyle}>{category}</p>
     </div>

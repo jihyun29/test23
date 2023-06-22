@@ -5,7 +5,7 @@ import love from "./love.jpg";
 import marriage from "./marriage.jpg";
 import work from "./work.jpg";
 import school from "./school.jpg";
-import balance from "./balance.jpg";
+import balance from "./balance.png";
 
 const image = {
   game,
