@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useMemo } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { io } from "socket.io-client";
 import * as icon from "../icons";
@@ -21,9 +21,6 @@ function Room() {
     "연애 중에도 개인 시간을 가져야 하는가?",
   ];
 
-  // 향후 titleList가 변경될 때 useMemo 사용
-  // const titleList = useMemo(() => );
-
   const colors = ["#919191", "#C6C6C6"];
 
   // 타이틀 설정 시 사용되는 State
@@ -32,6 +29,9 @@ function Room() {
   const [isRoulette, setIsRoulette] = useState(false);
   // 채팅 표시를 위해 사용되는 State
   const [totalChat, setTotalChat] = useState([]);
+
+  const [isMuted, setIsMuted] = useState(false);
+  const [isVideoOff, setIsVideoOff] = useState(false);
 
   const socket = useRef(null);
 
@@ -44,9 +44,6 @@ function Room() {
 
   // 채팅 전송을 위한 Ref
   const InputValue = useRef("");
-
-  // 내 비디오, 오디오 스트림
-  let myStream;
 
   // --------- 소켓 부분 -----------
   // 1, 컴포넌트가 마운트 됐을 때 : 소켓 연결
@@ -157,29 +154,14 @@ function Room() {
     navigate("/category");
   };
 
-  // 내 비디오, 오디오 정보 가져오는 함수
-  const getMedia = async () => {
-    try {
-      // 내 오디오, 비디오 장비들의 stram 정보를 가져옴
-      myStream = await navigator.mediaDevices.getUserMedia({
-        audio: false,
-        video: true,
-      });
-      // vedio html요소와 내 오디오, 비동 장비 연결
-      myVideoBox.current.srcObject = myStream;
-      yourVideoBox.current.srcObject = myStream;
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
   // 게임 시작 버튼 클릭 시 실행되는 함수
   const gameStartBtnClickhandler = () => {
     setIsRoulette(true);
   };
 
   // 룰렛 돌려 주제정하는 함수
-  const setTitleBtnClickHandler = () => {
+  const setTitleBtnClickHandler = (event) => {
+    event.stopPropagation();
     const canvas = change.current;
     canvas.style.transform = `initial`;
     canvas.style.transition = `initial`;
@@ -201,14 +183,98 @@ function Room() {
     }, 1);
   };
 
-  getMedia();
+  const closeRoulette = () => {
+    setIsRoulette(false);
+  };
+  // useEffect(() => {
+  //   if (!isMuted && !isVideoOff) {
+  //     getMedia();
+  //   }
+  // }, [isMuted, isVideoOff]);
+
+  // 내 비디오, 오디오 스트림
+  // let muted = false;
+  // let cameraOff = false;
+
+  const muteClickHandler = async () => {
+    (await myStream)
+      .getAudioTracks()
+      .forEach((track) => (track.enabled = !track.enabled));
+    console.log((await myStream).getAudioTracks());
+    // if (!muted) {
+    //   muted = true;
+    // } else {
+    //   muted = false;
+    // }
+    if (!isMuted) {
+      setIsMuted(true);
+    } else {
+      setIsMuted(false);
+    }
+  };
+
+  const cameraOffClickHandler = async () => {
+    (await myStream)
+      .getVideoTracks()
+      .forEach((track) => (track.enabled = !track.enabled));
+    console.log((await myStream).getVideoTracks());
+    // if (!cameraOff) {
+    //   cameraOff = true;
+    // } else {
+    //   cameraOff = false;
+    // }
+    if (!isVideoOff) {
+      setIsVideoOff(true);
+    } else {
+      setIsVideoOff(false);
+    }
+  };
+
+  // 내 비디오, 오디오 정보 가져오는 함수
+  const getMedia = async () => {
+    try {
+      // 내 오디오, 비디오 장비들의 stram 정보를 가져옴
+      const Stream = await navigator.mediaDevices.getUserMedia({
+        audio: true,
+        video: true,
+      });
+      return Stream;
+      // if (isMuted) {
+      //   myStream.getAudioTracks().forEach((track) => (track.enabled = false));
+      // }
+      // if (isVideoOff) {
+      //   myStream.getVideoTracks().forEach((track) => (track.enabled = false));
+      // }
+      // vedio html요소와 내 오디오, 비동 장비 연결\
+      // myVideoBox.current.srcObject = myStream;
+      // yourVideoBox.current.srcObject = myStream;
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  // 컴포넌트 첫 마운트 시에 myStream 정보를 캐싱 후 바꾸지 않음
+  // 향후 반장이 바뀔 때 의존성으로 사용할 수 있을 것 같음
+  const myStream = useMemo(getMedia, []);
+
+  // isMuted 와 isVideoOff 상태를 의존성을 가지며 2개의 상태값이 변할 때마다 캐싱된 myStream 값을 가져와서 video의 srcObject로 입력해줌
+  useEffect(() => {
+    setTimeout(async () => {
+      // console.log(await myStream);
+      myVideoBox.current.srcObject = await myStream;
+      yourVideoBox.current.srcObject = await myStream;
+    }, 0);
+  }, [isMuted, isVideoOff]);
 
   return (
     <div className="relative flex w-[100vw] h-[100vh] gap-3 bg-black">
       {/* 룰렛 */}
       {isRoulette ? (
-        <div className="absolute w-[100vw] h-[100vh] top-0 left-0 bg-slate-200/40 z-[2]">
-          <div className="relative flex justify-center items-center w-[75vh] h-[75vh] top-[12.5%] left-[25vw] z-[3]">
+        <div
+          onClick={closeRoulette}
+          className="absolute w-[100vw] h-[100vh] top-0 left-0 bg-slate-200/40 z-[2]"
+        >
+          <div className="relative flex justify-center items-center w-[75vh] h-[75vh] top-[12.5%] left-[25vw] z-[2]">
             <canvas
               ref={change}
               className="w-full h-full rounded-[100%] border-[2vh] border-gray-400 outline outline-[3vh]"
@@ -253,15 +319,20 @@ function Room() {
           {/* 비디오 */}
           <div className="flex justify-between items-center w-full h-[85%] ov">
             {/* 비디오 html : srcObject는 내 오디오, 비디오 장비,연결 시 자동으로 Play되는 autoPlay 속성 적용 */}
+            {/* playsinline : 모바일 기기가 비디오를 재생할 때 전체화면이 되지 않도록 설정 */}
             <video
               className="w-[48%] h-full rounded-2xl"
               ref={myVideoBox}
               autoPlay
+              playsInline
+              muted
             />
             <video
               className="w-[48%] h-full rounded-2xl border border-red-500"
               ref={yourVideoBox}
               autoPlay
+              playsInline
+              muted
             />
           </div>
           {/* 비디오 */}
@@ -284,7 +355,7 @@ function Room() {
         </div>
         {/* text prompt  */}
         <div className="flex justify-center items-center w-full h-[14%] bg-[#2F3131] text-[#C6C6C6] font-bold rounded-2xl text-[2vh]">
-          <Prompt />
+          {/* <Prompt /> */}
         </div>
         {/* 기능 버튼들 */}
         <div className="flex justify-between w-full h-[7%] px-[1%]">
@@ -293,10 +364,34 @@ function Room() {
               <icon.MoveRoom width="8vh" height="100%" />
             </button>
             <button className="text-white my-2">
-              <icon.VideoOff width="8vh" height="100%" />
+              {isVideoOff ? (
+                <icon.VideoOn
+                  onClick={cameraOffClickHandler}
+                  width="8vh"
+                  height="100%"
+                />
+              ) : (
+                <icon.VideoOff
+                  onClick={cameraOffClickHandler}
+                  width="8vh"
+                  height="100%"
+                />
+              )}
             </button>
             <button className="text-white my-2">
-              <icon.Mute width="8vh" height="100%" />
+              {isMuted ? (
+                <icon.MuteOff
+                  onClick={muteClickHandler}
+                  width="8vh"
+                  height="100%"
+                />
+              ) : (
+                <icon.Mute
+                  onClick={muteClickHandler}
+                  width="8vh"
+                  height="100%"
+                />
+              )}
             </button>
           </div>
           <div className="flex w-[10vh]">
