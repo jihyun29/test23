@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import * as icons from "../icons";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import { game } from "../api/api";
 
 function Category() {
   const navigate = useNavigate();
@@ -101,7 +100,7 @@ function Category() {
         {/* Left Side bar */}
 
         {/* Center */}
-        <div className="flex flex-col justify-evenly items-center w-[50vw] h-full">
+        <div className="flex flex-col justify-evenly items-center w-[50vw] h-full ">
           <p className="font-semibold text-[3vh] text-[#2F3131] font-sans">
             입장하고픈 토론방의 분야를 선택해주세요
           </p>

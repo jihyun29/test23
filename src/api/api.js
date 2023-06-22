@@ -33,7 +33,7 @@ instance.interceptors.response.use(
 );
 
 export const game = {
-  kategorie: async () => await instance.get("/api/kategoria"),
+  kategorie: async () => await instance.get("/api/kategorie"),
 };
 
 export default instance;

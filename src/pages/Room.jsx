@@ -227,6 +227,7 @@ function Room() {
       Stream.getVideoTracks().forEach(
         (track) => (track.enabled = !track.enabled)
       );
+      // console.log(Stream);
       return Stream;
     } catch (e) {
       console.log(e);

@@ -2,13 +2,45 @@ import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
+import image from "../images";
 
 function RoomList() {
   const navigate = useNavigate();
   // 카테고리 페이지로부터 선택된 카테고리 전달 받음
   const { state } = useLocation();
 
-  // 더미 데이터
+  let imageSrc;
+  switch (state) {
+    case "게임/프로게이머":
+      imageSrc = image.game;
+      break;
+    case "연예/이슈":
+      imageSrc = image.celebrity;
+      break;
+    case "스포츠/운동":
+      imageSrc = image.sports;
+      break;
+    case "연애":
+      imageSrc = image.love;
+      break;
+    case "결혼/육아":
+      imageSrc = image.marriage;
+      break;
+    case "회사생활":
+      imageSrc = image.work;
+      break;
+    case "학교생활":
+      imageSrc = image.school;
+      break;
+    case "밸런스게임":
+      imageSrc = image.balance;
+      break;
+    default:
+      imageSrc = null;
+      break;
+  }
+
+  // 더미 데이터 => api로 받아와야 되는 부분들
   const titleList = [
     "연애 중 초능력을 가지면 좋겠는가?",
     "연애 시 비밀번호를 공유해야 하는가?",
@@ -19,7 +51,7 @@ function RoomList() {
     "연애 중에 썸타는 상대방에게 선물을 주어야 하는가?",
     "연애 중에도 개인 시간을 가져야 하는가?",
   ];
-  // 방 리스트 만들기 위해 더미데이터 이용
+  // 방 리스트 만들기 위해 더미데이터 이용 => api로 받아와야 되는 부분들
   const [roomList, setRoomList] = useState([
     {
       title: "연애 중 초능력을 가지면 좋겠는가?",
@@ -173,6 +205,7 @@ function RoomList() {
     },
   ]);
 
+  // 페이지네이션 관련 변수들
   const limit = 10;
   const [page, setPage] = useState(1);
   const offset = (page - 1) * limit;
@@ -211,7 +244,12 @@ function RoomList() {
       <div className="flex flex-col w-full h-[80vh]">
         {/* 배너 부분 */}
         <div className="relative flex flex-col w-full h-[20vh] bg-[#464747]">
-          <img src="../../public/img/game.jpg" />
+          <img
+            className="h-full object-cover"
+            src={imageSrc}
+            alt="카테고리에 따른 이미지"
+            auto
+          />
           <button
             onClick={goCategoryBtnClick}
             className="absolute ml-[2vh] text-[2.5vh] font-bold text-white top-[10%]"
@@ -344,7 +382,7 @@ function Pagination({ total, limit, page, setPage }) {
       <button
         onClick={() => setPage(page - 1)}
         disabled={page === 1}
-        className="h-[90%] disabled:text-gray-400 disabled:cursor-default"
+        className="h-full disabled:text-gray-400 disabled:cursor-default"
       >
         &lt;
       </button>
@@ -363,7 +401,7 @@ function Pagination({ total, limit, page, setPage }) {
       <button
         onClick={() => setPage(page + 1)}
         disabled={page === numPages}
-        className="h-[90%] disabled:text-gray-400 disabled:cursor-default"
+        className="h-full disabled:text-gray-400 disabled:cursor-default"
       >
         &gt;
       </button>
