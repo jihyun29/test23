@@ -2,7 +2,6 @@ import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Category from "../pages/Category";
 import Home from "../pages/Home";
-// import OneRoom from "../pages/OneRoom";
 import Room from "../pages/Room";
 import RoomList from "../pages/RoomList";
 import Kakao from "../pages/kakaoLogin/Kakao";
