@@ -2,6 +2,9 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
+import * as icon from "../icons";
+import Lottie from "lottie-react";
+import lottie from "../lottie";
 
 function Home() {
   const navigate = useNavigate();
@@ -17,13 +20,28 @@ function Home() {
           <div className="absoulte flex text-[5vh] text-[#1B1B1B] font-[900] animate-flowText">
             <div>말 많고 입이 멈추질 않는 프로펠러 돌아가는 소리가 들리는</div>
             &nbsp;
+            <div className="w-[5vh] h-[5vh] my-auto">
+              <Lottie animationData={lottie.heart3} className="h-full" />
+            </div>
             <div>말 많고 입이 멈추질 않는 프로펠러 돌아가는 소리가 들리는</div>
+            &nbsp;
+            <div className="w-[5vh] h-[5vh] my-auto">
+              <Lottie animationData={lottie.heart3} className="h-full" />
+            </div>
+            <div>말 많고 입이 멈추질 않는 프로펠러 돌아가는 소리가 들리는</div>
+            <div className="w-[5vh] h-[5vh] my-auto">
+              <Lottie animationData={lottie.heart3} className="h-full" />
+            </div>
             &nbsp;
             <div>말 많고 입이 멈추질 않는 프로펠러 돌아가는 소리가 들리는</div>
             &nbsp;
+            <div className="w-[5vh] h-[5vh] my-auto">
+              <Lottie animationData={lottie.heart3} className="h-full" />
+            </div>
             <div>말 많고 입이 멈추질 않는 프로펠러 돌아가는 소리가 들리는</div>
-            &nbsp;
-            <div>말 많고 입이 멈추질 않는 프로펠러 돌아가는 소리가 들리는</div>
+            <div className="w-[5vh] h-[5vh] my-auto">
+              <Lottie animationData={lottie.heart3} className="h-full" />
+            </div>
           </div>
           <div
             style={{ textShadow: "2px 2px black" }}

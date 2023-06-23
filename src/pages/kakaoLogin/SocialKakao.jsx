@@ -42,7 +42,7 @@ const SocialKakao = () => {
         <p className="text-[24px] leading-[30px] font-bold">Get Win!</p>
       </div>
       <div className="w-[181px] h-[181px] mx-auto">
-        <LoginLogo />
+        <LoginLogo width="100%" height="100%" />
       </div>
       <div className="flex flex-col justify-center mb-[78px]">
         <div className="App">

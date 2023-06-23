@@ -31,3 +31,9 @@ instance.interceptors.response.use(
     return Promise.reject(error);
   }
 );
+
+export const game = {
+  kategorie: async () => await instance.get("/api/kategorie"),
+};
+
+export default instance;

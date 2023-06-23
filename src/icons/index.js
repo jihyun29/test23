@@ -22,6 +22,7 @@ import { ReactComponent as Thumbsup } from "./thumbsup.svg";
 import { ReactComponent as VideoOff } from "./videoOff.svg";
 import { ReactComponent as VideoOn } from "./videoOn.svg";
 import { ReactComponent as Warning } from "./warning.svg";
+import { ReactComponent as Fight } from "./fight.svg";
 
 export {
   Game,
@@ -48,4 +49,5 @@ export {
   VideoOff,
   VideoOn,
   Warning,
+  Fight,
 };
