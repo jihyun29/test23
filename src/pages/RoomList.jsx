@@ -1,6 +1,8 @@
 import Lottie from "lottie-react";
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
+import { useMutation } from "react-query";
 import { useLocation, useNavigate } from "react-router-dom";
+import { chatgpt } from "../api/api";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import image from "../images";
@@ -10,7 +12,7 @@ function RoomList() {
   const navigate = useNavigate();
   // 카테고리 페이지로부터 선택된 카테고리 전달 받음
   const { state } = useLocation();
-
+  console.log(state);
   let imageSrc;
   switch (state) {
     case "게임/프로게이머":
@@ -42,17 +44,6 @@ function RoomList() {
       break;
   }
 
-  // 더미 데이터 => api로 받아와야 되는 부분들
-  const titleList = [
-    "연애 중 초능력을 가지면 좋겠는가?",
-    "연애 시 비밀번호를 공유해야 하는가?",
-    "연애 중 굿모닝 콜을 받아야 하는가?",
-    "연애 중에 솔직한 연애 고백을 해야 하는가?",
-    "연애 중 키 차이는 중요한가?",
-    "연애 중 신체적 유사성을 필요한가?",
-    "연애 중에 썸타는 상대방에게 선물을 주어야 하는가?",
-    "연애 중에도 개인 시간을 가져야 하는가?",
-  ];
   // 방 리스트 만들기 위해 더미데이터 이용 => api로 받아와야 되는 부분들
   const [roomList, setRoomList] = useState([
     {
@@ -218,24 +209,17 @@ function RoomList() {
   };
 
   // 방생성 함수 : 지금은 랜덤으로 생성 & 내 화면에만 표시됨으로 향후 수정 필요
-  const createRoomBtnClick = () => {
-    const randomTitle = Math.round(Math.random() * 7);
-    const randomTalker = Math.round(Math.random() * 2);
-    const randomListener = Math.round(Math.random() * 8);
-    const title = titleList[randomTitle];
-    setRoomList([
-      ...roomList,
-      {
-        title: title,
-        talker: `${randomTalker}`,
-        listener: `${randomListener}`,
-        roomNumber: `${roomList.length + 1}`,
-      },
-    ]);
+  const createRoomBtnClick = async () => {
+    // const randomTitle = Math.round(Math.random() * 7);
+    // console.log(randomTitle);
+    // console.log(await titleList);
+    // const title = (await titleList)[randomTitle];
+    // console.log(title);
     navigate(`/room/${roomList.length + 1}`, {
       state: {
         roomNumber: roomList.length + 1,
-        defaultTitle: titleList[randomTitle],
+        defaultTitle: "의미없는 데이터",
+        category: state,
       },
     });
   };
@@ -306,6 +290,7 @@ function RoomList() {
             <ListOne
               key={item.roomNumber}
               number={index + limit * (page - 1)}
+              category={state}
               title={item.title}
               talker={item.talker}
               listener={item.listener}
@@ -334,13 +319,17 @@ function RoomList() {
 export default RoomList;
 
 // 방 리스트 1개 컴포넌트
-function ListOne({ number, title, talker, listener, roomNumber }) {
+function ListOne({ number, title, category, talker, listener, roomNumber }) {
   const navigate = useNavigate();
   // 방 입장 시 방 넘버 넘겨줌
   const btnClickHandler = () => {
     // socket.emit("enter_room", roomNumber);
     navigate(`/room/${roomNumber}`, {
-      state: { roomNumber: roomNumber, defaultTitle: title },
+      state: {
+        roomNumber: roomNumber,
+        defaultTitle: title,
+        category: category,
+      },
     });
   };
 

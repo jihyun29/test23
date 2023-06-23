@@ -32,8 +32,9 @@ instance.interceptors.response.use(
   }
 );
 
-export const game = {
-  kategorie: async () => await instance.get("/api/kategorie"),
+export const chatgpt = {
+  kategorie: async (category) =>
+    await instance.post("/api/chatgpt", { kategorieName: category }),
 };
 
 export default instance;

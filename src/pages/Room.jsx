@@ -1,6 +1,10 @@
 import React, { useState, useRef, useEffect, useMemo } from "react";
+import Lottie from "lottie-react";
+import lottie from "../lottie";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useMutation } from "react-query";
 import { io } from "socket.io-client";
+import { chatgpt } from "../api/api";
 import * as icon from "../icons";
 import Prompt from "../components/feature/Prompt";
 
@@ -8,19 +12,8 @@ function Room() {
   const navigate = useNavigate();
   // 방 리스트 페이지에서 페이지 이동 시 넘겨는 State : 방 넘버
   const { state } = useLocation();
-  const { roomNumber, defaultTitle } = state;
-
-  // 더미데이터
-  const titleList = [
-    "연애 중 초능력을 가지면 좋겠는가?",
-    "연애 시 비밀번호를 공유해야 하는가?",
-    "연애 중 굿모닝 콜을 받아야 하는가?",
-    "연애 중에 솔직한 연애 고백을 해야 하는가?",
-    "연애 중 키 차이는 중요한가?",
-    "연애 중 신체적 유사성을 필요한가?",
-    "연애 중에 썸타는 상대방에게 선물을 주어야 하는가?",
-    "연애 중에도 개인 시간을 가져야 하는가?",
-  ];
+  console.log(state);
+  const { roomNumber, defaultTitle, category } = state;
 
   const colors = ["#919191", "#C6C6C6"];
 
@@ -46,6 +39,21 @@ function Room() {
 
   // 채팅 전송을 위한 Ref
   const InputValue = useRef("");
+
+  const { mutateAsync: getTitleList, isLoading: isTitleLoading } = useMutation(
+    () => chatgpt.kategorie(category),
+    {
+      onSuccess: (res) => {
+        console.log("title is", res);
+      },
+      onError: (error) => {
+        console.log(error);
+      },
+      retry: 0,
+    }
+  );
+
+  const titleList = useRef([]);
 
   // --------- 소켓 부분 -----------
   // 1, 컴포넌트가 마운트 됐을 때 : 소켓 연결
@@ -83,12 +91,15 @@ function Room() {
   // ---------- 룰렛 그리기 -----------
   // 문제점 : 룰렛 다른 참여자들도 보이도록 설정 필요
   useEffect(() => {
-    if (isRoulette) {
+    console.log(isTitleLoading);
+    console.log(isRoulette);
+    if (isRoulette && !isTitleLoading) {
+      console.log(titleList.current);
       // const $c = document.querySelector("canvas");
       const $c = change.current;
       const ctx = $c.getContext(`2d`);
 
-      const newMake = () => {
+      const newMake = async () => {
         // 캔버스의 중앙점 구하기
         const [cw, ch] = [$c.width / 2, $c.height / 2];
         const arc = Math.PI / 4;
@@ -126,7 +137,7 @@ function Room() {
           //   ch + Math.sin(angle) * (ch - 70)
           // );
           ctx.rotate(angle + Math.PI);
-          ctx.fillText(titleList[i], 0, i, 140);
+          ctx.fillText(titleList.current[i], 0, i, 140);
 
           // ctx.rotate(angle + Math.PI);
           ctx.restore();
@@ -139,7 +150,7 @@ function Room() {
       };
       newMake();
     }
-  }, [isRoulette, titleList]);
+  }, [isRoulette, isTitleLoading]);
   // ---------- 룰렛 그리기 -----------
 
   // 내 채팅 내용 화면에 띄어줌
@@ -157,7 +168,11 @@ function Room() {
   };
 
   // 게임 시작 버튼 클릭 시 실행되는 함수
-  const gameStartBtnClickhandler = () => {
+  const gameStartBtnClickhandler = async () => {
+    const data = await getTitleList();
+    const sortedData = data.data.data.answer.split("\n");
+    console.log(sortedData);
+    titleList.current = sortedData;
     setIsRoulette(true);
   };
 
@@ -169,17 +184,17 @@ function Room() {
     canvas.style.transition = `initial`;
 
     setTimeout(() => {
-      const ran = Math.floor(Math.random() * titleList.length);
+      const ran = Math.floor(Math.random() * titleList.current.length);
 
-      const arc = 360 / titleList.length;
+      const arc = 360 / titleList.current.length;
       const rotate = ran * arc + 3600 + arc * 3 - arc / 2;
 
       canvas.style.transform = `rotate(-${rotate}deg)`;
       canvas.style.transition = `2s`;
 
       setTimeout(() => {
-        alert(`토론 주제는 ${titleList[ran]} 입니다!`);
-        setTitle(titleList[ran]);
+        alert(`토론 주제는 ${titleList.current[ran]} 입니다!`);
+        setTitle(titleList.current[ran]);
         setIsRoulette(false);
       }, 2000);
     }, 1);
@@ -249,7 +264,7 @@ function Room() {
 
   return (
     <div className="relative flex w-[100vw] h-[100vh] gap-3 bg-black">
-      {/* 룰렛 */}
+      {/* 룰렛 */}(
       {isRoulette ? (
         <div
           onClick={closeRoulette}
@@ -262,6 +277,7 @@ function Room() {
               width="400px"
               height="400px"
             />
+            )
             <button
               className="absolute z-[4] w-[20%] h-[20%] border rounded-full bg-white text-[3vh]"
               onClick={setTitleBtnClickHandler}
@@ -273,9 +289,14 @@ function Room() {
             </div>
           </div>
         </div>
+      ) : isTitleLoading ? (
+        <div className="absolute w-[100vw] h-[100vh] top-0 left-0 bg-slate-200/40 z-[2]">
+          <div className="relative flex justify-center items-center w-[75vh] h-[75vh] top-[12.5%] left-[25vw] z-[2]">
+            <Lottie animationData={lottie.loading} />
+          </div>
+        </div>
       ) : null}
       {/* 룰렛 */}
-
       {/* 게임 창 부분 */}
       <div className="flex flex-col w-[75%] h-full py-[1%] pl-[1%] gap-[1%]">
         {/* 주제 + 비디오 */}
@@ -394,7 +415,6 @@ function Room() {
         </div>
       </div>
       {/* 게임 창 부분 */}
-
       {/* 채팅 박스 */}
       <form
         className="flex flex-col ml-auto  w-[25%] h-full"
