@@ -120,7 +120,7 @@ function Category() {
           </p>
 
           {/* 카테고리 카드들 표시되는 부분 */}
-          <div className="grid grid-cols-3 w-[45vh] h-[45vh] gap-3">
+          <div className="grid grid-cols-3 gird-rows-3 w-[45vh] h-[45vh] gap-3">
             {categoryList.map((category, index) => {
               return (
                 <CategoryCard

@@ -232,7 +232,7 @@ function RoomList() {
         roomNumber: `${roomList.length + 1}`,
       },
     ]);
-    navigate("/room", {
+    navigate(`/room/${roomList.length + 1}`, {
       state: {
         roomNumber: roomList.length + 1,
         defaultTitle: titleList[randomTitle],
@@ -339,7 +339,7 @@ function ListOne({ number, title, talker, listener, roomNumber }) {
   // 방 입장 시 방 넘버 넘겨줌
   const btnClickHandler = () => {
     // socket.emit("enter_room", roomNumber);
-    navigate("/room", {
+    navigate(`/room/${roomNumber}`, {
       state: { roomNumber: roomNumber, defaultTitle: title },
     });
   };
