@@ -40,6 +40,9 @@ function Room() {
   const myVideoBox = useRef(null);
   const yourVideoBox = useRef(null);
 
+  // chatgpt에 카테고리별 주제 받아오는 Ref
+  const titleList = useRef([]);
+
   // 채팅 전송을 위한 Ref
   const chatInputValue = useRef("");
 
@@ -55,8 +58,6 @@ function Room() {
       retry: 0,
     }
   );
-
-  const titleList = useRef([]);
 
   // --------- 소켓 부분 -----------
   useSocket({ socket, roomNumber });
