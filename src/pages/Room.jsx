@@ -1,21 +1,24 @@
-import React, { useState, useRef, useEffect, useMemo } from "react";
+import React from "react";
 import Lottie from "lottie-react";
-import lottie from "../lottie";
+
+import { useState, useRef, useEffect, useMemo } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useMutation } from "react-query";
-import { io } from "socket.io-client";
+
+import { useRoulette } from "../util/useRoulette";
+import { useSocket } from "../util/useSocket";
+
 import { chatgpt } from "../api/api";
+
+import lottie from "../lottie";
 import * as icon from "../icons";
-import Prompt from "../components/feature/Prompt";
 
 function Room() {
   const navigate = useNavigate();
   // 방 리스트 페이지에서 페이지 이동 시 넘겨는 State : 방 넘버
   const { state } = useLocation();
-  console.log(state);
-  const { roomNumber, defaultTitle, category } = state;
 
-  const colors = ["#919191", "#C6C6C6"];
+  const { roomNumber, defaultTitle, category } = state;
 
   // 타이틀 설정 시 사용되는 State
   const [title, setTitle] = useState(defaultTitle);
@@ -31,14 +34,14 @@ function Room() {
   const socket = useRef(null);
 
   // 룰렛 React DOM을 point하기 위한 Ref
-  const change = useRef(null);
+  const roulette = useRef(null);
 
   // 비디오 부분 React DOM을 point하기 위한 Ref
   const myVideoBox = useRef(null);
   const yourVideoBox = useRef(null);
 
   // 채팅 전송을 위한 Ref
-  const InputValue = useRef("");
+  const chatInputValue = useRef("");
 
   const { mutateAsync: getTitleList, isLoading: isTitleLoading } = useMutation(
     () => chatgpt.kategorie(category),
@@ -56,26 +59,7 @@ function Room() {
   const titleList = useRef([]);
 
   // --------- 소켓 부분 -----------
-  // 1, 컴포넌트가 마운트 됐을 때 : 소켓 연결
-  // 2. 리랜더링 시 : 소켓 연결 유지
-  // 3. 언마운트 시 : 소켓 연결 끊기
-  // 참조 : https://gurtn.tistory.com/180
-  useEffect(() => {
-    // 페이지 접속 시 방넘버가 없을 경우 소켓 연결 안되도록 설정
-    if (state === null) {
-      return;
-    }
-    // 방 넘버만 있다면 소켓 연결
-    socket.current = io("http://localhost:4000", {
-      withCredentials: true,
-    });
-    socket.current.emit("enter_room", roomNumber);
-    // 페이지 언마운트 시 소켓 연결 해제
-    return () => {
-      socket.current.disconnect();
-    };
-  }, [roomNumber, state]);
-
+  useSocket({ socket, roomNumber });
   useEffect(() => {
     // 소켓이 연결되어 있지 않다면 홈페이지로 이동
     if (socket.current === null) {
@@ -88,78 +72,23 @@ function Room() {
   });
   // ---------- 소켓 부분 -----------
 
-  // ---------- 룰렛 그리기 -----------
+  // ---------- 룰렛 관련 -----------
   // 문제점 : 룰렛 다른 참여자들도 보이도록 설정 필요
-  useEffect(() => {
-    console.log(isTitleLoading);
-    console.log(isRoulette);
-    if (isRoulette && !isTitleLoading) {
-      console.log(titleList.current);
-      // const $c = document.querySelector("canvas");
-      const $c = change.current;
-      const ctx = $c.getContext(`2d`);
+  useRoulette({ isTitleLoading, isRoulette, titleList, roulette });
 
-      const newMake = async () => {
-        // 캔버스의 중앙점 구하기
-        const [cw, ch] = [$c.width / 2, $c.height / 2];
-        const arc = Math.PI / 4;
-        // 룰렛 배경 항목 수에 따라 그리기 : 8개
-        for (let i = 0; i < 8; i++) {
-          // 그리기 시작
-          ctx.beginPath();
-          // 해당 위치에 넣을 색상 지정
-          ctx.fillStyle = colors[i % 2];
-          // 중앙점으로 이동
-          ctx.moveTo(cw, ch);
-          // 호 그리기
-          // arc(x,y,r, startAngle, endAngle, anticlockwise)
-          // x좌표, y좌표, 반지름, 호의 시작점, 끝점을 각도(라디안 값)로 표시, 그릴 때 반시계 방향으로 그릴지 여부
-          ctx.arc(cw, ch, cw, arc * i, arc * (i + 1), false);
-          ctx.fill();
-          ctx.closePath();
-        }
-        ctx.fillStyle = "white";
-        ctx.textAlign = "center";
-        ctx.fillStyle = "";
-
-        // 아이템 표기
-        for (let i = 0; i < 8; i++) {
-          const angle = arc * i + arc / 2;
-
-          ctx.save();
-
-          ctx.translate(
-            cw + Math.cos(angle) * (cw - 75),
-            ch + Math.sin(angle) * (ch - 75)
-          );
-          // ctx.translate(
-          //   cw + Math.cos(angle) * (cw - 70),
-          //   ch + Math.sin(angle) * (ch - 70)
-          // );
-          ctx.rotate(angle + Math.PI);
-          ctx.fillText(titleList.current[i], 0, i, 140);
-
-          // ctx.rotate(angle + Math.PI);
-          ctx.restore();
-        }
-
-        // titleList.forEach((text, j) => {
-
-        //   // ctx.fillText(text, 0, 20 * j);
-        // });
-      };
-      newMake();
-    }
-  }, [isRoulette, isTitleLoading]);
-  // ---------- 룰렛 그리기 -----------
+  // 룰렛 닫는 함수
+  const closeRoulette = () => {
+    setIsRoulette(false);
+  };
+  // ---------- 룰렛 관련 -----------
 
   // 내 채팅 내용 화면에 띄어줌
   const chatSubmitHandler = (event) => {
-    const myChat = InputValue.current.value;
+    const myChat = chatInputValue.current.value;
     event.preventDefault();
     socket.current.emit("send_chat", myChat, roomNumber);
     setTotalChat([...totalChat, `You: ${myChat}`]);
-    InputValue.current.value = "";
+    chatInputValue.current.value = "";
   };
 
   // 나가기 버튼 클릭 시 실행되는 함수
@@ -179,7 +108,7 @@ function Room() {
   // 룰렛 돌려 주제정하는 함수
   const setTitleBtnClickHandler = (event) => {
     event.stopPropagation();
-    const canvas = change.current;
+    const canvas = roulette.current;
     canvas.style.transform = `initial`;
     canvas.style.transition = `initial`;
 
@@ -198,11 +127,6 @@ function Room() {
         setIsRoulette(false);
       }, 2000);
     }, 1);
-  };
-
-  // 룰렛 닫는 함수
-  const closeRoulette = () => {
-    setIsRoulette(false);
   };
 
   // 내 오디오 음소거 함수
@@ -272,7 +196,7 @@ function Room() {
         >
           <div className="relative flex justify-center items-center w-[75vh] h-[75vh] top-[12.5%] left-[25vw] z-[2]">
             <canvas
-              ref={change}
+              ref={roulette}
               className="w-full h-full rounded-[100%] border-[2vh] border-gray-400 outline outline-[3vh]"
               width="400px"
               height="400px"
@@ -441,7 +365,7 @@ function Room() {
         <div className="flex w-full h-[5%] border border-black gap-[10px] bg-slate-300 p-2 mt-2 rounded-2xl">
           <input
             className="border w-full"
-            ref={InputValue}
+            ref={chatInputValue}
             type="text"
             required
             placeholder="Write chat"

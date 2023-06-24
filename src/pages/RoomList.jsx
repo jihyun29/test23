@@ -1,8 +1,6 @@
 import Lottie from "lottie-react";
-import React, { useState, useMemo } from "react";
-import { useMutation } from "react-query";
+import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { chatgpt } from "../api/api";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import image from "../images";
