@@ -1,7 +1,7 @@
 import Lottie from "lottie-react";
 import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useQuery } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import { game } from "../api/api";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
@@ -33,6 +33,26 @@ function RoomList() {
     }
   );
 
+  const { mutateAsync: createRoom } = useMutation(() => game.createRoom(code), {
+    onSuccess: (res) => {
+      console.log(res);
+    },
+  });
+
+  // 방생성 함수 : 지금은 랜덤으로 생성 & 내 화면에만 표시됨으로 향후 수정 필요
+  const createRoomBtnClick = async () => {
+    const data = await createRoom();
+    const roomData = data.data.data[0];
+    navigate(`/room/${roomData.roomId}`, {
+      state: [roomData.roomId, roomData.roomName, name, code],
+    });
+  };
+
+  // 카테고리로 이동하는 함수
+  const goCategoryBtnClick = () => {
+    navigate("/category");
+  };
+
   useEffect(() => {
     console.log(roomList);
   }, [roomList]);
@@ -41,18 +61,6 @@ function RoomList() {
   const limit = 10;
   const [page, setPage] = useState(1);
   const offset = (page - 1) * limit;
-
-  // 카테고리로 이동하는 함수
-  const goCategoryBtnClick = () => {
-    navigate("/category");
-  };
-
-  // 방생성 함수 : 지금은 랜덤으로 생성 & 내 화면에만 표시됨으로 향후 수정 필요
-  const createRoomBtnClick = async () => {
-    navigate(`/room/${roomList.length + 1}`, {
-      state: [roomList.length + 1, "의미없는 데이터", state],
-    });
-  };
 
   return (
     <>

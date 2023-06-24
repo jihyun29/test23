@@ -47,7 +47,7 @@ function Header() {
         <div className="w-[5vh] h-[5vh] border rounded-[100%]">
           <Lottie animationData={lottie.title} className="w-full h-full" />
         </div>
-        <div className="text-[3vh] text-[#ABABAB] font-bold">AHGARI 파이터</div>
+        <div className="text-[3vh] text-[#ABABAB] font-bold">WHA! PLE</div>
       </div>
       {userIcon}
     </div>

@@ -8,6 +8,7 @@ import { useMutation } from "react-query";
 import { useRoulette } from "../util/useRoulette";
 import { useSocket } from "../util/useSocket";
 
+import { socket } from "../socket";
 import { chatgpt } from "../api/api";
 
 import lottie from "../lottie";
@@ -17,9 +18,8 @@ function GameRoom() {
   const navigate = useNavigate();
   // 방 리스트 페이지에서 페이지 이동 시 넘겨는 State : 방 넘버
   const { state } = useLocation();
-
+  console.log(state);
   const [roomNumber, defaultTitle, categoryName, categoryCode] = state;
-  console.log(roomNumber, defaultTitle, categoryName);
 
   // 타이틀 설정 시 사용되는 State
   const [title, setTitle] = useState(defaultTitle);
@@ -27,25 +27,20 @@ function GameRoom() {
   const [isRoulette, setIsRoulette] = useState(false);
   // 채팅 표시를 위해 사용되는 State
   const [totalChat, setTotalChat] = useState([]);
-
   // 비디오 끄기, 음소거 아이콘 변경에 사용되는 State
   const [isMuted, setIsMuted] = useState(false);
   const [isVideoOff, setIsVideoOff] = useState(true);
 
-  const socket = useRef(null);
-
   // 룰렛 React DOM을 point하기 위한 Ref
   const roulette = useRef(null);
-
   // 비디오 부분 React DOM을 point하기 위한 Ref
   const myVideoBox = useRef(null);
   const yourVideoBox = useRef(null);
+  // 채팅 전송을 위한 Ref
+  const chatInputValue = useRef("");
 
   // chatgpt에 카테고리별 주제 받아오는 Ref
   const titleList = useRef([]);
-
-  // 채팅 전송을 위한 Ref
-  const chatInputValue = useRef("");
 
   const { mutateAsync: getTitleList, isLoading: isTitleLoading } = useMutation(
     () => chatgpt.kategorie(categoryName),
@@ -60,18 +55,30 @@ function GameRoom() {
     }
   );
 
+  // 게임 시작 버튼 클릭 시 실행되는 함수
+  const gameStartBtnClickhandler = async () => {
+    const data = await getTitleList();
+    const sortedData = data.data.content.split("\n");
+    console.log(sortedData);
+    titleList.current = sortedData;
+    setIsRoulette(true);
+  };
+
   // --------- 소켓 부분 -----------
   useSocket({ socket, roomNumber });
-  useEffect(() => {
-    // 소켓이 연결되어 있지 않다면 홈페이지로 이동
-    if (socket.current === null) {
-      return navigate("/");
-    }
-    // 소켓이 연결되어 있다면 새로운 채팅 발생 시 해당 채팅 화면에 띄어줌
-    socket.current.on("new_chatting", (chat) => {
-      setTotalChat([...totalChat, chat]);
-    });
+
+  socket.on("new_chatting", (chat) => {
+    setTotalChat([...totalChat, chat]);
   });
+
+  // 내 채팅 내용 화면에 띄어줌
+  const chatSubmitHandler = (event) => {
+    event.preventDefault();
+    const myChat = chatInputValue.current.value;
+    socket.emit("send_chat", myChat, roomNumber);
+    setTotalChat([...totalChat, `You: ${myChat}`]);
+    chatInputValue.current.value = "";
+  };
   // ---------- 소켓 부분 -----------
 
   // ---------- 룰렛 관련 -----------
@@ -81,30 +88,6 @@ function GameRoom() {
   // 룰렛 닫는 함수
   const closeRoulette = () => {
     setIsRoulette(false);
-  };
-  // ---------- 룰렛 관련 -----------
-
-  // 내 채팅 내용 화면에 띄어줌
-  const chatSubmitHandler = (event) => {
-    const myChat = chatInputValue.current.value;
-    event.preventDefault();
-    socket.current.emit("send_chat", myChat, roomNumber);
-    setTotalChat([...totalChat, `You: ${myChat}`]);
-    chatInputValue.current.value = "";
-  };
-
-  // 나가기 버튼 클릭 시 실행되는 함수
-  const goHomeBtnClick = () => {
-    navigate("/roomlist", { state: [categoryName, categoryCode] });
-  };
-
-  // 게임 시작 버튼 클릭 시 실행되는 함수
-  const gameStartBtnClickhandler = async () => {
-    const data = await getTitleList();
-    const sortedData = data.data.data.answer.split("\n");
-    console.log(sortedData);
-    titleList.current = sortedData;
-    setIsRoulette(true);
   };
 
   // 룰렛 돌려 주제정하는 함수
@@ -129,6 +112,12 @@ function GameRoom() {
         setIsRoulette(false);
       }, 2000);
     }, 1);
+  };
+  // ---------- 룰렛 관련 -----------
+
+  // 나가기 버튼 클릭 시 실행되는 함수
+  const goHomeBtnClick = () => {
+    navigate("/roomlist", { state: [categoryName, categoryCode] });
   };
 
   // 내 오디오 음소거 함수

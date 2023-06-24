@@ -1,4 +1,5 @@
 import React from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 // 방 리스트 1개 컴포넌트
@@ -12,8 +13,10 @@ function Room({
   categoryCode,
 }) {
   const navigate = useNavigate();
+
+  const [isClick, setIsClick] = useState(false);
   // 방 입장 시 방 넘버 넘겨줌
-  const btnClickHandler = () => {
+  const goGameRoomHandler = () => {
     navigate(`/room/${roomId}`, {
       state: [roomId, roomName, categoryName, categoryCode],
     });
@@ -37,7 +40,7 @@ function Room({
 
       {/* 방제목 */}
       <div className="ml-[7.5vw] w-[50vw] text-[1.5vh]">
-        <p onClick={btnClickHandler} className="w-fit hover:cursor-pointer">
+        <p onClick={goGameRoomHandler} className="w-fit hover:cursor-pointer">
           {roomName}
         </p>
       </div>
@@ -52,7 +55,11 @@ function Room({
 
       {/* 입장하기 버튼 */}
       <div className="ml-[4vw]">
-        <button disabled={disabled} onClick={btnClickHandler} className={style}>
+        <button
+          disabled={disabled}
+          onClick={goGameRoomHandler}
+          className={style}
+        >
           입장하기
         </button>
       </div>
