@@ -6,6 +6,7 @@ const URL =
   process.env.NODE_ENV === "production"
     ? process.env.REACT_APP_BACKEND_SERVER_URL
     : "http://localhost:4000";
+// const URL = process.env.REACT_APP_BACKEND_SERVER_URL;
 
 export const socket = io(URL, {
   withCredentials: true,

@@ -5,10 +5,14 @@ import Header from "../components/Header";
 import * as icon from "../icons";
 import Lottie from "lottie-react";
 import lottie from "../lottie";
+import axios from "axios";
+import instance from "../api/api";
 
 function Home() {
   const navigate = useNavigate();
   const moveToCategoryPage = () => {
+    // 테스트
+    instance.put("https://simsimhae.store/api/discussant/36");
     navigate("/category");
   };
 

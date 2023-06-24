@@ -55,7 +55,7 @@ function Category() {
         randomNumber
       ].name;
       return navigate("/roomlist", {
-        state: [randomSubject, randomNumber],
+        state: [randomSubject, randomNumber + 1],
       });
     } else {
       const selectedCategoryCode = await categoryList.filter(

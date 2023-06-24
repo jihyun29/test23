@@ -20,6 +20,7 @@ const SocialKakao = () => {
     console.log("token ", token);
 
     if (token) {
+      console.log(token);
       localStorage.setItem("authorization", JSON.stringify(`Bearer ${token}`));
       setCookie("authorization", `Bearer ${token}`);
       console.log("token");
@@ -35,6 +36,7 @@ const SocialKakao = () => {
   if (Object.keys(token).length > 0) {
     sessionStorage.setItem("RefreshToken", token.token);
   }
+
   return (
     <div className="flex flex-col justify-between w-[600px] h-[671px] border border-[#777777] m-auto px-[114px] rounded-[20px]">
       <div className="w-[131px] h-[60ox] mt-[117px]">

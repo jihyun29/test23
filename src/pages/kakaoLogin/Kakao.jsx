@@ -2,8 +2,8 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
-import axios from "axios";
 import { useCookies } from "react-cookie";
+import jwt_decode from "jwt-decode";
 
 const Kakao = (props) => {
   const [cookie, setCookie, removeCookie] = useCookies(["authorization"]);
@@ -19,8 +19,9 @@ const Kakao = (props) => {
 
     if (token) {
       localStorage.setItem("authorization", JSON.stringify(`Bearer ${token}`));
-
-      setCookie("authorization", `Bearer ${token}`, { path: "/" });
+      const decoded = jwt_decode(token);
+      localStorage.setItem("userId", decoded.userId);
+      setCookie("authorization1", `Bearer ${token}`, { path: "/" });
       console.log("token");
       navigate("/");
     }

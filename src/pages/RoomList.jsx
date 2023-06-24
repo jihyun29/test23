@@ -13,8 +13,14 @@ function RoomList() {
   const navigate = useNavigate();
   // 카테고리 페이지로부터 선택된 카테고리 전달 받음
   const { state } = useLocation();
+  // 카테고리 이름, 코드
   const [name, code] = state;
   console.log(name, code);
+
+  // 페이지네이션 관련 변수들
+  const limit = 10;
+  const [page, setPage] = useState(1);
+  const offset = (page - 1) * limit;
 
   // 방 리스트 만들기 위해 더미데이터 이용 => api로 받아와야 되는 부분들
   const [roomList, setRoomList] = useState([]);
@@ -56,11 +62,6 @@ function RoomList() {
   useEffect(() => {
     console.log(roomList);
   }, [roomList]);
-
-  // 페이지네이션 관련 변수들
-  const limit = 10;
-  const [page, setPage] = useState(1);
-  const offset = (page - 1) * limit;
 
   return (
     <>
@@ -110,7 +111,7 @@ function RoomList() {
           <div className="flex justify-center ml-[3vw] w-[51px] text-[1.5vh]">
             Num
           </div>
-          <p className="ml-[7.5vw] w-[50vw] text-[1.5vh]">방제목</p>
+          <p className="ml-[7.5vw] w-[46vw] text-[1.5vh]">방제목</p>
           <p className="ml-[50px] text-[1.5vh]">인원</p>
         </div>
         {/* 방리스트 타이틀 */}

@@ -1,6 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { socket } from "../socket";
 
 // 방 리스트 1개 컴포넌트
 function Room({
@@ -17,9 +18,23 @@ function Room({
   const [isClick, setIsClick] = useState(false);
   // 방 입장 시 방 넘버 넘겨줌
   const goGameRoomHandler = () => {
+    setIsClick(true);
+  };
+
+  const goGameRoombyTellerHandler = () => {
     navigate(`/room/${roomId}`, {
       state: [roomId, roomName, categoryName, categoryCode],
     });
+  };
+
+  const goGameRoombyListenerHandler = () => {
+    navigate(`/room/${roomId}`, {
+      state: [roomId, roomName, categoryName, categoryCode],
+    });
+  };
+
+  const closeBtnClick = () => {
+    setIsClick(false);
   };
 
   // 방이 꽉 찰 경우 접속 불가하도록 설정
@@ -39,7 +54,7 @@ function Room({
       {/* 방 넘버 */}
 
       {/* 방제목 */}
-      <div className="ml-[7.5vw] w-[50vw] text-[1.5vh]">
+      <div className="ml-[7.5vw] w-[45vw] text-[1.5vh]">
         <p onClick={goGameRoomHandler} className="w-fit hover:cursor-pointer">
           {roomName}
         </p>
@@ -54,15 +69,38 @@ function Room({
       {/* 인원 */}
 
       {/* 입장하기 버튼 */}
-      <div className="ml-[4vw]">
-        <button
-          disabled={disabled}
-          onClick={goGameRoomHandler}
-          className={style}
-        >
-          입장하기
-        </button>
-      </div>
+      {isClick ? (
+        <div className="flex ml-[2vw] gap-[1vw] text-[1.1vh]">
+          <button
+            onClick={goGameRoombyTellerHandler}
+            className=" rounded-[0.5vh] bg-[#DEE5ED] p-[0.2vh]"
+          >
+            발언자
+          </button>
+          <button
+            onClick={goGameRoombyListenerHandler}
+            className="rounded-[0.5vh] bg-[#DEE5ED] p-[0.2vh]"
+          >
+            배심원
+          </button>
+          <button
+            onClick={closeBtnClick}
+            className="rounded-[0.5vh] bg-red-100 p-[0.2vh]"
+          >
+            닫기
+          </button>
+        </div>
+      ) : (
+        <div className="ml-[4vw]">
+          <button
+            disabled={disabled}
+            onClick={goGameRoomHandler}
+            className={style}
+          >
+            입장하기
+          </button>
+        </div>
+      )}
       {/* 입장하기 버튼 */}
     </div>
   );
