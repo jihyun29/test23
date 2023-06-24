@@ -13,7 +13,7 @@ import { chatgpt } from "../api/api";
 import lottie from "../lottie";
 import * as icon from "../icons";
 
-function Room() {
+function GameRoom() {
   const navigate = useNavigate();
   // 방 리스트 페이지에서 페이지 이동 시 넘겨는 State : 방 넘버
   const { state } = useLocation();
@@ -241,9 +241,12 @@ function Room() {
             {/* 주제 */}
           </div>
 
+          {/* Versus */}
           <div className="absolute w-[3vh] h-[2vh right-[48.5%] top-[55%]">
             <icon.Versus width="100%" height="100%" />
           </div>
+          {/* Versus */}
+
           {/* 비디오 */}
           <div className="flex justify-between items-center w-full h-[85%]">
             {/* 비디오 html : srcObject는 내 오디오, 비디오 장비,연결 시 자동으로 Play되는 autoPlay 속성 적용 */}
@@ -288,9 +291,12 @@ function Room() {
         {/* 기능 버튼들 */}
         <div className="flex justify-between w-full h-[7%] px-[1%]">
           <div className="flex w-[40%] gap-[8%]">
+            {/* 랜덤 방 이동 */}
             <button className="text-white my-2">
               <icon.MoveRoom width="8vh" height="100%" />
             </button>
+            {/* 랜덤 방 이동 */}
+            {/* 비디오 켜기/끄기 */}
             <button className="text-white my-2">
               {isVideoOff ? (
                 <icon.VideoOn
@@ -306,6 +312,8 @@ function Room() {
                 />
               )}
             </button>
+            {/* 비디오 켜기/끄기 */}
+            {/* 오디오 켜기/끄기 */}
             <button className="text-white my-2">
               {isMuted ? (
                 <icon.MuteOff
@@ -321,22 +329,27 @@ function Room() {
                 />
               )}
             </button>
+            {/* 오디오 켜기/끄기 */}
           </div>
           <div className="flex w-[10vh]">
+            {/* 게임시작 */}
             <button
               className="text-white my-2 ml-auto w-full border text-[3vh]"
               onClick={gameStartBtnClickhandler}
             >
               start
             </button>
+            {/* 게임시작 */}
           </div>
           <div className="flex">
+            {/* 방 나가기 */}
             <button
               className="text-white my-2 ml-auto"
               onClick={goHomeBtnClick}
             >
               <icon.Exit width="8vh" height="100%" />
             </button>
+            {/* 방 나가기 */}
           </div>
         </div>
       </div>
@@ -380,4 +393,4 @@ function Room() {
   );
 }
 
-export default Room;
+export default GameRoom;
