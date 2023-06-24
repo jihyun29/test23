@@ -430,9 +430,20 @@ function Room() {
         </div>
         {/*----------- 주제 + 비디오 ---------- */}
         {/* Progress bar */}
-        <div className="flex justify-center items-center w-full h-[7%] bg-[#1E1E1E] rounded-2xl text-white">
-          <ProgressBar timers={Ment} />
-          <Timer timers={Ment} />
+        <div className="relative flex justify-center items-center w-full h-[7%] bg-[#1E1E1E] rounded-2xl text-white">
+          {/* <ProgressBar timers={Ment} /> */}
+          {buttonClicked ? (
+            <ProgressBar timers={Ment} />
+          ) : (
+            <div className="absolute left-[10%]  bg-gray-500 w-[70%] h-5 rounded-full"></div>
+          )}
+          {buttonClicked ? (
+            <Timer timers={Ment} />
+          ) : (
+            <button className="absolute text-[#C6C6C6] font-bold rounded-2xl text-[2vh] w-[20%] right-10 mx-auto ">
+              잔여시간
+            </button>
+          )}
         </div>
         {/* 닉네임 */}
         <div className="grid grid-cols-4 grid-rows-2 w-full h-[20%]  gap-2">
@@ -447,8 +458,13 @@ function Room() {
         </div>
         {/* text prompt  */}
         <div className="flex justify-center items-center w-full h-[14%] bg-[#2F3131] text-[#C6C6C6] font-bold rounded-2xl text-[2vh]">
-          {!buttonClicked && <button onClick={handleButtonClick}>Start</button>}
-          {buttonClicked && <Prompt timers={Ment} />}
+          {/* {!buttonClicked && <button onClick={handleButtonClick}>아래 Start버튼을 눌러 시작해주세요!</button>}
+          {buttonClicked && <Prompt timers={Ment} />} */}
+          {buttonClicked ? (
+            <Prompt timers={Ment} />
+          ) : (
+            <div>아래 Start버튼을 눌러 시작해주세요!</div>
+          )}
         </div>
         {/* 기능 버튼들 */}
         <div className="flex justify-between w-full h-[7%] px-[1%]">
@@ -490,7 +506,10 @@ function Room() {
           <div className="flex w-[10vh]">
             <button
               className="text-white my-2 ml-auto w-full border text-[3vh]"
-              onClick={gameStartBtnClickhandler}
+              onClick={() => {
+                gameStartBtnClickhandler();
+                handleButtonClick();
+              }}
             >
               start
             </button>

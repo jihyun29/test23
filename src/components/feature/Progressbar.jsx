@@ -21,10 +21,10 @@ const ProgressBar = ({ timers }) => {
   const progress = (elapsedTime / totalTime) * 100;
 
   return (
-    <div className="container mx-auto my-10">
+    <div className="container mx-auto w-[80%] my-10">
       <div className="relative left-10  bg-gray-500 w-full h-5 rounded-full">
         <div
-          className="absolute top-[25%] bg-green-500 h-[50%] rounded-full"
+          className="absolute top-[25%] bg-green-500 h-[50%] w-full rounded-full"
           style={{ width: `${progress}%`, transition: "width 1s" }}
         >
           <div
