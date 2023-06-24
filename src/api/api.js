@@ -43,4 +43,9 @@ export const chatgpt = {
     await instance.post("/api/chatgpt", { kategorieName: category }),
 };
 
+export const game = {
+  getRoomList: async (category) =>
+    await instance.get(`/api/roomlist/${category}`),
+};
+
 export default instance;

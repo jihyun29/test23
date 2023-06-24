@@ -1,200 +1,38 @@
 import Lottie from "lottie-react";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useQuery } from "react-query";
+import { game } from "../api/api";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
-import image from "../images";
 import lottie from "../lottie";
 
 function RoomList() {
   const navigate = useNavigate();
   // 카테고리 페이지로부터 선택된 카테고리 전달 받음
   const { state } = useLocation();
-  console.log(state);
-  let imageSrc;
-  switch (state) {
-    case "게임/프로게이머":
-      imageSrc = image.game;
-      break;
-    case "연예/이슈":
-      imageSrc = image.celebrity;
-      break;
-    case "스포츠/운동":
-      imageSrc = image.sports;
-      break;
-    case "연애":
-      imageSrc = image.love;
-      break;
-    case "결혼/육아":
-      imageSrc = image.marriage;
-      break;
-    case "회사생활":
-      imageSrc = image.work;
-      break;
-    case "학교생활":
-      imageSrc = image.school;
-      break;
-    case "밸런스게임":
-      imageSrc = image.balance;
-      break;
-    default:
-      imageSrc = null;
-      break;
-  }
+  const [name, code] = state;
+  console.log(name, code);
 
   // 방 리스트 만들기 위해 더미데이터 이용 => api로 받아와야 되는 부분들
-  const [roomList, setRoomList] = useState([
+  const [roomList, setRoomList] = useState([]);
+
+  const { data: getData, isLoading: isRoomListLoading } = useQuery(
+    ["getRoom", code],
+    () => game.getRoomList(code),
     {
-      title: "연애 중 초능력을 가지면 좋겠는가?",
-      talker: 1,
-      listener: 4,
-      roomNumber: "가",
-    },
-    {
-      title: "연애 시 비밀번호를 공유해야 하는가?",
-      talker: 2,
-      listener: 5,
-      roomNumber: "나",
-    },
-    {
-      title: "연애 중 굿모닝 콜을 받아야 하는가?",
-      talker: 1,
-      listener: 3,
-      roomNumber: "다",
-    },
-    {
-      title: "연애 중에 솔직한 연애 고백을 해야 하는가?",
-      talker: 1,
-      listener: 2,
-      roomNumber: "라",
-    },
-    {
-      title: "연애 중 키 차이는 중요한가?",
-      talker: 2,
-      listener: 8,
-      roomNumber: "마",
-    },
-    {
-      title: "연애 중 신체적 유사성을 필요한가?",
-      talker: 2,
-      listener: 5,
-      roomNumber: "바",
-    },
-    {
-      title: "연애 중에 썸타는 상대방에게 선물을 주어야 하는가?",
-      talker: 1,
-      listener: 7,
-      roomNumber: "사",
-    },
-    {
-      title: "연애 중에도 개인 시간을 가져야 하는가?",
-      talker: 1,
-      listener: 8,
-      roomNumber: "아",
-    },
-    {
-      title: "연애 중에도 개인 시간을 가져야 하는가?",
-      talker: 1,
-      listener: 8,
-      roomNumber: "자",
-    },
-    {
-      title: "연애 중에도 개인 시간을 가져야 하는가?",
-      talker: 1,
-      listener: 8,
-      roomNumber: "차",
-    },
-    {
-      title: "연애 중에도 개인 시간을 가져야 하는가?",
-      talker: 1,
-      listener: 8,
-      roomNumber: "카",
-    },
-    {
-      title: "연애 중에도 개인 시간을 가져야 하는가?",
-      talker: 1,
-      listener: 8,
-      roomNumber: "타",
-    },
-    {
-      title: "연애 중에도 개인 시간을 가져야 하는가?",
-      talker: 1,
-      listener: 8,
-      roomNumber: "파",
-    },
-    {
-      title: "연애 중에도 개인 시간을 가져야 하는가?",
-      talker: 1,
-      listener: 8,
-      roomNumber: "하",
-    },
-    {
-      title: "연애 중에도 개인 시간을 가져야 하는가?",
-      talker: 1,
-      listener: 8,
-      roomNumber: "갸",
-    },
-    {
-      title: "연애 중에도 개인 시간을 가져야 하는가?",
-      talker: 1,
-      listener: 8,
-      roomNumber: "냐",
-    },
-    {
-      title: "연애 중에도 개인 시간을 가져야 하는가?",
-      talker: 1,
-      listener: 8,
-      roomNumber: "댜",
-    },
-    {
-      title: "연애 중에도 개인 시간을 가져야 하는가?",
-      talker: 1,
-      listener: 8,
-      roomNumber: "랴",
-    },
-    {
-      title: "연애 중에도 개인 시간을 가져야 하는가?",
-      talker: 1,
-      listener: 8,
-      roomNumber: "먀",
-    },
-    {
-      title: "연애 중에도 개인 시간을 가져야 하는가?",
-      talker: 1,
-      listener: 8,
-      roomNumber: "뱌",
-    },
-    {
-      title: "연애 중에도 개인 시간을 가져야 하는가?",
-      talker: 1,
-      listener: 8,
-      roomNumber: "샤",
-    },
-    {
-      title: "연애 중에도 개인 시간을 가져야 하는가?",
-      talker: 1,
-      listener: 8,
-      roomNumber: "야",
-    },
-    {
-      title: "연애 중에도 개인 시간을 가져야 하는가?",
-      talker: 1,
-      listener: 8,
-      roomNumber: "쟈",
-    },
-    {
-      title: "연애 중에도 개인 시간을 가져야 하는가?",
-      talker: 1,
-      listener: 8,
-      roomNumber: "챠",
-    },
-    {
-      title: "연애 중에도 개인 시간을 가져야 하는가?",
-      talker: 1,
-      listener: 8,
-      roomNumber: "캬",
-    },
-  ]);
+      onSuccess: (data) => {
+        console.log(data);
+        setRoomList([...data.data.data]);
+      },
+      refetchOnWindowFocus: false,
+      retry: 1,
+    }
+  );
+
+  useEffect(() => {
+    console.log(roomList);
+  }, [roomList]);
 
   // 페이지네이션 관련 변수들
   const limit = 10;
@@ -214,11 +52,7 @@ function RoomList() {
     // const title = (await titleList)[randomTitle];
     // console.log(title);
     navigate(`/room/${roomList.length + 1}`, {
-      state: {
-        roomNumber: roomList.length + 1,
-        defaultTitle: "의미없는 데이터",
-        category: state,
-      },
+      state: [roomList.length + 1, "의미없는 데이터", state],
     });
   };
 
@@ -253,7 +87,7 @@ function RoomList() {
           </button>
           <div className="absolute right-[5%] top-[10%] ">
             <div className="w-fit text-[2.7vh] text-black font-medium ml-auto">
-              {state}
+              {name}
             </div>
             <div className="text-[#ABABAB] w-fit  ml-auto">
               연애할 때 나만 이럴까?
@@ -284,15 +118,16 @@ function RoomList() {
 
         {/* 빙 리스트 본문 */}
         <div className="flex flex-col w-full h-[52vh] px-[6.4vw] overflow-hidden">
-          {roomList.slice(offset, offset + limit).map((item, index) => (
+          {roomList?.slice(offset, offset + limit).map((item, index) => (
             <ListOne
-              key={item.roomNumber}
+              key={item.roomId}
               number={index + limit * (page - 1)}
-              category={state}
-              title={item.title}
-              talker={item.talker}
-              listener={item.listener}
-              roomNumber={item.roomNumber}
+              categoryName={item.KategorieName}
+              roomName={item.roomName}
+              debater={item.debater}
+              panel={item.panel}
+              roomId={item.roomId}
+              categoryCode={code}
             />
           ))}
         </div>
@@ -317,25 +152,28 @@ function RoomList() {
 export default RoomList;
 
 // 방 리스트 1개 컴포넌트
-function ListOne({ number, title, category, talker, listener, roomNumber }) {
+function ListOne({
+  number,
+  roomName,
+  debater,
+  panel,
+  roomId,
+  categoryName,
+  categoryCode,
+}) {
   const navigate = useNavigate();
   // 방 입장 시 방 넘버 넘겨줌
   const btnClickHandler = () => {
-    // socket.emit("enter_room", roomNumber);
-    navigate(`/room/${roomNumber}`, {
-      state: {
-        roomNumber: roomNumber,
-        defaultTitle: title,
-        category: category,
-      },
+    navigate(`/room/${roomId}`, {
+      state: [roomId, roomName, categoryName, categoryCode],
     });
   };
 
   // 방이 꽉 찰 경우 접속 불가하도록 설정
-  const talkerStyle = talker === 2 ? "text-red-600" : null;
-  const listenerStyle = listener === 8 ? "text-red-600" : null;
+  const debaterStyle = debater === 2 ? "text-red-600" : null;
+  const panelStyle = panel === 8 ? "text-red-600" : null;
   const [style, disabled] =
-    talker + listener === 10
+    debater + panel === 10
       ? ["font-semibold text-[#C6C6C6] text-[1.3vh]", true]
       : ["font-semibold text-[#35C585] text-[1.3vh]", false];
 
@@ -350,15 +188,15 @@ function ListOne({ number, title, category, talker, listener, roomNumber }) {
       {/* 방제목 */}
       <div className="ml-[7.5vw] w-[50vw] text-[1.3vh]">
         <p onClick={btnClickHandler} className="w-fit hover:cursor-pointer">
-          {title}
+          {roomName}
         </p>
       </div>
       {/* 방제목 */}
 
       {/* 인원 */}
       <div className="flex justify-between gap-4 text-[1.3vh]">
-        <p className={talkerStyle}>발표자 : {talker}/2</p>
-        <p className={listenerStyle}>참여자 : {listener}/8</p>
+        <p className={debaterStyle}>발표자 : {debater}/2</p>
+        <p className={panelStyle}>참여자 : {panel}/8</p>
       </div>
       {/* 인원 */}
 

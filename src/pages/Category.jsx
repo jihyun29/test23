@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Lottie from "lottie-react";
-import * as icons from "../icons";
 import lottie from "../lottie";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
@@ -14,28 +13,15 @@ function Category() {
 
   // 카테고리
   const categoryList = [
-    "게임/프로게이머",
-    "연예/이슈",
-    "스포츠/운동",
-    "연애",
-    "랜덤",
-    "결혼/육아",
-    "회사생활",
-    "학교생활",
-    "밸런스게임",
-  ];
-
-  // 카테고리 별 아이콘
-  const iconList = [
-    <icons.Game width="100%" height="100%" />,
-    <icons.Idol width="100%" height="100%" />,
-    <icons.Health width="100%" height="100%" />,
-    <icons.Love width="100%" height="100%" />,
-    <icons.Random width="100%" height="100%" />,
-    <icons.Marriage width="100%" height="100%" />,
-    <icons.Business width="100%" height="100%" />,
-    <icons.School width="100%" height="100%" />,
-    <icons.Balance width="100%" height="100%" />,
+    { name: "게임/프로게이머", code: 1 },
+    { name: "연예/이슈", code: 2 },
+    { name: "스포츠/운동", code: 3 },
+    { name: "연애", code: 4 },
+    { name: "랜덤", code: 0 },
+    { name: "결혼/육아", code: 5 },
+    { name: "회사생활", code: 6 },
+    { name: "학교생활", code: 7 },
+    { name: "밸런스게임", code: 8 },
   ];
 
   const lottieList = [
@@ -50,8 +36,6 @@ function Category() {
     lottie.versus,
   ];
 
-  const imgSrc = [];
-
   // 가장 많이 선택된 카테고리
   const example = "게임/프로게이머";
 
@@ -62,17 +46,26 @@ function Category() {
   // 1. 방 리스트 페이지로 이동
   // 2. 카테고리 선택 안될 시 알람 발생
   // 3. 랜덤 선택 시 임의의 주제 넘겨줌
-  const enterRoomList = () => {
+  const enterRoomList = async () => {
     if (selectedCategory === null) {
       return alert("카테고리를 선택해주세요.");
     } else if (selectedCategory === "랜덤") {
       const randomNumber = Math.round(Math.random() * 7);
-      const randomSubject = categoryList.filter((item) => item !== "랜덤")[
+      const randomSubject = categoryList.filter((item) => item.name !== "랜덤")[
         randomNumber
-      ];
-      return navigate("/roomlist", { state: randomSubject });
+      ].name;
+      return navigate("/roomlist", {
+        state: [randomSubject, randomNumber],
+      });
+    } else {
+      const selectedCategoryCode = await categoryList.filter(
+        (category) => category.name === selectedCategory
+      )[0].code;
+      console.log(selectedCategoryCode);
+      navigate("/roomlist", {
+        state: [selectedCategory, selectedCategoryCode],
+      });
     }
-    navigate("/roomlist", { state: selectedCategory });
   };
 
   // 메인으로 클릭 시 실행되는 함수
@@ -82,8 +75,9 @@ function Category() {
 
   // 카테고리 클릭 시 실행되는 함수
   // 선택된 카테고리 state에 저장
-  const categoryBtnClickHandler = (category) => {
-    setSelectedCategory(category);
+  const categoryBtnClickHandler = (categoryName) => {
+    console.log(categoryName);
+    setSelectedCategory(categoryName);
   };
 
   return (
@@ -124,8 +118,8 @@ function Category() {
             {categoryList.map((category, index) => {
               return (
                 <CategoryCard
-                  key={category}
-                  category={category}
+                  key={category.name}
+                  categoryName={category.name}
                   selectedCategory={selectedCategory}
                   icon={lottieList[index]}
                   onClickHandler={categoryBtnClickHandler}
@@ -162,25 +156,25 @@ export default Category;
 // 카테고리 페이지에서만 사용됨
 const CategoryCard = ({
   selectedCategory,
-  category,
+  categoryName,
   icon = null,
   onClickHandler,
 }) => {
   // 카테고리 선택 시 디자인 변경을 위한 변수들
 
   const bgStyle =
-    selectedCategory === category
+    selectedCategory === categoryName
       ? "flex flex-col items-center border rounded-[24px] bg-[#2F3131]"
       : "flex flex-col items-center border rounded-[24px] bg-[#F1F1F1]";
   const ftStyle =
-    selectedCategory === category
+    selectedCategory === categoryName
       ? "mt-[5%] text-[1.5vh] font-bold text-[#33F39E]"
       : "mt-[5%] text-[1.5vh] font-bold text-[#777777]";
 
   return (
     <div
       onClick={() => {
-        onClickHandler(category);
+        onClickHandler(categoryName);
       }}
       className={bgStyle}
     >
@@ -188,7 +182,7 @@ const CategoryCard = ({
         {/* {icon} */}
         <Lottie animationData={icon} className="w-full h-full" />
       </div>
-      <p className={ftStyle}>{category}</p>
+      <p className={ftStyle}>{categoryName}</p>
     </div>
   );
 };

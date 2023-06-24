@@ -18,7 +18,8 @@ function Room() {
   // 방 리스트 페이지에서 페이지 이동 시 넘겨는 State : 방 넘버
   const { state } = useLocation();
 
-  const { roomNumber, defaultTitle, category } = state;
+  const [roomNumber, defaultTitle, categoryName, categoryCode] = state;
+  console.log(roomNumber, defaultTitle, categoryName);
 
   // 타이틀 설정 시 사용되는 State
   const [title, setTitle] = useState(defaultTitle);
@@ -47,7 +48,7 @@ function Room() {
   const chatInputValue = useRef("");
 
   const { mutateAsync: getTitleList, isLoading: isTitleLoading } = useMutation(
-    () => chatgpt.kategorie(category),
+    () => chatgpt.kategorie(categoryName),
     {
       onSuccess: (res) => {
         console.log("title is", res);
@@ -94,7 +95,7 @@ function Room() {
 
   // 나가기 버튼 클릭 시 실행되는 함수
   const goHomeBtnClick = () => {
-    navigate("/category");
+    navigate("/roomlist", { state: [categoryName, categoryCode] });
   };
 
   // 게임 시작 버튼 클릭 시 실행되는 함수
