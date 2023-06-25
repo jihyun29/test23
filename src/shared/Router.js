@@ -2,7 +2,7 @@ import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Category from "../pages/Category";
 import Home from "../pages/Home";
-import Room from "../pages/Room";
+import GameRoom from "../pages/GameRoom";
 import RoomList from "../pages/RoomList";
 import Kakao from "../pages/kakaoLogin/Kakao";
 import SocialKakao from "../pages/kakaoLogin/SocialKakao";
@@ -14,7 +14,7 @@ function Router() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/category" element={<Category />} />
-        <Route path="/room" element={<Room />} />
+        <Route path="/room/:id" element={<GameRoom />} />
         <Route path="/roomlist" element={<RoomList />} />
         {/* <Route path="/room/:id" element={<OneRoom />} /> */}
 

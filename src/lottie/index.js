@@ -16,6 +16,7 @@ import versus from "./versus.json";
 import topic from "./topic.json";
 import like from "./like.json";
 import dislike from "./dislike.json";
+import loading from "./loading.json";
 
 import hand from "./hand.json";
 
@@ -36,10 +37,6 @@ const lottie = {
   school,
   versus,
   topic,
-  like,
-  dislike,
-
-  hand,
 };
 
 export default lottie;
