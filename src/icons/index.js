@@ -23,6 +23,11 @@ import { ReactComponent as VideoOff } from "./videoOff.svg";
 import { ReactComponent as VideoOn } from "./videoOn.svg";
 import { ReactComponent as Warning } from "./warning.svg";
 import { ReactComponent as Fight } from "./fight.svg";
+import { ReactComponent as likeButton } from "./likeButton.svg";
+import { ReactComponent as hateButton } from "./hateButton.svg";
+import { ReactComponent as challenge } from "./challeng.svg";
+import { ReactComponent as whyButton } from "./whyButton.svg";
+import { ReactComponent as reportButton } from "./reportButton.svg";
 
 export {
   Game,
@@ -50,4 +55,9 @@ export {
   VideoOn,
   Warning,
   Fight,
+  likeButton,
+  hateButton,
+  challenge,
+  whyButton,
+  reportButton,
 };

@@ -1,39 +1,19 @@
-import React from "react";
-import { useState } from "react";
-import { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
-function Prompt() {
-  const promptTextList = [
-    "토론을 시작하겟습니다",
-    "찬성 발언해주세요",
-    "반대 발언해주세요",
-    "토론이 종료되었습니다",
-  ];
+const Prompt = ({ timers }) => {
+  const [currentIndex, setCurrentIndex] = useState(0);
 
-  const durations = [5000, 10000, 10000, 3000];
-
-  const [index, setIndex] = useState(0);
-  let remainTime = durations[index];
-
-  const time = () => {
-    if (remainTime === 0) {
-      setIndex(index + 1);
-      remainTime = durations[index];
-    }
-    remainTime -= 1000;
-    console.log(index);
-    console.log(remainTime);
-  };
-
-  if (index > 3) {
-    clearInterval(time);
-  }
   useEffect(() => {
-    setInterval(time, 1000);
-    return clearInterval(time);
-  }, []);
+    if (currentIndex < timers.length - 1) {
+      const timerId = setTimeout(() => {
+        setCurrentIndex((prevIndex) => prevIndex + 1);
+      }, timers[currentIndex].timer * 1000);
 
-  return <div>{promptTextList[index]}</div>;
-}
+      return () => clearTimeout(timerId);
+    }
+  }, [currentIndex, timers]);
+
+  return <p>{timers[currentIndex].message}</p>;
+};
 
 export default Prompt;

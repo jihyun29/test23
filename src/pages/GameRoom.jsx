@@ -11,10 +11,52 @@ import { useSocket } from "../util/useSocket";
 import { socket } from "../socket";
 import { chatgpt } from "../api/api";
 
+import Timer from "../components/feature/Timer";
+import Prompt from "../components/feature/Prompt";
+import ProgressBar from "../components/feature/Progressbar";
 import lottie from "../lottie";
 import * as icon from "../icons";
 
 function GameRoom() {
+  const Ment = [
+    {
+      timer: 10,
+      message:
+        "안녕하세요, 토론에 참가해 주신 여러분께 감사드립니다. 오늘은 [주제]에 대해 토론을 진행하도록 하겠습니다.",
+    },
+    {
+      timer: 10,
+      message:
+        "방청객 분들께서는 찬성측과 반대측 발언에 대해서 공감가시는 입장에 토론 종료되기 전까지 투표부탁드립니다",
+    },
+    { timer: 10, message: "모두 준비되셨으면, 시작하겠습니다." },
+    { timer: 10, message: "토론을 시작하겠습니다" },
+    { timer: 10, message: "먼저, 찬성 측 첫번째 발언해주시겠습니까?" },
+    { timer: 150, message: "찬성 측 의견을 말씀해 주세요" },
+    { timer: 150, message: "네, 이번에는 반대 측 의견을 말씀해 주세요" },
+    { timer: 100, message: "찬성 측 반론 있으시면 발언해주세요" },
+    {
+      timer: 100,
+      message: "반대 측 찬성측 발언에 대해 반론이 있으시면 발언해주세요",
+    },
+    { timer: 100, message: "추가로 의견을 제시하실 분은 말씀해주세요" },
+    {
+      timer: 100,
+      message: "시간이 얼마 남지 않았습니다. 마지막 결론 말씀해주세요",
+    },
+    { timer: 100, message: "반대측 부터 발언해주세요" },
+    { timer: 100, message: "마지막으로 찬성 측 발언해주세요" },
+    { timer: 10, message: "토론이 종료되었습니다" },
+    { timer: 10, message: "투표가 종료되었습니다." },
+    { timer: 10, message: "토론배틀에 승자는 {토론자A}입니다. 축하드립니다. " },
+    { timer: 10, message: "다시 한번 참가해 주신 여러분께 감사드립니다. " },
+    {
+      timer: 10,
+      message:
+        "토론에 참가하실 의향이 있으신 분은 도전하기 버튼을 눌러 많은 참여부탁드립니다.",
+    },
+  ];
+
   const navigate = useNavigate();
   // 방 리스트 페이지에서 페이지 이동 시 넘겨는 State : 방 넘버
   const { state } = useLocation();
@@ -177,6 +219,32 @@ function GameRoom() {
     }, 0);
   }, [isMuted, isVideoOff, myStream]);
 
+  /// 작업중
+  const [buttonClicked, setButtonClicked] = useState(false);
+
+  const handleButtonClick = () => {
+    setButtonClicked(true);
+  };
+
+  const [showLikeButton, setShowLikeButton] = useState(false);
+  const [showLikeYouButton, setShowLikeYouButton] = useState(false);
+
+  const handleMouseEnter = () => {
+    setShowLikeButton(true);
+  };
+
+  const handleMouseLeave = () => {
+    setShowLikeButton(false);
+  };
+
+  const handleMouseYouEnter = () => {
+    setShowLikeYouButton(true);
+  };
+
+  const handleMouseYouLeave = () => {
+    setShowLikeYouButton(false);
+  };
+
   return (
     <div className="relative flex w-[100vw] h-[100vh] gap-3 bg-black">
       {/* 룰렛 */}(
@@ -237,30 +305,84 @@ function GameRoom() {
           {/* Versus */}
 
           {/* 비디오 */}
-          <div className="flex justify-between items-center w-full h-[85%]">
+          <div className=" relative flex justify-between items-center w-full h-[85%]">
             {/* 비디오 html : srcObject는 내 오디오, 비디오 장비,연결 시 자동으로 Play되는 autoPlay 속성 적용 */}
             {/* playsinline : 모바일 기기가 비디오를 재생할 때 전체화면이 되지 않도록 설정 */}
-            <video
-              className="w-[48%] h-full rounded-2xl"
-              ref={myVideoBox}
-              autoPlay
-              playsInline
-              muted
-            />
-            <video
-              className="w-[48%] h-full rounded-2xl"
-              ref={yourVideoBox}
-              autoPlay
-              playsInline
-              muted
-            />
+            <div
+              className="relative w-[48%] h-full"
+              onMouseEnter={handleMouseEnter}
+              onMouseLeave={handleMouseLeave}
+            >
+              <video
+                className="  w-full h-full rounded-2xl"
+                ref={myVideoBox}
+                autoPlay
+                playsInline
+                muted
+              />
+              {/* 좋아요버튼 렌더링 */}
+
+              {showLikeButton && (
+                <div className="absolute bottom-0  w-full h-[20%]   opacity-95 flex items-center justify-center">
+                  <div className="flex item-center justify">
+                    {/* <Lottie
+                      animationData={lottie.hand}
+                      className="absolute h-full left-0 cursor-pointer"
+                    /> */}
+                    <icon.challenge className="cursor-pointer left-10" />
+                    <icon.likeButton className="cursor-pointer" />
+                    <icon.hateButton className="cursor-pointer" />
+                    <icon.whyButton className="cursor-pointer" />
+                    <icon.reportButton className="cursor-pointer right-0" />
+                  </div>
+                </div>
+              )}
+            </div>
+            <div
+              className="relative w-[48%] h-full"
+              onMouseEnter={handleMouseYouEnter}
+              onMouseLeave={handleMouseYouLeave}
+            >
+              <video
+                className="  w-full h-full rounded-2xl"
+                ref={yourVideoBox}
+                autoPlay
+                playsInline
+                muted
+              />
+              {/* 좋아요버튼 렌더링 */}
+
+              {showLikeYouButton && (
+                <div className="absolute bottom-0  w-full h-[20%] opacity-75 flex items-center justify-center">
+                  {/* <div className="like-button bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"> */}
+                  <icon.challenge className="cursor-pointer" />
+                  <icon.likeButton className="cursor-pointer" />
+                  <icon.hateButton className="cursor-pointer" />
+                  <icon.whyButton className="cursor-pointer" />
+                  <icon.reportButton className="cursor-pointer" />
+                  {/* </div> */}
+                </div>
+              )}
+            </div>
           </div>
           {/* 비디오 */}
         </div>
         {/*----------- 주제 + 비디오 ---------- */}
         {/* Progress bar */}
-        <div className="flex justify-center items-center w-full h-[7%] bg-[#1E1E1E] rounded-2xl text-white">
-          progress bar
+        <div className="relative flex justify-center items-center w-full h-[7%] bg-[#1E1E1E] rounded-2xl text-white">
+          {/* <ProgressBar timers={Ment} /> */}
+          {buttonClicked ? (
+            <ProgressBar timers={Ment} />
+          ) : (
+            <div className="absolute left-[10%]  bg-gray-500 w-[70%] h-5 rounded-full"></div>
+          )}
+          {buttonClicked ? (
+            <Timer timers={Ment} />
+          ) : (
+            <button className="absolute text-[#C6C6C6] font-bold rounded-2xl text-[2vh] w-[20%] right-10 mx-auto ">
+              잔여시간
+            </button>
+          )}
         </div>
         {/* 닉네임 */}
         <div className="grid grid-cols-4 grid-rows-2 w-full h-[20%]  gap-2">
@@ -275,7 +397,13 @@ function GameRoom() {
         </div>
         {/* text prompt  */}
         <div className="flex justify-center items-center w-full h-[14%] bg-[#2F3131] text-[#C6C6C6] font-bold rounded-2xl text-[2vh]">
-          {/* <Prompt /> */}
+          {/* {!buttonClicked && <button onClick={handleButtonClick}>아래 Start버튼을 눌러 시작해주세요!</button>}
+          {buttonClicked && <Prompt timers={Ment} />} */}
+          {buttonClicked ? (
+            <Prompt timers={Ment} />
+          ) : (
+            <div>아래 Start버튼을 눌러 시작해주세요!</div>
+          )}
         </div>
         {/* 기능 버튼들 */}
         <div className="flex justify-between w-full h-[7%] px-[1%]">
@@ -324,7 +452,10 @@ function GameRoom() {
             {/* 게임시작 */}
             <button
               className="text-white my-2 ml-auto w-full border text-[3vh]"
-              onClick={gameStartBtnClickhandler}
+              onClick={() => {
+                gameStartBtnClickhandler();
+                handleButtonClick();
+              }}
             >
               start
             </button>
