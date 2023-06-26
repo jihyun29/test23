@@ -89,19 +89,19 @@ function Category() {
         <div className="w-[25vw] h-full overflow-hidden">
           <button
             onClick={goHomeHandler}
-            className="text-[#C6C6C6] text-[1.8vw] font-bold mt-[10%] ml-[10%]"
+            className="text-[#C6C6C6] text-[1.8vmin] font-bold mt-[10%] ml-[10%]"
           >
             ← 메인으로
           </button>
-          <div className="flex flex-col justify-between w-[80%] h-[20%] ml-[10%] px-[2.5vh] mt-[25%] bg-[#464747] rounded-[24px]">
-            <div className="mt-[26px] text-[#C6C6C6] text-[1.8vh] font-sans">
+          <div className="flex flex-col justify-between w-[80%] h-[20%] ml-[10%] px-[2.5vmin] mt-[25%] bg-[#464747] rounded-[24px]">
+            <div className="mt-[26px] text-[#C6C6C6] text-[1.8vmin] font-sans">
               <p>지금 가장 많은 사람들이</p>
               <p>선택한 토론방은?</p>
               <span className="bg-black text-white w-fit px-[0.3vw] rounded-[8px] mt-[5px] mr-[0px]">
                 {example}
               </span>
             </div>
-            <button className="text-[#EFFE37] text-[2vh] font-bold ml-auto mb-[1.5vh]">
+            <button className="text-[#EFFE37] text-[2vmin] font-bold ml-auto mb-[1.5vh]">
               바로 선택하기 ➤
             </button>
           </div>
@@ -116,7 +116,7 @@ function Category() {
             </p>
 
             {/* 카테고리 카드들 표시되는 부분 */}
-            <div className="grid grid-cols-3 gird-rows-3 w-[45vh] h-[45vh] gap-3">
+            <div className="grid grid-cols-3 gird-rows-3 w-[45vmin] h-[45vmin] gap-3">
               {categoryList.map((category, index) => {
                 return (
                   <CategoryCard
@@ -163,8 +163,8 @@ const CategoryCard = ({
 
   const bgStyle =
     selectedCategory === categoryName
-      ? "flex flex-col items-center rounded-[24px] border border-[#EFFE37] bg-[#464747]"
-      : "flex flex-col items-center rounded-[24px] bg-[#464747]";
+      ? "flex flex-col items-center rounded-[24px] border border-[#EFFE37] bg-[#464747] cursor-pointer"
+      : "flex flex-col items-center rounded-[24px] bg-[#464747] cursor-pointer";
   const ftStyle =
     selectedCategory === categoryName
       ? "mt-[10%] text-[1.5vh] font-bold text-[#EFFE37]"

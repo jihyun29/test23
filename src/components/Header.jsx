@@ -19,7 +19,7 @@ function Header() {
   const userIcon = localStorage.getItem("authorization") ? (
     <div
       onClick={userIconClickHandler}
-      className="w-[5vh] h-[5vh] mr-[9vw] border rounded-full active:border-[3px]"
+      className="w-[5vh] h-[5vh] mr-[9vw] rounded-full active:border-[3px]"
     >
       <icon.Profile width="100%" height="100%" />
       {isClick ? (

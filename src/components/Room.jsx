@@ -75,26 +75,26 @@ function Room({
           <button
             onClick={goGameRoombyTellerHandler}
             disabled={debaterBtn}
-            className=" rounded-[0.5vh] bg-[#DEE5ED] p-[0.2vh]"
+            className=" rounded-[0.5vh] p-[0.2vh] text-[#EFFE37] text-[1.5vh] font-semibold"
           >
             발언자
           </button>
           <button
             onClick={goGameRoombyListenerHandler}
             disabled={panelBtn}
-            className="rounded-[0.5vh] bg-[#DEE5ED] p-[0.2vh]"
+            className="rounded-[0.5vh] p-[0.2vh] text-[#EFFE37] text-[1.5vh] font-semibold"
           >
             배심원
           </button>
           <button
             onClick={closeBtnClick}
-            className="rounded-[0.5vh] bg-red-100 p-[0.2vh]"
+            className="rounded-[0.5vh] p-[0.2vh] text-red-200 text-[1.5vh] font-semibold"
           >
             닫기
           </button>
         </div>
       ) : (
-        <div className="ml-[4vw]">
+        <div className="ml-[6vw]">
           <button
             disabled={disabled}
             onClick={goGameRoomHandler}
