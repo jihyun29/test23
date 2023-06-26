@@ -146,10 +146,9 @@ function RoomList() {
         <div className="relative flex flex-col w-full h-[20vh] bg-white">
           <div className="relative w-full h-full overflow-hidden">
             <img
-              className="h-full object-cover"
+              className="w-full h-full object-fill"
               src={bannerImage}
               alt="카테고리에 따른 이미지"
-              auto
             />
           </div>
           <button
