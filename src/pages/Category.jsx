@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import icon from "../icons";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import instance from "../api/api";
 
 function Category() {
   const navigate = useNavigate();
@@ -40,9 +41,6 @@ function Category() {
   // 가장 많이 선택된 카테고리
   const example = "게임/프로게이머";
 
-  // const kategorie = game.kategorie;
-  // console.log(kategorie);
-
   // 입장하기 버튼 클릭 시 실행되는 함수
   // 1. 방 리스트 페이지로 이동
   // 2. 카테고리 선택 안될 시 알람 발생
@@ -55,14 +53,21 @@ function Category() {
       const randomSubject = categoryList.filter((item) => item.name !== "랜덤")[
         randomNumber
       ].name;
+      const data = await instance.put("/api/user", {
+        Authorization: localStorage.getItem("authorization"),
+      });
+      console.log(data);
       return navigate("/roomlist", {
         state: [randomSubject, randomNumber + 1],
       });
     } else {
-      const selectedCategoryCode = await categoryList.filter(
+      const selectedCategoryCode = categoryList.filter(
         (category) => category.name === selectedCategory
       )[0].code;
-      console.log(selectedCategoryCode);
+      const data = await instance.put("/api/user", {
+        Authorization: localStorage.getItem("authorization"),
+      });
+      console.log(data);
       navigate("/roomlist", {
         state: [selectedCategory, selectedCategoryCode],
       });
@@ -86,17 +91,17 @@ function Category() {
       <Header />
       <div className="flex w-full h-[80vh]">
         {/* Left Side bar */}
-        <div className="w-[25vw] h-full overflow-hidden">
+        <div className="w-[30vw] h-full overflow-hidden">
           <button
             onClick={goHomeHandler}
-            className="text-[#C6C6C6] text-[1.8vmin] font-bold mt-[10%] ml-[10%]"
+            className="text-[#C6C6C6] text-[1.8vmin] font-bold mt-[5vmin] ml-[10%]"
           >
             ← 메인으로
           </button>
-          <div className="flex flex-col justify-between w-[18=9vw] h-[16vmin] ml-[5vmin] px-[2.5vmin] mt-[25%] bg-[#464747] rounded-[24px]">
+          <div className="flex flex-col justify-between w-[23vmin] h-[16vmin] ml-[5vmin] px-[2.5vmin] mt-[25%] bg-[#464747] rounded-[24px]">
             <div className="mt-[2.6vmin] text-[#C6C6C6] text-[1.8vmin] font-sans">
-              <p>지금 가장 많은 사람들이</p>
-              <p>선택한 토론방은?</p>
+              <p>지금 가장 많은 사람들이 선택한 토론방은?</p>
+              {/* <p>선택한 토론방은?</p> */}
               <span className="bg-black text-white w-fit px-[0.3vmin] rounded-[8px] mt-[5px] mr-[0px]">
                 {example}
               </span>
@@ -109,9 +114,9 @@ function Category() {
         {/* Left Side bar */}
 
         {/* Center */}
-        <div className="w-[80vw] h-full">
-          <div className="w-[60%] h-full flex flex-col justify-evenly items-center">
-            <p className="font-semibold text-[3vmin] text-[#C6C6C6] font-sans">
+        <div className="w-[70vw] h-full">
+          <div className="w-[60vmin] h-full flex flex-col items-center justify-between">
+            <p className="font-semibold text-[3vmin] text-[#C6C6C6] mt-[8vmin]">
               입장하고픈 토론방의 분야를 선택해주세요
             </p>
 
@@ -131,7 +136,7 @@ function Category() {
             </div>
             {/* 카테고리 카드들 표시되는 부분 */}
 
-            <div className="flex justify-center w-full">
+            <div className="flex justify-center w-full mb-[8vmin]">
               <button
                 // disabled
                 onClick={enterRoomList}
@@ -167,8 +172,8 @@ const CategoryCard = ({
       : "flex flex-col items-center rounded-[24px] bg-[#464747] cursor-pointer";
   const ftStyle =
     selectedCategory === categoryName
-      ? "mt-[10%] text-[1.5vh] font-bold text-[#EFFE37]"
-      : "mt-[10%] text-[1.5vh] font-bold text-[#C6C6C6]";
+      ? "mt-[8%] text-[1.5vmin] font-bold text-[#EFFE37]"
+      : "mt-[8%] text-[1.5vmin] font-bold text-[#C6C6C6]";
 
   return (
     <div
