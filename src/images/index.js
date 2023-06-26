@@ -1,11 +1,11 @@
-import game from "./banner:game.jpg";
-import entertainment from "./banner:entertainment.jpg";
-import sport from "./banner:sport.jpg";
-import love from "./banner:love.jpg";
-import marriage from "./banner:marriage.jpg";
-import company from "./banner:company.jpg";
-import school from "./banner:school.jpg";
-import balancegame from "./banner:balancegame.jpg";
+import game from "./game.jpg";
+import entertainment from "./entertainment.jpg";
+import sport from "./sport.jpg";
+import love from "./love.jpg";
+import marriage from "./marriage.jpg";
+import company from "./company.jpg";
+import school from "./school.jpg";
+import balancegame from "./balancegame.jpg";
 
 const image = {
   game,

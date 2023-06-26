@@ -26,20 +26,20 @@ import { ReactComponent as MainFlowText6 } from "./왠지 말 많고.svg";
 import { ReactComponent as MainFlowText7 } from "./입이 멈추질 않는.svg";
 import { ReactComponent as MainFlowText8 } from "./프로펠러 돌아가는.svg";
 import { ReactComponent as MainFlowText9 } from "./소리가 들리는.svg";
-import { ReactComponent as MainHearts } from "./main:Hearts.svg";
-import { ReactComponent as MainLoL } from "./main:lol.svg";
-import { ReactComponent as MainProp } from "./main:prop.svg";
-import { ReactComponent as MainSound } from "./main:sound.svg";
-import { ReactComponent as MainArrow } from "./main:arrow.svg";
-import { ReactComponent as BalanceGame } from "./category:balancegame.svg";
-import { ReactComponent as Company } from "./category:company.svg";
-import { ReactComponent as Entertainment } from "./category:entertainment.svg";
-import { ReactComponent as Game } from "./category:game.svg";
-import { ReactComponent as Love } from "./category:love.svg";
-import { ReactComponent as Marriage } from "./category:marriage.svg";
-import { ReactComponent as Random } from "./category:random.svg";
-import { ReactComponent as School } from "./category:school.svg";
-import { ReactComponent as Sports } from "./category:sports.svg";
+import { ReactComponent as MainHearts } from "./Hearts.svg";
+import { ReactComponent as MainLoL } from "./lol.svg";
+import { ReactComponent as MainProp } from "./prop.svg";
+import { ReactComponent as MainSound } from "./sound.svg";
+import { ReactComponent as MainArrow } from "./arrow.svg";
+import { ReactComponent as BalanceGame } from "./balancegame.svg";
+import { ReactComponent as Company } from "./company.svg";
+import { ReactComponent as Entertainment } from "./entertainment.svg";
+import { ReactComponent as Game } from "./game.svg";
+import { ReactComponent as Love } from "./love.svg";
+import { ReactComponent as Marriage } from "./marriage.svg";
+import { ReactComponent as Random } from "./random.svg";
+import { ReactComponent as School } from "./school.svg";
+import { ReactComponent as Sports } from "./sports.svg";
 
 export const icon = {
   Debate,
