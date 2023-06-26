@@ -8,7 +8,15 @@ import { io } from "socket.io-client";
 //   : "http://localhost:4000";
 const URL = process.env.REACT_APP_BACKEND_SERVER_URL;
 
-export const socket = io(URL, {
+export const socketWOToken = io(URL, {
   // secure: true,
   withCredentials: true,
+});
+
+export const socketWithToken = io(URL, {
+  // secure: true,
+  withCredentials: true,
+  query: {
+    token: localStorage.getItem("authorization"),
+  },
 });

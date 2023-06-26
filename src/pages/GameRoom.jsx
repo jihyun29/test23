@@ -8,7 +8,7 @@ import { useMutation } from "react-query";
 import { useRoulette } from "../util/useRoulette";
 import { useSocket } from "../util/useSocket";
 
-import { socket } from "../socket";
+import { socketWOToken, socketWithToken } from "../socket";
 import { chatgpt } from "../api/api";
 
 import Timer from "../components/feature/Timer";
@@ -63,6 +63,8 @@ function GameRoom() {
   console.log(state);
   const [roomNumber, defaultTitle, categoryName, categoryCode, isTeller] =
     state;
+
+  const socket = isTeller ? socketWithToken : socketWOToken;
 
   // 타이틀 설정 시 사용되는 State
   const [title, setTitle] = useState(defaultTitle);

@@ -14,6 +14,7 @@ function Header() {
   };
   const logoutClickHandler = () => {
     localStorage.removeItem("authorization");
+    localStorage.removeItem("userId");
     navigate("/");
   };
   const userIcon = localStorage.getItem("authorization") ? (
@@ -23,7 +24,7 @@ function Header() {
     >
       <icon.Profile width="100%" height="100%" />
       {isClick ? (
-        <div className="absolute flex flex-col w-[14vw] h-[5vh] top-[7vh] right-[4.5vw] rounded-[1vw] p-[1vh] bg-[#F2F2F2] z-[2]">
+        <div className="absolute flex flex-col w-[14vw] h-[5vh] top-[7vh] right-[4.5vw] rounded-[1vw] p-[1vh] bg-[#F2F2F2] z-[5]">
           <div
             onClick={logoutClickHandler}
             className="flex bg-white h-[3vh] rounded-[1vw] text-[1.5vh] justify-center items-center hover:bg-blue-100"

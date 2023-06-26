@@ -93,15 +93,15 @@ function Category() {
           >
             ← 메인으로
           </button>
-          <div className="flex flex-col justify-between w-[80%] h-[20%] ml-[10%] px-[2.5vmin] mt-[25%] bg-[#464747] rounded-[24px]">
-            <div className="mt-[26px] text-[#C6C6C6] text-[1.8vmin] font-sans">
+          <div className="flex flex-col justify-between w-[18=9vw] h-[16vmin] ml-[5vmin] px-[2.5vmin] mt-[25%] bg-[#464747] rounded-[24px]">
+            <div className="mt-[2.6vmin] text-[#C6C6C6] text-[1.8vmin] font-sans">
               <p>지금 가장 많은 사람들이</p>
               <p>선택한 토론방은?</p>
-              <span className="bg-black text-white w-fit px-[0.3vw] rounded-[8px] mt-[5px] mr-[0px]">
+              <span className="bg-black text-white w-fit px-[0.3vmin] rounded-[8px] mt-[5px] mr-[0px]">
                 {example}
               </span>
             </div>
-            <button className="text-[#EFFE37] text-[2vmin] font-bold ml-auto mb-[1.5vh]">
+            <button className="text-[#EFFE37] text-[2vmin] font-bold ml-auto mb-[1.5vmin]">
               바로 선택하기 ➤
             </button>
           </div>
@@ -111,7 +111,7 @@ function Category() {
         {/* Center */}
         <div className="w-[80vw] h-full">
           <div className="w-[60%] h-full flex flex-col justify-evenly items-center">
-            <p className="font-semibold text-[3vh] text-[#C6C6C6] font-sans">
+            <p className="font-semibold text-[3vmin] text-[#C6C6C6] font-sans">
               입장하고픈 토론방의 분야를 선택해주세요
             </p>
 
@@ -135,7 +135,7 @@ function Category() {
               <button
                 // disabled
                 onClick={enterRoomList}
-                className="bg-[#EFFE37] px-[12vh] py-[2vh] rounded-[60px] text-[2.5vh] font-bold"
+                className="bg-[#EFFE37] px-[12vmin] py-[2vmin] rounded-[60px] text-[2.5vmin] font-bold"
               >
                 입장하기
               </button>

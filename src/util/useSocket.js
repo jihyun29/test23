@@ -8,7 +8,7 @@ export function useSocket({ socket, roomNumber, isTeller }) {
   // 참조 : https://socket.io/how-to/use-with-react
   useEffect(() => {
     // 누르는 버튼에 따라 다른 이벤트 발생
-    socket.connect();
+    socket.connect(`${process.env.REACT_APP_BACKEND_SERVER_URL}?`);
     if (!isTeller) {
       socket.emit(
         "joinJuror",
