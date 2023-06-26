@@ -9,7 +9,7 @@ function Pagination({ total, limit, page, setPage }) {
       <button
         onClick={() => setPage(page - 1)}
         disabled={page === 1}
-        className="h-full disabled:text-gray-400 disabled:cursor-default"
+        className="h-full text-white disabled:text-[#777777] disabled:cursor-default"
       >
         &lt;
       </button>
@@ -20,7 +20,7 @@ function Pagination({ total, limit, page, setPage }) {
             key={i + 1}
             onClick={() => setPage(i + 1)}
             aria-current={page === i + 1 ? "page" : null}
-            className="w-[2vh] h-[2vh] rounded-[100%] px-[0.5vh] bg-black text-[white] text-[1vh] hover:bg-[tomato] hover:cursor-pointer translate-y-[-2px] aria-[current]:bg-green-500 aria-[current]:font-bold"
+            className="w-[2vh] h-[2vh] rounded-[100%] px-[0.5vh] text-[#D9D9D9] text-[1vh] aria-[current]:text-white aria-[current]:font-[800] aria-[current]:text-[1.3vh]"
           >
             {i + 1}
           </button>
@@ -28,7 +28,7 @@ function Pagination({ total, limit, page, setPage }) {
       <button
         onClick={() => setPage(page + 1)}
         disabled={page === numPages}
-        className="h-full disabled:text-gray-400 disabled:cursor-default"
+        className="h-full text-white disabled:text-[#777777] disabled:cursor-default"
       >
         &gt;
       </button>

@@ -1,123 +1,91 @@
 import React from "react";
+import Lottie from "lottie-react";
 import { useNavigate } from "react-router-dom";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
-import * as icon from "../icons";
-import Lottie from "lottie-react";
+import icon from "../icons";
 import lottie from "../lottie";
-import axios from "axios";
-import instance from "../api/api";
+// import axios from "axios";
+// import instance from "../api/api";
 
 function Home() {
   const navigate = useNavigate();
   const moveToCategoryPage = () => {
     // 테스트
-    instance.put("https://simsimhae.store/api/discussant/36");
+    // instance.put("https://simsimhae.store/api/discussant/36");
     navigate("/category");
   };
 
   return (
     <>
       <Header />
-      <div className="flex flex-col w-full h-[80vh] justify-between">
-        <div className="relative mt-[10vh] flex flex-col items-center w-full h-[25vh] whitespace-nowrap overflow-hidden">
-          <div className="absoulte flex text-[5vh] text-[#1B1B1B] font-[900] animate-flowText">
-            <div>말 많고 입이 멈추질 않는 프로펠러 돌아가는 소리가 들리는</div>
-            &nbsp;
-            <div className="w-[5vh] h-[5vh] my-auto">
-              <Lottie animationData={lottie.heart3} className="h-full" />
+      <div className="flex flex-col w-full h-[80vh]">
+        <div className="relative mt-[5vh] flex flex-col items-center w-full h-[20vh] whitespace-nowrap overflow-hidden">
+          <div className="absoulte flex justify-start w-[300%] h-[50%] animate-flowText">
+            <div className="flex w-full h-full items-center">
+              <icon.MainFlowText1 width="19%" height="100%" />
+              <Lottie className="w-[12%]" animationData={lottie.globe} />
+              <icon.MainFlowText2 width="38%" height="100%" />
+              <icon.MainHearts width="10%" height="290%" />
+              <icon.MainFlowText3 width="54%" height="100%" />
+              <icon.MainArrow width="12%" height="100%" />
+              <icon.MainFlowText4 width="46%" height="100%" />
+              <icon.MainLoL width="20%" height="100%" />
+              <icon.MainFlowText5 width="39%" height="100%" />
+              <p className="w-[2%]"></p>
             </div>
-            <div>말 많고 입이 멈추질 않는 프로펠러 돌아가는 소리가 들리는</div>
-            &nbsp;
-            <div className="w-[5vh] h-[5vh] my-auto">
-              <Lottie animationData={lottie.heart3} className="h-full" />
-            </div>
-            <div>말 많고 입이 멈추질 않는 프로펠러 돌아가는 소리가 들리는</div>
-            <div className="w-[5vh] h-[5vh] my-auto">
-              <Lottie animationData={lottie.heart3} className="h-full" />
-            </div>
-            &nbsp;
-            <div>말 많고 입이 멈추질 않는 프로펠러 돌아가는 소리가 들리는</div>
-            &nbsp;
-            <div className="w-[5vh] h-[5vh] my-auto">
-              <Lottie animationData={lottie.heart3} className="h-full" />
-            </div>
-            <div>말 많고 입이 멈추질 않는 프로펠러 돌아가는 소리가 들리는</div>
-            <div className="w-[5vh] h-[5vh] my-auto">
-              <Lottie animationData={lottie.heart3} className="h-full" />
-            </div>
-          </div>
-          <div
-            style={{ textShadow: "2px 2px black" }}
-            className="absolute flex top-[25%] text-[5vh] text-white font-[900] animate-flowText"
-          >
-            <div>
-              할 거 없는데 잠 자기 보단 말하는 걸 선택하고픈 그런 날인 당신에게
-            </div>
-            &nbsp;
-            <div>
-              할 거 없는데 잠 자기 보단 말하는 걸 선택하고픈 그런 날인 당신에게
-            </div>
-            &nbsp;
-            <div>
-              할 거 없는데 잠 자기 보단 말하는 걸 선택하고픈 그런 날인 당신에게
-            </div>
-            &nbsp;
-            <div>
-              할 거 없는데 잠 자기 보단 말하는 걸 선택하고픈 그런 날인 당신에게
-            </div>
-            &nbsp;
-            <div>
-              할 거 없는데 잠 자기 보단 말하는 걸 선택하고픈 그런 날인 당신에게
+            <div className="flex w-full h-full items-center">
+              <icon.MainFlowText1 width="19%" height="100%" />
+              <Lottie className="w-[12%]" animationData={lottie.globe} />
+              <icon.MainFlowText2 width="38%" height="100%" />
+              <icon.MainHearts width="10%" height="290%" />
+              <icon.MainFlowText3 width="54%" height="100%" />
+              <icon.MainArrow width="12%" height="100%" />
+              <icon.MainFlowText4 width="46%" height="100%" />
+              <icon.MainLoL width="20%" height="100%" />
+              <icon.MainFlowText5 width="39%" height="100%" />
+              <p className="w-[2%]"></p>
             </div>
           </div>
-          <div className="absolute top-[50%] flex text-[5vh] text-[#1B1B1B] font-[900] animate-flowText">
-            <div>토론을 좋아하고 자신의 주장을 내세워 이야기하길 좋아하는</div>
-            &nbsp;
-            <div>토론을 좋아하고 자신의 주장을 내세워 이야기하길 좋아하는</div>
-            &nbsp;
-            <div>토론을 좋아하고 자신의 주장을 내세워 이야기하길 좋아하는</div>
-            &nbsp;
-            <div>토론을 좋아하고 자신의 주장을 내세워 이야기하길 좋아하는</div>
-            &nbsp;
-            <div>토론을 좋아하고 자신의 주장을 내세워 이야기하길 좋아하는</div>
-          </div>
-          <div
-            style={{ textShadow: "2px 2px black" }}
-            className="absolute flex top-[75%] text-[5vh] text-white font-[900] animate-flowText"
-          >
-            <div>
-              말하는 건 몰라도 말 잘하는 이에게 따봉을 들어주고픈 그런
-              분들에게도
+          <div className="absoulte flex w-[300%] h-[50%] animate-flowText">
+            <div className="flex w-full h-full items-center">
+              <icon.MainFlowText6 width="22%" height="100%" />
+              <p className="w-[2%]"></p>
+              <icon.MainLoL width="20%" height="100%" />
+              <icon.MainFlowText7 width="30%" height="100%" />
+              <p className="w-[2%]"></p>
+              <icon.MainProp width="8%" height="100%" />
+              <p className="w-[2%]"></p>
+              <icon.MainFlowText8 width="33%" height="100%" />
+              <p className="w-[2%]"></p>
+              <icon.MainSound width="12%" height="100%" />
+              <p className="w-[2%]"></p>
+              <icon.MainFlowText9 width="25%" height="100%" />
+              <p className="w-[2%]"></p>
             </div>
-            &nbsp;
-            <div>
-              말하는 건 몰라도 말 잘하는 이에게 따봉을 들어주고픈 그런
-              분들에게도
-            </div>
-            &nbsp;
-            <div>
-              말하는 건 몰라도 말 잘하는 이에게 따봉을 들어주고픈 그런
-              분들에게도
-            </div>
-            &nbsp;
-            <div>
-              말하는 건 몰라도 말 잘하는 이에게 따봉을 들어주고픈 그런
-              분들에게도
-            </div>
-            &nbsp;
-            <div>
-              말하는 건 몰라도 말 잘하는 이에게 따봉을 들어주고픈 그런
-              분들에게도
+            <div className="flex w-full h-full items-center">
+              <icon.MainFlowText6 width="22%" height="100%" />
+              <p className="w-[2%]"></p>
+              <icon.MainLoL width="20%" height="100%" />
+              <icon.MainFlowText7 width="30%" height="100%" />
+              <p className="w-[2%]"></p>
+              <icon.MainProp width="8%" height="100%" />
+              <p className="w-[2%]"></p>
+              <icon.MainFlowText8 width="33%" height="100%" />
+              <p className="w-[2%]"></p>
+              <icon.MainSound width="12%" height="100%" />
+              <p className="w-[2%]"></p>
+              <icon.MainFlowText9 width="25%" height="100%" />
+              <p className="w-[2%]"></p>
             </div>
           </div>
         </div>
-        <div className="flex justify-center mb-[5vh]">
+        <div className="flex justify-center mt-[6vh]">
           <button
             onClick={moveToCategoryPage}
-            className="py-[4vh] px-[14vw] bg-black text-white font-[700] text-[2.5vh] rounded-[60px]"
+            className="py-[2vh] px-[8vw] bg-[#EFFE37] text-black font-bold text-[4vh] rounded-[60px]"
           >
-            게임시작
+            Let's Go!
           </button>
         </div>
       </div>

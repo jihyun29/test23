@@ -13,7 +13,7 @@ function Footer() {
         <p className="text-[#F2F2F2] font-light text-[1.4vh]">
           팀 심심해는 사람들에게 재미를 전하는 것들을 만듭니다.
         </p>
-        <div className="w-full flex justify-between text-[#919191] text-[1.5vh]">
+        <div className="w-full flex justify-between text-[#919191] text-[1.5vh] mt-[1.2vh]">
           <p>이용약관</p>
           <p>운영정책</p>
           <p>개인정보처리방침</p>

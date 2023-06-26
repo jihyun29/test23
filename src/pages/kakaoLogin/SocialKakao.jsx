@@ -1,11 +1,11 @@
 //socialKaka0
 import { useEffect } from "react";
 import React from "react";
-import { LoginLogo } from "../../icons";
 import { useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import { useLocation } from "react-router-dom";
 import queryString from "query-string";
+import icon from "../../icons";
 
 //restapi 방법
 const SocialKakao = () => {
@@ -38,21 +38,21 @@ const SocialKakao = () => {
   }
 
   return (
-    <div className="flex flex-col justify-between w-[600px] h-[671px] border border-[#777777] m-auto px-[114px] rounded-[20px]">
-      <div className="w-[131px] h-[60ox] mt-[117px]">
-        <p className="  text-[24px] leading-[30px] font-medium">Do Debate,</p>
-        <p className="text-[24px] leading-[30px] font-bold">Get Win!</p>
+    <div className="flex flex-col justify-between border w-[70vh] h-[80vh] m-auto px-[114px] rounded-[20px]">
+      <div className="w-[100%] h-[10vh] mt-[10vh]">
+        <p className="  text-[3vh] font-medium text-white">Do Debate,</p>
+        <p className="text-[3vh] font-bold text-white">Get Win!</p>
       </div>
-      <div className="w-[181px] h-[181px] mx-auto">
-        <LoginLogo width="100%" height="100%" />
+      <div className="w-full h-[30vh] mx-auto">
+        <icon.Random width="100%" height="100%" />
       </div>
-      <div className="flex flex-col justify-center mb-[78px]">
+      <div className="flex flex-col justify-center mb-[8vh]">
         <div className="App">
           <a href={kakaoLogin}>
             <img src="//k.kakaocdn.net/14/dn/btqCn0WEmI3/nijroPfbpCa4at5EIsjyf0/o.jpg" />
           </a>
         </div>
-        <p className="text-[14px] text-[#777777] leading-[18.5px] mx-auto mt-[15px]">
+        <p className="text-[1.7vh] text-[#ABABAB] mx-auto mt-[1.4vh]">
           카카오톡 소셜 로그인을 통해 내 계정 정보로 접속할 수 있습니다.
         </p>
       </div>

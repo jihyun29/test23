@@ -5,10 +5,10 @@ module.exports = {
       keyframes: {
         textLoop: {
           "0%": {
-            transform: "translateX(0px)",
+            transform: "translateX(33%)",
           },
           "100%": {
-            transform: "translateX(-20%)",
+            transform: "translateX(-17%)",
           },
         },
       },

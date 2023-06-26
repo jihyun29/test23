@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Lottie from "lottie-react";
-import lottie from "../lottie";
+// import Lottie from "lottie-react";
+// import lottie from "../lottie";
+import icon from "../icons";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 
@@ -25,15 +26,15 @@ function Category() {
   ];
 
   const lottieList = [
-    lottie.game,
-    lottie.topic,
-    lottie.sport,
-    lottie.love,
-    lottie.random,
-    lottie.marriage,
-    lottie.work,
-    lottie.school,
-    lottie.versus,
+    <icon.Game width="100%" height="100%" />,
+    <icon.Entertainment width="100%" height="100%" />,
+    <icon.Sports width="100%" height="100%" />,
+    <icon.Love width="100%" height="100%" />,
+    <icon.Random width="100%" height="100%" />,
+    <icon.Marriage width="100%" height="100%" />,
+    <icon.Company width="100%" height="100%" />,
+    <icon.School width="100%" height="100%" />,
+    <icon.BalanceGame width="100%" height="100%" />,
   ];
 
   // 가장 많이 선택된 카테고리
@@ -88,12 +89,12 @@ function Category() {
         <div className="w-[25vw] h-full overflow-hidden">
           <button
             onClick={goHomeHandler}
-            className="text-[#777777] text-[2.5vh] font-bold mt-[10%] ml-[10%]"
+            className="text-[#C6C6C6] text-[2.5vh] font-bold mt-[10%] ml-[10%]"
           >
             ← 메인으로
           </button>
-          <div className="flex flex-col justify-between w-[26vh] h-[20%] ml-[10%] px-[2.5vh] border mt-[25%] bg-[#F1F1F1] rounded-[24px]">
-            <div className="mt-[26px] text-[#777777] text-[1.8vh] font-sans">
+          <div className="flex flex-col justify-between w-[26vh] h-[20%] ml-[10%] px-[2.5vh] mt-[25%] bg-[#464747] rounded-[24px]">
+            <div className="mt-[26px] text-[#C6C6C6] text-[1.8vh] font-sans">
               <p>지금 가장 많은 사람들이</p>
               <p>선택한 토론방은?</p>
               <span className="bg-black text-white w-fit px-[0.3vw] rounded-[8px] mt-[5px] mr-[0px]">
@@ -109,7 +110,7 @@ function Category() {
 
         {/* Center */}
         <div className="flex flex-col justify-evenly items-center w-[50vw] h-full ">
-          <p className="font-semibold text-[3vh] text-[#2F3131] font-sans">
+          <p className="font-semibold text-[3vh] text-[#C6C6C6] font-sans">
             입장하고픈 토론방의 분야를 선택해주세요
           </p>
 
@@ -164,12 +165,12 @@ const CategoryCard = ({
 
   const bgStyle =
     selectedCategory === categoryName
-      ? "flex flex-col items-center border rounded-[24px] bg-[#2F3131]"
-      : "flex flex-col items-center border rounded-[24px] bg-[#F1F1F1]";
+      ? "flex flex-col items-center rounded-[24px] border border-[#EFFE37] bg-[#464747]"
+      : "flex flex-col items-center rounded-[24px] bg-[#464747]";
   const ftStyle =
     selectedCategory === categoryName
-      ? "mt-[5%] text-[1.5vh] font-bold text-[#33F39E]"
-      : "mt-[5%] text-[1.5vh] font-bold text-[#777777]";
+      ? "mt-[10%] text-[1.5vh] font-bold text-[#EFFE37]"
+      : "mt-[10%] text-[1.5vh] font-bold text-[#C6C6C6]";
 
   return (
     <div
@@ -178,9 +179,9 @@ const CategoryCard = ({
       }}
       className={bgStyle}
     >
-      <div className="w-[40%] h-[40%] mt-[25%] rounded-[100%] bg-white overflow-hidden">
-        {/* {icon} */}
-        <Lottie animationData={icon} className="w-full h-full" />
+      <div className="w-[55%] h-[55%] mt-[12%] overflow-hidden">
+        {icon}
+        {/* <Lottie animationData={icon} className="w-full h-full" /> */}
       </div>
       <p className={ftStyle}>{categoryName}</p>
     </div>

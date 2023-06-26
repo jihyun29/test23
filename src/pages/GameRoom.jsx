@@ -15,7 +15,7 @@ import Timer from "../components/feature/Timer";
 import Prompt from "../components/feature/Prompt";
 import ProgressBar from "../components/feature/Progressbar";
 import lottie from "../lottie";
-import * as icon from "../icons";
+import icon from "../icons";
 
 function GameRoom() {
   const Ment = [
@@ -61,7 +61,8 @@ function GameRoom() {
   // 방 리스트 페이지에서 페이지 이동 시 넘겨는 State : 방 넘버
   const { state } = useLocation();
   console.log(state);
-  const [roomNumber, defaultTitle, categoryName, categoryCode] = state;
+  const [roomNumber, defaultTitle, categoryName, categoryCode, isTeller] =
+    state;
 
   // 타이틀 설정 시 사용되는 State
   const [title, setTitle] = useState(defaultTitle);
@@ -97,19 +98,10 @@ function GameRoom() {
     }
   );
 
-  // 게임 시작 버튼 클릭 시 실행되는 함수
-  const gameStartBtnClickhandler = async () => {
-    const data = await getTitleList();
-    const sortedData = data.data.content.split("\n");
-    console.log(sortedData);
-    titleList.current = sortedData;
-    setIsRoulette(true);
-  };
-
   // --------- 소켓 부분 -----------
-  useSocket({ socket, roomNumber });
+  useSocket({ socket, roomNumber, isTeller });
 
-  socket.on("new_chatting", (chat) => {
+  socket.on("new_chat", (chat) => {
     setTotalChat([...totalChat, chat]);
   });
 
@@ -117,7 +109,9 @@ function GameRoom() {
   const chatSubmitHandler = (event) => {
     event.preventDefault();
     const myChat = chatInputValue.current.value;
-    socket.emit("send_chat", myChat, roomNumber);
+    socket.emit("new_message", myChat, roomNumber, () => {
+      console.log("채팅이 보내졌습니다!");
+    });
     setTotalChat([...totalChat, `You: ${myChat}`]);
     chatInputValue.current.value = "";
   };
@@ -125,6 +119,16 @@ function GameRoom() {
 
   // ---------- 룰렛 관련 -----------
   // 문제점 : 룰렛 다른 참여자들도 보이도록 설정 필요
+
+  // 게임 시작 버튼 클릭 시 실행되는 함수
+  const gameStartBtnClickhandler = async () => {
+    const data = await getTitleList();
+    const sortedData = data.data.reply;
+    console.log(sortedData);
+    titleList.current = [...sortedData];
+    setIsRoulette(true);
+  };
+
   useRoulette({ isTitleLoading, isRoulette, titleList, roulette });
 
   // 룰렛 닫는 함수
@@ -153,6 +157,7 @@ function GameRoom() {
         setTitle(titleList.current[ran]);
         setIsRoulette(false);
       }, 2000);
+      handleButtonClick();
     }, 1);
   };
   // ---------- 룰렛 관련 -----------
@@ -231,10 +236,12 @@ function GameRoom() {
 
   const handleMouseEnter = () => {
     setShowLikeButton(true);
+    console.log("Hi", showLikeButton);
   };
 
   const handleMouseLeave = () => {
     setShowLikeButton(false);
+    console.log("Bye", showLikeButton);
   };
 
   const handleMouseYouEnter = () => {
@@ -247,7 +254,7 @@ function GameRoom() {
 
   return (
     <div className="relative flex w-[100vw] h-[100vh] gap-3 bg-black">
-      {/* 룰렛 */}(
+      {/* 룰렛 */}
       {isRoulette ? (
         <div
           onClick={closeRoulette}
@@ -305,7 +312,7 @@ function GameRoom() {
           {/* Versus */}
 
           {/* 비디오 */}
-          <div className=" relative flex justify-between items-center w-full h-[85%]">
+          <div className="flex justify-between items-center w-full h-[85%]">
             {/* 비디오 html : srcObject는 내 오디오, 비디오 장비,연결 시 자동으로 Play되는 autoPlay 속성 적용 */}
             {/* playsinline : 모바일 기기가 비디오를 재생할 때 전체화면이 되지 않도록 설정 */}
             <div
@@ -314,27 +321,20 @@ function GameRoom() {
               onMouseLeave={handleMouseLeave}
             >
               <video
-                className="  w-full h-full rounded-2xl"
+                className="w-full h-full rounded-2xl"
                 ref={myVideoBox}
                 autoPlay
                 playsInline
                 muted
-              />
+              ></video>
               {/* 좋아요버튼 렌더링 */}
-
               {showLikeButton && (
                 <div className="absolute bottom-0  w-full h-[20%]   opacity-95 flex items-center justify-center">
-                  <div className="flex item-center justify">
-                    {/* <Lottie
-                      animationData={lottie.hand}
-                      className="absolute h-full left-0 cursor-pointer"
-                    /> */}
-                    <icon.challenge className="cursor-pointer left-10" />
-                    <icon.likeButton className="cursor-pointer" />
-                    <icon.hateButton className="cursor-pointer" />
-                    <icon.whyButton className="cursor-pointer" />
-                    <icon.reportButton className="cursor-pointer right-0" />
-                  </div>
+                  <icon.challenge className="cursor-pointer left-10" />
+                  <icon.likeButton className="cursor-pointer" />
+                  <icon.hateButton className="cursor-pointer" />
+                  <icon.whyButton className="cursor-pointer" />
+                  <icon.reportButton className="cursor-pointer right-0" />
                 </div>
               )}
             </div>
@@ -351,16 +351,13 @@ function GameRoom() {
                 muted
               />
               {/* 좋아요버튼 렌더링 */}
-
               {showLikeYouButton && (
                 <div className="absolute bottom-0  w-full h-[20%] opacity-75 flex items-center justify-center">
-                  {/* <div className="like-button bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"> */}
                   <icon.challenge className="cursor-pointer" />
                   <icon.likeButton className="cursor-pointer" />
                   <icon.hateButton className="cursor-pointer" />
                   <icon.whyButton className="cursor-pointer" />
                   <icon.reportButton className="cursor-pointer" />
-                  {/* </div> */}
                 </div>
               )}
             </div>
@@ -408,11 +405,6 @@ function GameRoom() {
         {/* 기능 버튼들 */}
         <div className="flex justify-between w-full h-[7%] px-[1%]">
           <div className="flex w-[40%] gap-[8%]">
-            {/* 랜덤 방 이동 */}
-            <button className="text-white my-2">
-              <icon.MoveRoom width="8vh" height="100%" />
-            </button>
-            {/* 랜덤 방 이동 */}
             {/* 비디오 켜기/끄기 */}
             <button className="text-white my-2">
               {isVideoOff ? (
@@ -452,10 +444,7 @@ function GameRoom() {
             {/* 게임시작 */}
             <button
               className="text-white my-2 ml-auto w-full border text-[3vh]"
-              onClick={() => {
-                gameStartBtnClickhandler();
-                handleButtonClick();
-              }}
+              onClick={gameStartBtnClickhandler}
             >
               start
             </button>
@@ -481,10 +470,13 @@ function GameRoom() {
       >
         <div className="h-full border border-black p-2 break-words overflow-x-hidden overflow-y-auto bg-[#1B1B1B]">
           <ul>
-            {totalChat?.map((chat) => {
+            {totalChat?.map((chat, index) => {
               if (chat.split(":")[0] === "You") {
                 return (
-                  <li className="w-fit max-w-[80%] ml-auto bg-[#2F3131] px-[0.5vh] mt-[0.5vh] text-[#C6C6C6] text-[1.7vh] rounded-[1vh]">
+                  <li
+                    key={index}
+                    className="w-fit max-w-[80%] ml-auto bg-[#2F3131] px-[0.5vh] mt-[0.5vh] text-[#C6C6C6] text-[1.7vh] rounded-[1vh]"
+                  >
                     {chat.split(":")[1]}
                   </li>
                 );

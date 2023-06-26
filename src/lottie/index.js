@@ -14,11 +14,8 @@ import work from "./work.json";
 import school from "./school.json";
 import versus from "./versus.json";
 import topic from "./topic.json";
-import like from "./like.json";
-import dislike from "./dislike.json";
 import loading from "./loading.json";
-
-import hand from "./hand.json";
+import globe from "./globe.json";
 
 const lottie = {
   heart,
@@ -37,6 +34,8 @@ const lottie = {
   school,
   versus,
   topic,
+  loading,
+  globe,
 };
 
 export default lottie;
