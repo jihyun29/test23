@@ -89,11 +89,11 @@ function Category() {
         <div className="w-[25vw] h-full overflow-hidden">
           <button
             onClick={goHomeHandler}
-            className="text-[#C6C6C6] text-[2.5vh] font-bold mt-[10%] ml-[10%]"
+            className="text-[#C6C6C6] text-[1.8vw] font-bold mt-[10%] ml-[10%]"
           >
             ← 메인으로
           </button>
-          <div className="flex flex-col justify-between w-[26vh] h-[20%] ml-[10%] px-[2.5vh] mt-[25%] bg-[#464747] rounded-[24px]">
+          <div className="flex flex-col justify-between w-[80%] h-[20%] ml-[10%] px-[2.5vh] mt-[25%] bg-[#464747] rounded-[24px]">
             <div className="mt-[26px] text-[#C6C6C6] text-[1.8vh] font-sans">
               <p>지금 가장 많은 사람들이</p>
               <p>선택한 토론방은?</p>
@@ -109,42 +109,40 @@ function Category() {
         {/* Left Side bar */}
 
         {/* Center */}
-        <div className="flex flex-col justify-evenly items-center w-[50vw] h-full ">
-          <p className="font-semibold text-[3vh] text-[#C6C6C6] font-sans">
-            입장하고픈 토론방의 분야를 선택해주세요
-          </p>
+        <div className="w-[80vw] h-full">
+          <div className="w-[60%] h-full flex flex-col justify-evenly items-center">
+            <p className="font-semibold text-[3vh] text-[#C6C6C6] font-sans">
+              입장하고픈 토론방의 분야를 선택해주세요
+            </p>
 
-          {/* 카테고리 카드들 표시되는 부분 */}
-          <div className="grid grid-cols-3 gird-rows-3 w-[45vh] h-[45vh] gap-3">
-            {categoryList.map((category, index) => {
-              return (
-                <CategoryCard
-                  key={category.name}
-                  categoryName={category.name}
-                  selectedCategory={selectedCategory}
-                  icon={lottieList[index]}
-                  onClickHandler={categoryBtnClickHandler}
-                />
-              );
-            })}
-          </div>
-          {/* 카테고리 카드들 표시되는 부분 */}
+            {/* 카테고리 카드들 표시되는 부분 */}
+            <div className="grid grid-cols-3 gird-rows-3 w-[45vh] h-[45vh] gap-3">
+              {categoryList.map((category, index) => {
+                return (
+                  <CategoryCard
+                    key={category.name}
+                    categoryName={category.name}
+                    selectedCategory={selectedCategory}
+                    icon={lottieList[index]}
+                    onClickHandler={categoryBtnClickHandler}
+                  />
+                );
+              })}
+            </div>
+            {/* 카테고리 카드들 표시되는 부분 */}
 
-          <div className="flex justify-center items-center w-full">
-            <button
-              // disabled
-              onClick={enterRoomList}
-              className="bg-[#EFFE37] px-[12vh] py-[2vh] rounded-[60px] text-[2.5vh] font-bold"
-            >
-              입장하기
-            </button>
+            <div className="flex justify-center w-full">
+              <button
+                // disabled
+                onClick={enterRoomList}
+                className="bg-[#EFFE37] px-[12vh] py-[2vh] rounded-[60px] text-[2.5vh] font-bold"
+              >
+                입장하기
+              </button>
+            </div>
           </div>
         </div>
         {/* Center */}
-
-        {/* Right Side bar */}
-        <div></div>
-        {/* Right Side bar */}
       </div>
       <Footer />
     </>
