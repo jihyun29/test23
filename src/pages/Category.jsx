@@ -101,7 +101,7 @@ function Category() {
                 {example}
               </span>
             </div>
-            <button className="text-[#35C585] text-[2vh] font-bold ml-auto mb-[1.5vh]">
+            <button className="text-[#EFFE37] text-[2vh] font-bold ml-auto mb-[1.5vh]">
               바로 선택하기 ➤
             </button>
           </div>
