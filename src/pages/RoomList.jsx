@@ -144,7 +144,7 @@ function RoomList() {
       <div className="flex flex-col w-full h-[80vh]">
         {/* 배너 부분 */}
         <div className="relative flex flex-col w-full h-[20vh] bg-white">
-          <div className="relative w-full h-full overflow-hidden">
+          <div className="relative w-full h-full overflow-hidden z-[2]">
             <img
               className="w-full h-full object-fill"
               src={bannerImage}
@@ -153,11 +153,11 @@ function RoomList() {
           </div>
           <button
             onClick={goCategoryBtnClick}
-            className="absolute ml-[2vh] text-[2.5vh] font-bold text-[#C6C6C6] top-[10%]"
+            className="absolute ml-[2vh] text-[2.5vh] font-bold text-[#C6C6C6] top-[10%] z-[4]"
           >
             ← 카테고리 선택
           </button>
-          <div className="absolute right-[35%] top-[28%] ">
+          <div className="absolute flex flex-col justify-center items-center w-full h-full left-0 top-0 z-[3]">
             <div className="w-fit text-[2.7vh] text-white font-medium mx-auto">
               {name}
             </div>
@@ -170,7 +170,7 @@ function RoomList() {
           </div>
           <button
             onClick={createRoomBtnClick}
-            className="absolute border border-white text-[2.3vh] text-white font-bold px-[3vh] py-[1vh] rounded-[8px] mt-[2%] right-[7%] bottom-[10%]"
+            className="absolute border border-white text-[2.3vh] text-white font-bold px-[3vh] py-[1vh] rounded-[8px] mt-[2%] right-[7%] bottom-[10%] z-[4]"
           >
             {" "}
             방 만들기
