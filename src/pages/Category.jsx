@@ -134,7 +134,7 @@ function Category() {
             <button
               // disabled
               onClick={enterRoomList}
-              className="bg-black text-white px-[20vh] py-[4vh] rounded-[60px] text-[2.5vh] font-bold"
+              className="bg-[#EFFE37] px-[12vh] py-[2vh] rounded-[60px] text-[2.5vh] font-bold"
             >
               입장하기
             </button>
