@@ -11,6 +11,7 @@ const instance = axios.create({
 // axios request가 back으로 요청되기 전에 진행되는 작업 -> 일종의 middleware
 instance.interceptors.request.use(
   function (config) {
+    console.log("req", config);
     // 작업내용
     return config;
   },
@@ -23,6 +24,7 @@ instance.interceptors.request.use(
 // axios response가 받기 전에 진행되는 작업 -> 일종의 middleware
 instance.interceptors.response.use(
   function (response) {
+    console.log("res", response);
     // 작업 내용
     return response;
   },
@@ -48,6 +50,10 @@ export const game = {
     await instance.get(`/api/roomlist/${category}`),
   createRoom: async (category) =>
     await instance.post(`/api/roomlist/${category}`),
+  selectCategory: async () =>
+    await instance.put("api/user", null, {
+      headers: { Authorization: localStorage.getItem("Authorization") },
+    }),
 };
 
 export default instance;

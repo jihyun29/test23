@@ -19,7 +19,7 @@ export function useSocketEnterRoom({ socket, roomNumber, isTeller }) {
     if (!isTeller) {
       socket.emit(
         "joinJuror",
-        localStorage.getItem("userId"),
+        localStorage.getItem("userId"), // 미들웨어 적용 후 삭제
         roomNumber,
         () => {
           console.log("참여자로 입장되었습니다!");
@@ -28,7 +28,7 @@ export function useSocketEnterRoom({ socket, roomNumber, isTeller }) {
     } else {
       socket.emit(
         "joinDebate",
-        localStorage.getItem("userId"),
+        localStorage.getItem("userId"), // 미들웨어 적용 후 삭제
         roomNumber,
         () => {
           console.log("토론자로 입장되었습니다!");

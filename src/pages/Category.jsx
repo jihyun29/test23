@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import icon from "../icons";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import instance from "../api/api";
+import { game } from "../api/api";
 
 function Category() {
   const navigate = useNavigate();
@@ -53,11 +53,12 @@ function Category() {
       const randomSubject = categoryList.filter((item) => item.name !== "랜덤")[
         randomNumber
       ].name;
-      const data = await instance.put("/api/user", {
-        Authorization: localStorage.getItem("authorization"),
-      });
-      console.log(data.data.data);
-      localStorage.setItem("userId", data.data.data);
+      const data = game.selectCategory();
+      const res = (await data).data.data[0];
+      if (res) {
+        localStorage.setItem("Authorization", res.Authorization);
+        localStorage.setItem("kakaoId", res.kakaoId);
+      }
       return navigate("/roomlist", {
         state: [randomSubject, randomNumber + 1],
       });
@@ -65,9 +66,12 @@ function Category() {
       const selectedCategoryCode = categoryList.filter(
         (category) => category.name === selectedCategory
       )[0].code;
-      const data = await instance.put("/api/user", {
-        Authorization: localStorage.getItem("authorization"),
-      });
+      const data = game.selectCategory();
+      const res = (await data).data.data[0];
+      if (res) {
+        localStorage.setItem("Authorization", res.Authorization);
+        localStorage.setItem("kakaoId", res.kakaoId);
+      }
       navigate("/roomlist", {
         state: [selectedCategory, selectedCategoryCode],
       });

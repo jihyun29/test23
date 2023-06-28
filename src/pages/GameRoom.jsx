@@ -115,17 +115,13 @@ function GameRoom() {
   // --------- 소켓 부분 -----------
   useSocketEnterRoom({ socket, roomNumber, isTeller });
 
-  // 1. 룸 입장 시 랜덤 닉네임 받아옴
+  // 1. 방에 입장한 유저 리스트 받아오기
   socket.on("roomJoined", (nickName) => {
     setUserNickname([...nickName]);
   });
 
-  // 2. 상대 방이 보낸 채팅 가져옴
-  socket.on("new_chat", (chat) => {
-    setTotalChat([...totalChat, chat]);
-  });
-
-  // 2 -1. 내 채팅 내용 화면에 띄어줌
+  // 2. 채팅
+  // 2 - 1. 내 채팅 내용 화면에 띄어줌, 채팅 상대방에게 전송
   const chatSubmitHandler = (event) => {
     event.preventDefault();
     const myChat = chatInputValue.current.value;
@@ -136,53 +132,39 @@ function GameRoom() {
     chatInputValue.current.value = "";
   };
 
-  // 3. 룰렛 보여줌
-  socket.on("show_roulette", (rouletteData, result) => {
-    titleList.current = [...rouletteData];
-    setIsRoulette(result);
+  // 2 - 2. 상대 방이 보낸 채팅 가져옴
+  socket.on("new_chat", (chat) => {
+    setTotalChat([...totalChat, chat]);
   });
 
-  // 3-1. 게임 시작 버튼 클릭 시 실행되는 함수
+  // 3. 룰렛
+
+  // 룰렛 그려주는 함수 - useEffect()
+  useRoulette({ isRoulette, titleList, roulette, title });
+
+  // 3 - 1 - 1. 게임 시작 버튼 클릭 시 룰렛 보여주는 이벤트 전송
   const gameStartBtnClickhandler = () => {
     socket.emit("show_roulette", true, roomNumber, () => {
       console.log("룰렛이 생성되었습니다.");
     });
   };
 
-  // 4. 룰렛 닫기
-  socket.on("close_roulette", (result) => {
+  // 3 - 1 - 1. 룰렛 보여주는 이벤트 수신 후 룰렛 보여줌
+  socket.on("show_roulette", (rouletteData, result) => {
+    titleList.current = [...rouletteData];
     setIsRoulette(result);
   });
 
-  socket.on("close_result", (result) => {
-    setIsRouletteResult(result);
-  });
-
-  // 5. 유저 나갔을 시 발생하는 알람
-  socket.on("roomLeft", (nickname) => {
-    setTotalChat([...totalChat, `Alarm : ${nickname}님이 나가셨습니다.`]);
-  });
-  // ---------- 소켓 부분 -----------
-
-  // ---------- 룰렛 관련 -----------
-  // 룰렛 그리기
-  useRoulette({ isRoulette, titleList, roulette, title });
-
-  // 룰렛 돌려 주제정하는 함수
-  // 룰렛 시작 버튼 클릭 -> 소켓으로 시작 알려줌 ->
+  // 3 - 2 - 1.룰렛 애니메이션 시작 이벤트 전송
   const setTitleBtnClickHandler = (event) => {
-    // event.stopPropagation();
     socket.emit("start_roulette", roomNumber, () => {
       console.log("주제 정하기 룰렛이 다 돌아갔습니다!");
     });
   };
 
-  socket.on("start_roulette", (ran) => {
-    console.log(roulette.current);
-    setTitleFunc(ran);
-  });
-
-  // const ran = Math.floor(Math.random() * titleList.current.length);
+  /* 룰렛 애니메이션 작동하는 함수 
+  - 시작점 : start_roulette 이벤트 수신 시
+  */
   let currentTitle;
   const setTitleFunc = (ran) => {
     currentTitle = titleList.current[ran];
@@ -208,6 +190,14 @@ function GameRoom() {
     }, 1);
   };
 
+  // 3 - 2 - 2. 룰렛 애니메이션 시작 이벤트 수신 후 룰렛 애니메이션 시작
+  socket.on("start_roulette", (ran) => {
+    console.log(roulette.current);
+    // 룰렛 애니메이션 함수
+    setTitleFunc(ran);
+  });
+
+  // 3 - 3 - 1. 결과창 닫기 이벤트 시작 - Retry Button
   const closeResultModal = () => {
     socket.emit("close_result", false, roomNumber, () => {
       console.log("주제가 확정되었습니다. 게임이 시작됩니다!");
@@ -216,12 +206,29 @@ function GameRoom() {
       console.log("주제가 확정되었습니다. 게임이 시작됩니다!");
     });
   };
+
+  // 3 - 3 - 2. 이벤트 수신 후 결과 창 닫기
+  socket.on("close_result", (result) => {
+    setIsRouletteResult(result);
+  });
+
+  // 3 - 4 - 1. 룰렛 닫기 이벤트 시작 - Start Button
   const closeRouletteModal = () => {
     socket.emit("close_result", false, roomNumber, () => {
       console.log("주제가 확정되었습니다. 게임이 시작됩니다!");
     });
   };
-  // ---------- 룰렛 관련 -----------
+
+  // 3 - 4 - 2. 이벤트 수신 후 룰렛 닫기
+  socket.on("close_roulette", (result) => {
+    setIsRoulette(result);
+  });
+
+  // 4. 유저 나갔을 시 발생하는 알람
+  socket.on("roomLeft", (nickname) => {
+    setTotalChat([...totalChat, `Alarm : ${nickname}님이 나가셨습니다.`]);
+  });
+  // ---------- 소켓 부분 -----------
 
   // ---------- Web RTC -----------
   // 내 오디오 음소거 함수
