@@ -1,16 +1,18 @@
 import { useEffect } from "react";
 
 export function useRoulette({
-  isTitleLoading,
+  // isTitleLoading,
   isRoulette,
   titleList,
   roulette,
+  title,
 }) {
   useEffect(() => {
     const colors = ["#919191", "#C6C6C6"];
-    console.log(isTitleLoading);
-    console.log(isRoulette);
-    if (isRoulette && !isTitleLoading) {
+    // console.log(isTitleLoading);
+    // console.log(isRoulette);
+    // && !isTitleLoading
+    if (isRoulette) {
       console.log(titleList.current);
       const canvasRef = roulette.current;
       const canvas = canvasRef.getContext(`2d`);
@@ -18,6 +20,7 @@ export function useRoulette({
       const newMake = async () => {
         // 캔버스의 중앙점 구하기
         const [cw, ch] = [canvasRef.width / 2, canvasRef.height / 2];
+        console.log(cw, ch);
         const arc = Math.PI / 4;
         // 룰렛 배경 항목 수에 따라 그리기 : 8개
         for (let i = 0; i < 8; i++) {
@@ -36,7 +39,7 @@ export function useRoulette({
         }
         canvas.fillStyle = "white";
         canvas.textAlign = "center";
-        canvas.fillStyle = "";
+        canvas.font = "24px SUITE-Variable";
 
         // 아이템 표기
         for (let i = 0; i < 8; i++) {
@@ -55,5 +58,5 @@ export function useRoulette({
       };
       newMake();
     }
-  }, [isRoulette, isTitleLoading, roulette, titleList]);
+  }, [isRoulette, titleList, title]);
 }

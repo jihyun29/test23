@@ -2,18 +2,14 @@ import { io } from "socket.io-client";
 
 // 서버와 연결된 소켓 가져오는 파일
 // "undefined" means the URL will be computed from the `window.location` object
-// const URL =
-// process.env.NODE_ENV === "production"
-//   ? process.env.REACT_APP_BACKEND_SERVER_URL
-//   : "http://localhost:4000";
+
+// 배포 시
 const URL = process.env.REACT_APP_BACKEND_SERVER_URL;
 
-export const socketWOToken = io(URL, {
-  // secure: true,
-  withCredentials: true,
-});
+// 로컬 테스트 시
+// const URL = "http://localhost:4000";
 
-export const socketWithToken = io(URL, {
+export const socket = io(URL, {
   // secure: true,
   withCredentials: true,
   query: {

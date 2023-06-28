@@ -56,7 +56,8 @@ function Category() {
       const data = await instance.put("/api/user", {
         Authorization: localStorage.getItem("authorization"),
       });
-      console.log(data);
+      console.log(data.data.data);
+      localStorage.setItem("userId", data.data.data);
       return navigate("/roomlist", {
         state: [randomSubject, randomNumber + 1],
       });
@@ -67,7 +68,6 @@ function Category() {
       const data = await instance.put("/api/user", {
         Authorization: localStorage.getItem("authorization"),
       });
-      console.log(data);
       navigate("/roomlist", {
         state: [selectedCategory, selectedCategoryCode],
       });

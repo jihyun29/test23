@@ -45,7 +45,7 @@ function Header() {
   return (
     <div className="relative flex justify-between items-center w-full h-[8vh] border-b border-[#464747]">
       <div className="flex items-center ml-[9vw] gap-[1.5rem]">
-        <div className="w-[5vh] h-[5vh] border rounded-[100%]">
+        <div className="w-[5vh] h-[5vh] rounded-[100%]">
           <Lottie animationData={lottie.title} className="w-full h-full" />
         </div>
         <div className="text-[3vh] text-white font-bold">와플</div>
