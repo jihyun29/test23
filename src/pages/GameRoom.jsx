@@ -119,7 +119,7 @@ function GameRoom() {
     // const URL = process.env.REACT_APP_BACKEND_SERVER_URL;
 
     // 로컬 테스트 시
-    const URL = "http://localhost:4000";
+    const URL = process.env.REACT_APP_BACKEND_SERVER_URL;
 
     const socket = io(URL, {
       // secure: true,
