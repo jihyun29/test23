@@ -7,7 +7,6 @@ import Header from "../components/Header";
 import Room from "../components/Room";
 import Pagination from "../components/Pagination";
 import image from "../images";
-import { io } from "socket.io-client";
 
 function RoomList() {
   const bannerImageList = [

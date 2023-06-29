@@ -7,15 +7,6 @@ export function useSocketEnterRoom({ socket, roomNumber, isTeller }) {
   // 2. 언마운트 시 : 소켓 연결 끊기
   // 참조 : https://socket.io/how-to/use-with-react
   useEffect(() => {
-    console.log(socket);
-    if (!socket.connected) {
-      // 배포 시
-      socket.connect(process.env.REACT_APP_BACKEND_SERVER_URL);
-
-      // 로컬 테스트 시
-      // socket.connect("http://localhost:4000");
-    }
-    console.log(socket.connected);
     if (!isTeller) {
       socket.emit(
         "joinJuror",

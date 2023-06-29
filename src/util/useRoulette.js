@@ -13,8 +13,8 @@ export function useRoulette({
     // console.log(isRoulette);
     // && !isTitleLoading
     if (isRoulette) {
-      console.log(titleList.current);
       const canvasRef = roulette.current;
+      console.log(canvasRef);
       const canvas = canvasRef.getContext(`2d`);
 
       const newMake = async () => {
