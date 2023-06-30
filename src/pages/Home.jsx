@@ -30,7 +30,7 @@ function Home() {
               <icon.MainFlowText3 width="54%" height="100%" />
               <icon.MainArrow width="12%" height="100%" />
               <icon.MainFlowText4 width="46%" height="100%" />
-              <icon.MainLoL width="20%" height="100%" />
+              <icon.MainBlah width="20%" height="100%" />
               <icon.MainFlowText5 width="39%" height="100%" />
               <p className="w-[2vmin]"></p>
             </div>
@@ -42,7 +42,7 @@ function Home() {
               <icon.MainFlowText3 width="54%" height="100%" />
               <icon.MainArrow width="12%" height="100%" />
               <icon.MainFlowText4 width="46%" height="100%" />
-              <icon.MainLoL width="20%" height="100%" />
+              <icon.MainBlah width="20%" height="100%" />
               <icon.MainFlowText5 width="39%" height="100%" />
               <p className="w-[2vmin]"></p>
             </div>

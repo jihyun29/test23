@@ -40,6 +40,10 @@ import { ReactComponent as Marriage } from "./marriage.svg";
 import { ReactComponent as Random } from "./random.svg";
 import { ReactComponent as School } from "./school.svg";
 import { ReactComponent as Sports } from "./sports.svg";
+import { ReactComponent as MainBlah } from "./blah.svg";
+import { ReactComponent as DebatoryLogo } from "./debatoryLogo.svg";
+import { ReactComponent as Login } from "./login.svg";
+import { ReactComponent as Logout } from "./logout.svg";
 
 export const icon = {
   Debate,
@@ -84,6 +88,10 @@ export const icon = {
   Random,
   School,
   Sports,
+  MainBlah,
+  DebatoryLogo,
+  Login,
+  Logout,
 };
 
 export default icon;
