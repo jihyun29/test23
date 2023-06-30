@@ -105,7 +105,7 @@ function GameRoom() {
     // 로컬 테스트 시
     const URL = process.env.REACT_APP_BACKEND_SERVER_URL;
 
-    const socket = io("http://localhost:4000", {
+    const socket = io(URL, {
       withCredentials: true,
       query: {
         token: localStorage.getItem("Authorization"),
@@ -120,8 +120,8 @@ function GameRoom() {
 
   // 1. 방에 입장한 유저 리스트 받아오기
   socket.on("roomJoined", async (nickName) => {
-    const nickname = await nickName.map((user) => user.nickname);
-    setUserNickname([...nickname]);
+    console.log(nickName);
+    setUserNickname([...nickName]);
   });
 
   // 2. 채팅

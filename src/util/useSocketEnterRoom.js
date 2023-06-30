@@ -8,23 +8,13 @@ export function useSocketEnterRoom({ socket, roomNumber, isTeller }) {
   // 참조 : https://socket.io/how-to/use-with-react
   useEffect(() => {
     if (!isTeller) {
-      socket.emit(
-        "joinJuror",
-        localStorage.getItem("userId"), // 미들웨어 적용 후 삭제
-        roomNumber,
-        () => {
-          console.log("참여자로 입장되었습니다!");
-        }
-      );
+      socket.emit("joinJuror", roomNumber, () => {
+        console.log("참여자로 입장되었습니다!");
+      });
     } else {
-      socket.emit(
-        "joinDebate",
-        localStorage.getItem("userId"), // 미들웨어 적용 후 삭제
-        roomNumber,
-        () => {
-          console.log("토론자로 입장되었습니다!");
-        }
-      );
+      socket.emit("joinDebate", roomNumber, () => {
+        console.log("토론자로 입장되었습니다!");
+      });
     }
 
     // 페이지 언마운트 시 소켓 연결 해제
