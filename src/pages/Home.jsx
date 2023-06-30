@@ -22,7 +22,7 @@ function Home() {
       <div className="flex flex-col w-full h-[80vh]">
         <div className="relative mt-[5vh] flex flex-col items-center w-full h-[20vmin] whitespace-nowrap overflow-hidden">
           <div className="absoulte flex justify-start w-[300vmin] h-[50%] animate-flowText">
-            <div className="flex w-full h-full items-center">
+            <div className="flex w-full h-full items-center justify-start">
               <icon.MainFlowText1 width="19%" height="100%" />
               <Lottie className="w-[12%]" animationData={lottie.globe} />
               <icon.MainFlowText2 width="38%" height="100%" />

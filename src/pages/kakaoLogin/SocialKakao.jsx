@@ -1,33 +1,12 @@
 //socialKaka0
-import { useEffect } from "react";
 import React from "react";
-import { useNavigate } from "react-router-dom";
-import { useCookies } from "react-cookie";
 import { useLocation } from "react-router-dom";
 import queryString from "query-string";
 import icon from "../../icons";
 
 //restapi 방법
 const SocialKakao = () => {
-  const [cookie, setCookie, removeCookie] = useCookies(["authorization"]);
   const kakaoLogin = `${process.env.REACT_APP_BACKEND_SERVER_URL}/auth/kakao/callback`;
-  const navigate = useNavigate();
-  useEffect(() => {
-    // 현재 URL에서 쿼리 파라미터 추출
-    const urlParams = new URLSearchParams(window.location.search);
-    const token = urlParams.get("token");
-    console.log("urlparan", urlParams);
-    console.log("token ", token);
-
-    if (token) {
-      console.log(token);
-      localStorage.setItem("authorization", JSON.stringify(`Bearer ${token}`));
-      setCookie("authorization", `Bearer ${token}`);
-      console.log("token");
-      navigate("/");
-    }
-    // 추출한 토큰을 로컬 스토리지에 저장
-  }, [navigate]);
 
   const { search } = useLocation();
   const token = queryString.parse(search);
@@ -49,7 +28,10 @@ const SocialKakao = () => {
       <div className="flex flex-col justify-center mb-[8vh]">
         <div className="App">
           <a href={kakaoLogin}>
-            <img src="//k.kakaocdn.net/14/dn/btqCn0WEmI3/nijroPfbpCa4at5EIsjyf0/o.jpg" />
+            <img
+              src="//k.kakaocdn.net/14/dn/btqCn0WEmI3/nijroPfbpCa4at5EIsjyf0/o.jpg"
+              alt="카카오로그인"
+            />
           </a>
         </div>
         <p className="text-[1.7vh] text-[#ABABAB] mx-auto mt-[1.4vh]">

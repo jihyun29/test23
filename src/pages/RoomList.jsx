@@ -1,11 +1,9 @@
-import Lottie from "lottie-react";
 import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useMutation, useQuery } from "react-query";
 import { game } from "../api/api";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
-import lottie from "../lottie";
 import Room from "../components/Room";
 import Pagination from "../components/Pagination";
 import image from "../images";
@@ -50,7 +48,7 @@ function RoomList() {
   const { state } = useLocation();
   // 카테고리 이름, 코드
   const [name, code] = state;
-  console.log(name, code);
+  // console.log(name, code);
 
   let bannerImage;
   let bannerText;
@@ -106,7 +104,7 @@ function RoomList() {
     () => game.getRoomList(code),
     {
       onSuccess: (data) => {
-        console.log(data);
+        // console.log(data);
         setRoomList([...data.data.data]);
       },
       refetchOnWindowFocus: false,
@@ -135,7 +133,7 @@ function RoomList() {
   };
 
   useEffect(() => {
-    console.log(roomList);
+    // console.log(roomList);
   }, [roomList]);
 
   return (

@@ -2,12 +2,8 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
-import { useCookies } from "react-cookie";
-import jwt_decode from "jwt-decode";
 
 const Kakao = (props) => {
-  const [cookie, setCookie, removeCookie] = useCookies(["authorization"]);
-
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -15,14 +11,11 @@ const Kakao = (props) => {
     const urlParams = new URLSearchParams(window.location.search);
     const token = urlParams.get("token");
     console.log("urlparan", urlParams);
-    console.log("token ", token);
 
     if (token) {
-      localStorage.setItem("authorization", JSON.stringify(`Bearer ${token}`));
-      const decoded = jwt_decode(token);
-      localStorage.setItem("userId", decoded.userId);
-      setCookie("authorization1", `Bearer ${token}`, { path: "/" });
-      console.log("token");
+      localStorage.setItem("Authorization", `Bearer ${token}`);
+      localStorage.setItem("kakaoId", "1");
+      console.log(typeof localStorage.getItem("Authorization"));
       navigate("/");
     }
     // 추출한 토큰을 로컬 스토리지에 저장
