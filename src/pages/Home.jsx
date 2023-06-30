@@ -21,7 +21,7 @@ function Home() {
       <Header />
       <div className="flex flex-col w-full h-[80vh]">
         <div className="relative mt-[5vh] flex flex-col items-center w-full h-[20vmin] whitespace-nowrap overflow-hidden">
-          <div className="absoulte flex justify-start w-[300vmin] h-[50%] animate-flowText">
+          <div className="absoulte flex justify-start w-[300vmin] h-[50%] animate-flowTextToLeft">
             <div className="flex w-full h-full items-center justify-start">
               <icon.MainFlowText1 width="19%" height="100%" />
               <Lottie className="w-[12%]" animationData={lottie.globe} />
@@ -47,7 +47,7 @@ function Home() {
               <p className="w-[2vmin]"></p>
             </div>
           </div>
-          <div className="absoulte flex w-[300vmin] h-[50%] animate-flowText">
+          <div className="absoulte flex w-[300vmin] h-[50%] animate-flowTextToRight">
             <div className="flex w-full h-full items-center">
               <icon.MainFlowText6 width="22%" height="100%" />
               <p className="w-[2vmin]"></p>

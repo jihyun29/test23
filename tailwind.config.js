@@ -4,17 +4,26 @@ module.exports = {
   theme: {
     extend: {
       keyframes: {
-        textLoop: {
+        textToLeftLoop: {
           "0%": {
-            transform: "translateX(15%)",
+            transform: "translateX(0px)",
           },
           "100%": {
-            transform: "translateX(-35%)",
+            transform: "translateX(-25%)",
+          },
+        },
+        textToRightLoop: {
+          "0%": {
+            transform: "translateX(0px)",
+          },
+          "100%": {
+            transform: "translateX(25%)",
           },
         },
       },
       animation: {
-        flowText: "textLoop 10s linear infinite",
+        flowTextToLeft: "textToLeftLoop 10s linear infinite",
+        flowTextToRight: "textToRightLoop 10s linear infinite",
       },
     },
   },

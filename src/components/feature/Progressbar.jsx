@@ -1,22 +1,31 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 
-const ProgressBar = ({ timers }) => {
-  const [totalTime, setTotalTime] = useState(0);
+const ProgressBar = ({ timers, setButtonClick }) => {
   const [elapsedTime, setElapsedTime] = useState(0);
 
-  useEffect(() => {
-    let total = 0;
-    timers.forEach((item) => {
-      total += item.timer;
+  const testFunc = () => {
+    let test = 0;
+    timers.forEach((ment) => {
+      test += ment.timer;
     });
-    setTotalTime(total);
+    return test;
+  };
 
+  const totalTime = useMemo(testFunc, []);
+
+  useEffect(() => {
     const timerId = setInterval(() => {
-      setElapsedTime((prevTime) => prevTime + 1);
+      setElapsedTime((prevTime) => {
+        if (prevTime === totalTime) {
+          alert("다음 게임 준비를 시작합니다!");
+          setButtonClick(false);
+        }
+        return prevTime + 1;
+      });
     }, 1000);
 
     return () => clearInterval(timerId);
-  }, [timers]);
+  }, [totalTime, setButtonClick]);
 
   const progress = (elapsedTime / totalTime) * 100;
 
@@ -28,7 +37,7 @@ const ProgressBar = ({ timers }) => {
           style={{ width: `${progress}%`, transition: "width 1s" }}
         >
           <div
-            className="absolute right-0 top-1/2 transform -translate-y-1/2 w-10 h-10 rounded-full bg-green-500"
+            className="absolute right-0 top-1/2 transform -translate-y-1/2 w-5 h-5 rounded-full bg-green-500"
             style={{
               transition: "width 1s",
             }}

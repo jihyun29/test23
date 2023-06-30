@@ -1,7 +1,6 @@
 import React from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { io } from "socket.io-client";
 
 // 방 리스트 1개 컴포넌트
 function Room({

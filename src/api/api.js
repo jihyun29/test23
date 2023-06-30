@@ -49,7 +49,9 @@ export const game = {
   getRoomList: async (category) =>
     await instance.get(`/api/roomlist/${category}`),
   createRoom: async (category) =>
-    await instance.post(`/api/roomlist/${category}`),
+    await instance.post(`/api/roomlist/${category}`, null, {
+      headers: { Authorization: localStorage.getItem("Authorization") },
+    }),
   selectCategory: async () =>
     await instance.put("api/user", null, {
       headers: { Authorization: localStorage.getItem("Authorization") },

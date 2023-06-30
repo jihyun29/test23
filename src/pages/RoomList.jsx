@@ -9,6 +9,13 @@ import Pagination from "../components/Pagination";
 import image from "../images";
 
 function RoomList() {
+  const navigate = useNavigate();
+  // 카테고리 페이지로부터 선택된 카테고리 전달 받음
+  const { state } = useLocation();
+  // 카테고리 이름, 코드
+  const [name, code] = state;
+  // console.log(name, code);
+
   const bannerImageList = [
     image.game,
     image.entertainment,
@@ -42,13 +49,6 @@ function RoomList() {
       "하나부터 열까지 다른 게임스타일, 다양하게 토론해요",
     ],
   };
-
-  const navigate = useNavigate();
-  // 카테고리 페이지로부터 선택된 카테고리 전달 받음
-  const { state } = useLocation();
-  // 카테고리 이름, 코드
-  const [name, code] = state;
-  // console.log(name, code);
 
   let bannerImage;
   let bannerText;

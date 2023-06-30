@@ -18,45 +18,6 @@ import lottie from "../lottie";
 import icon from "../icons";
 
 function GameRoom() {
-  const Ment = [
-    {
-      timer: 10,
-      message:
-        "안녕하세요, 토론에 참가해 주신 여러분께 감사드립니다. 오늘은 [주제]에 대해 토론을 진행하도록 하겠습니다.",
-    },
-    {
-      timer: 10,
-      message:
-        "방청객 분들께서는 찬성측과 반대측 발언에 대해서 공감가시는 입장에 토론 종료되기 전까지 투표부탁드립니다",
-    },
-    { timer: 10, message: "모두 준비되셨으면, 시작하겠습니다." },
-    { timer: 10, message: "토론을 시작하겠습니다" },
-    { timer: 10, message: "먼저, 찬성 측 첫번째 발언해주시겠습니까?" },
-    { timer: 150, message: "찬성 측 의견을 말씀해 주세요" },
-    { timer: 150, message: "네, 이번에는 반대 측 의견을 말씀해 주세요" },
-    { timer: 100, message: "찬성 측 반론 있으시면 발언해주세요" },
-    {
-      timer: 100,
-      message: "반대 측 찬성측 발언에 대해 반론이 있으시면 발언해주세요",
-    },
-    { timer: 100, message: "추가로 의견을 제시하실 분은 말씀해주세요" },
-    {
-      timer: 100,
-      message: "시간이 얼마 남지 않았습니다. 마지막 결론 말씀해주세요",
-    },
-    { timer: 100, message: "반대측 부터 발언해주세요" },
-    { timer: 100, message: "마지막으로 찬성 측 발언해주세요" },
-    { timer: 10, message: "토론이 종료되었습니다" },
-    { timer: 10, message: "투표가 종료되었습니다." },
-    { timer: 10, message: "토론배틀에 승자는 {토론자A}입니다. 축하드립니다. " },
-    { timer: 10, message: "다시 한번 참가해 주신 여러분께 감사드립니다. " },
-    {
-      timer: 10,
-      message:
-        "토론에 참가하실 의향이 있으신 분은 도전하기 버튼을 눌러 많은 참여부탁드립니다.",
-    },
-  ];
-
   const navigate = useNavigate();
   // 방 리스트 페이지에서 페이지 이동 시 넘겨는 State : 방 넘버
   const { state } = useLocation();
@@ -66,6 +27,29 @@ function GameRoom() {
 
   // 타이틀 설정 시 사용되는 상태
   const [title, setTitle] = useState(defaultTitle);
+
+  // 게임 멘트
+  const Ment = useMemo(
+    () => [
+      {
+        timer: 1,
+        message: ` ${title}에 대해 토론을 진행하도록 하겠습니다.`,
+      },
+      { timer: 4, message: "먼저, 찬성 측 첫번째 발언해주시겠습니까?" },
+      { timer: 1, message: "반대 측 반론 있으시면 발언해주세요" },
+      { timer: 4, message: "네, 이번에는 반대 측 의견을 말씀해 주세요" },
+      { timer: 1, message: "찬성 측 반론 있으시면 발언해주세요" },
+      { timer: 4, message: "추가로 의견을 제시하실 분은 말씀해주세요" },
+      {
+        timer: 1,
+
+        message: "시간이 얼마 남지 않았습니다. 마지막 결론 말씀해주세요",
+      },
+      { timer: 1, message: "투표를 진행합니다." },
+    ],
+    [title]
+  );
+
   // 룰렛 표시 여부에 사용되는 상태
   const [isRoulette, setIsRoulette] = useState(false);
   const [isRouletteResult, setIsRouletteResult] = useState(false);
@@ -121,8 +105,7 @@ function GameRoom() {
     // 로컬 테스트 시
     const URL = process.env.REACT_APP_BACKEND_SERVER_URL;
 
-    const socket = io(URL, {
-      // secure: true,
+    const socket = io("http://localhost:4000", {
       withCredentials: true,
       query: {
         token: localStorage.getItem("Authorization"),
@@ -203,11 +186,10 @@ function GameRoom() {
     canvas.style.transform = `rotate(-${rotate}deg)`;
     canvas.style.transition = `2s`;
 
-    // setTimeout(() => {
-    setTitle(currentTitle);
-    setIsRouletteResult(true);
-    // }, 2000);
-    // handleButtonClick();
+    setTimeout(() => {
+      setTitle(currentTitle);
+      setIsRouletteResult(true);
+    }, 2000);
   };
 
   // 3 - 2 - 2. 룰렛 애니메이션 시작 이벤트 수신 후 룰렛 애니메이션 시작
@@ -242,6 +224,7 @@ function GameRoom() {
   // 3 - 4 - 2. 이벤트 수신 후 룰렛 닫기
   socket.on("close_roulette", (result) => {
     setIsRoulette(result);
+    setTimeout(handleButtonClick, 1000);
   });
 
   // 4. 유저 나갔을 시 발생하는 알람
@@ -463,7 +446,7 @@ function GameRoom() {
         <div className="relative flex justify-center items-center w-full h-[7%] bg-[#1E1E1E] rounded-2xl text-white">
           {/* <ProgressBar timers={Ment} /> */}
           {buttonClicked ? (
-            <ProgressBar timers={Ment} />
+            <ProgressBar timers={Ment} setButtonClick={setButtonClicked} />
           ) : (
             <div className="absolute left-[10%]  bg-gray-500 w-[70%] h-5 rounded-full"></div>
           )}
