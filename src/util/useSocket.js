@@ -15,8 +15,11 @@ export const useSocket = () => {
 
 // -------------- test
 export const useRoomListSocket = () => {
-  const socket = io.connect(`${URL}/roomlist`, {
+  const socket = io.connect(`${URL}/roomList`, {
     withCredentials: true,
+    query: {
+      token: localStorage.getItem("Authorization"),
+    },
   });
   return socket;
 };

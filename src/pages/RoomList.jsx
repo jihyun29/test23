@@ -7,33 +7,40 @@ import Header from "../components/Header";
 import Room from "../components/Room";
 import Pagination from "../components/Pagination";
 import image from "../images";
-// test
-import { useRoomListSocket } from "../util/useSocket";
+// import { useRoomListSocket } from "../util/useSocket";
 
 function RoomList() {
   // ------------------------- test
-  const roomListSocket = useMemo(useRoomListSocket, []);
-
-  useEffect(() => {
-    roomListSocket.emit("update", "update");
-    return () => {
-      roomListSocket.disconnect();
-    };
-  }, []);
-
-  roomListSocket.on("send_roomlist", (msg) => {
-    console.log(msg);
-  });
-  roomListSocket.on("test", (msg) => {
-    console.log(msg);
-  });
+  // const roomListSocket = useMemo(useRoomListSocket, []);
   // ------------------------- test
 
   const navigate = useNavigate();
   // 카테고리 페이지로부터 선택된 카테고리 전달 받음
   const { state } = useLocation();
   // 카테고리 이름, 코드
-  const [name, code] = state;
+  const [categoryName, categoryCode] = state;
+
+  // ------------------------- test
+  // useEffect(() => {
+  //   roomListSocket.emit("update", categoryCode);
+  //   return () => {
+  //     roomListSocket.disconnect();
+  //     console.log("네임스페이스 소켓의 연결이 끊어졌습니다.");
+  //   };
+  // }, []);
+
+  // roomListSocket.on("update_roomList", (roomList) => {
+  //   console.log(roomList);
+  //   setRoomList(roomList);
+  // });
+
+  // roomListSocket.on("disconnect", () => {
+  //   console.log("네임스페이스 소켓의 연결이 끊어질 예정입니다.");
+  // });
+  // roomListSocket.on("test", (msg) => {
+  //   console.log(msg);
+  // });
+  // ------------------------- test
 
   const bannerImageList = {
     game: image.game,
@@ -72,7 +79,7 @@ function RoomList() {
   let bannerImage;
   let bannerText;
 
-  switch (name) {
+  switch (categoryName) {
     case "게임/프로게이머":
       bannerImage = bannerImageList.game;
       bannerText = bannerTextList.game;
@@ -117,25 +124,29 @@ function RoomList() {
   // 방 리스트 만들기 위해 더미데이터 이용 => api로 받아와야 되는 부분들
   const [roomList, setRoomList] = useState([]);
 
+  //   API로 RoomList 가져오는 부분 -> 향후 삭제
   // useQuery에 대한 것은 queryKey부터 시작해서 좀 더 공부 필요 !!
   const { isLoading: isRoomListLoading } = useQuery(
-    ["getRoom", code],
-    () => game.getRoomList(code),
+    ["getRoom", categoryCode],
+    () => game.getRoomList(categoryCode),
     {
       onSuccess: (data) => {
         // console.log(data);
         setRoomList([...data.data.data]);
       },
       refetchOnWindowFocus: false,
-      retry: 1,
+      retry: 0,
     }
   );
 
-  const { mutateAsync: createRoom } = useMutation(() => game.createRoom(code), {
-    onSuccess: (res) => {
-      console.log(res);
-    },
-  });
+  const { mutateAsync: createRoom } = useMutation(
+    () => game.createRoom(categoryCode),
+    {
+      onSuccess: (res) => {
+        console.log(res);
+      },
+    }
+  );
 
   // 방생성 함수 : 지금은 랜덤으로 생성 & 내 화면에만 표시됨으로 향후 수정 필요
   // createRoom mustation으로 들어가도록 설정 필요
@@ -143,7 +154,13 @@ function RoomList() {
     const data = await createRoom();
     const roomData = data.data.data[0];
     navigate(`/room/${roomData.roomId}`, {
-      state: [roomData.roomId, roomData.roomName, name, code, true],
+      state: [
+        roomData.roomId,
+        roomData.roomName,
+        categoryName,
+        categoryCode,
+        true,
+      ],
     });
   };
 
@@ -169,7 +186,7 @@ function RoomList() {
           debater={item.debater}
           panel={item.panel}
           roomId={item.roomId}
-          categoryCode={code}
+          categoryCode={categoryCode}
         />
       ));
   };
@@ -195,7 +212,7 @@ function RoomList() {
           </button>
           <div className="absolute flex flex-col justify-center items-center w-full h-full left-0 top-0 z-[3]">
             <div className="w-fit text-[2.7vh] text-white font-medium mx-auto">
-              {name}
+              {categoryName}
             </div>
             <div className="text-white text-[1.5vh] w-fit mt-[1vh] mx-auto">
               {bannerText[0]}

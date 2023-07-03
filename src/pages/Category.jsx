@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import icon from "../icons";
 import Header from "../components/Header";
-import Footer from "../components/Footer";
+// import Footer from "../components/Footer";
 import { game } from "../api/api";
 
 function Category() {
@@ -60,9 +60,10 @@ function Category() {
       return alert("카테고리를 선택해주세요.");
     } else if (selectedCategory === "랜덤") {
       const randomNumber = Math.round(Math.random() * 7);
-      const randomSubject = categoryList.filter((item) => item.name !== "랜덤")[
-        randomNumber
-      ].name;
+      const randomCategoryName = categoryList.filter(
+        (item) => item.name !== "랜덤"
+      )[randomNumber].name;
+      const randomCategoryCode = randomNumber + 1;
       const data = game.selectCategory();
       const res = (await data).data.data[0];
       if (res) {
@@ -70,7 +71,7 @@ function Category() {
         localStorage.setItem("kakaoId", res.kakaoId);
       }
       return navigate("/roomlist", {
-        state: [randomSubject, randomNumber + 1],
+        state: [randomCategoryName, randomCategoryCode],
       });
     } else {
       const selectedCategoryCode = categoryList.filter(
@@ -103,7 +104,7 @@ function Category() {
   return (
     <>
       <Header />
-      <div className="flex w-full h-[83vh]">
+      <div className="flex w-full h-[95vh]">
         {/* Left Side bar */}
         <div className="w-[20%] h-full overflow-hidden">
           <button
@@ -167,7 +168,7 @@ function Category() {
               <button
                 // disabled
                 onClick={enterRoomList}
-                className="bg-[#EFFE37] px-[12vmin] py-[1.5vmin] rounded-[60px] text-[1.8vmin] font-bold"
+                className="bg-[#EFFE37] px-[12vmin] py-[2vmin] rounded-[60px] text-[1.8vmin] font-bold"
               >
                 입장하기
               </button>
@@ -177,7 +178,7 @@ function Category() {
         {/* Center */}
         <div className="w-[20%]"></div>
       </div>
-      <Footer />
+      {/* <Footer /> */}
     </>
   );
 }
@@ -198,30 +199,19 @@ const CategoryCard = ({
 
   const bgStyle =
     selectedCategory === categoryName
-      ? originStyle + " outline outline-[3px] outline-white cursor-pointer"
+      ? originStyle + " outline outline-[2px] outline-white cursor-pointer"
       : originStyle;
-  let originFontStyle;
-  if (index === 2 || index === 3 || index === 5 || index === 8) {
-    originFontStyle = "text-black";
-  } else {
-    originFontStyle = "text-white";
-  }
-
-  const ftStyle = originFontStyle;
-  //   selectedCategory === categoryName ? "text-white" : originFontStyle;
 
   return (
     <div
       onClick={() => {
         onClickHandler(categoryName);
       }}
-      className={
-        bgStyle +
-        " flex justify-between px-[1.5vmin] pt-[1.8vmin] rounded-3xl cursor-pointer"
-      }
+      className={bgStyle + " rounded-3xl cursor-pointer"}
     >
-      <p className={ftStyle + " text-[2vmin] font-bold"}>{categoryName}</p>
-      <div className="h-[60%] ml-auto mt-auto overflow-hidden">{icon}</div>
+      {icon}
+      {/* <p className={ftStyle + " text-[2vmin] font-bold"}>{categoryName}</p>
+      <div className="h-[60%] ml-auto mt-auto overflow-hidden">{icon}</div> */}
     </div>
   );
 };
