@@ -114,7 +114,7 @@ function Category() {
           >
             ← 메인으로
           </button>
-          <div className="flex flex-col justify-between w-fit h-[17vmin] ml-auto px-[1.2vmin] mt-[25%] bg-[#464747] rounded-[24px]">
+          <div className="flex flex-col justify-between w-fit h-[17vmin] ml-auto px-[1.2vmin] mt-[25%] bg-[#464747] rounded-3xl">
             <div className="mt-[2vmin] text-[#C6C6C6] text-[1.5vmin] font-sans">
               <p>지금 가장 많은</p>
               <p>관심을 받고 있는</p>
@@ -200,7 +200,7 @@ const CategoryCard = ({
 
   const bgStyle =
     selectedCategory === categoryName
-      ? originStyle + " border border-[#EFFE37] bg-[#464747] cursor-pointer"
+      ? originStyle + " border border-green-300 cursor-pointer"
       : originStyle;
   let originFontStyle;
   if (index === 2 || index === 3 || index === 5 || index === 8) {
@@ -210,7 +210,7 @@ const CategoryCard = ({
   }
 
   const ftStyle =
-    selectedCategory === categoryName ? "text-green-500" : originFontStyle;
+    selectedCategory === categoryName ? "text-green-300" : originFontStyle;
 
   return (
     <div

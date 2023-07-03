@@ -36,7 +36,7 @@ function Header() {
     ) : (
       <Link
         to="/SocialKakao"
-        className="mr-[9vw] border border-white text-white py-[0.1vmin] px-[1.5vmin] rounded-[0.8vmin] text-[1.5vmin]"
+        className="mr-[9vw] w-fit border border-white text-white py-[0.1vmin] px-[1.5vmin] rounded-[0.8vmin] text-[1.5vmin]"
       >
         로그인
       </Link>
