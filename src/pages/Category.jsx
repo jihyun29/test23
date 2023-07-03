@@ -1,7 +1,5 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-// import Lottie from "lottie-react";
-// import lottie from "../lottie";
 import icon from "../icons";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
@@ -200,7 +198,7 @@ const CategoryCard = ({
 
   const bgStyle =
     selectedCategory === categoryName
-      ? originStyle + " border border-green-300 cursor-pointer"
+      ? originStyle + " outline outline-[3px] outline-white cursor-pointer"
       : originStyle;
   let originFontStyle;
   if (index === 2 || index === 3 || index === 5 || index === 8) {
@@ -209,8 +207,8 @@ const CategoryCard = ({
     originFontStyle = "text-white";
   }
 
-  const ftStyle =
-    selectedCategory === categoryName ? "text-green-300" : originFontStyle;
+  const ftStyle = originFontStyle;
+  //   selectedCategory === categoryName ? "text-white" : originFontStyle;
 
   return (
     <div
