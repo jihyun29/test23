@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useMutation, useQuery } from "react-query";
 import { game } from "../api/api";
@@ -7,25 +7,44 @@ import Header from "../components/Header";
 import Room from "../components/Room";
 import Pagination from "../components/Pagination";
 import image from "../images";
+// test
+import { useRoomListSocket } from "../util/useSocket";
 
 function RoomList() {
+  // ------------------------- test
+  const roomListSocket = useMemo(useRoomListSocket, []);
+
+  useEffect(() => {
+    roomListSocket.emit("update", "update");
+    return () => {
+      roomListSocket.disconnect();
+    };
+  }, []);
+
+  roomListSocket.on("send_roomlist", (msg) => {
+    console.log(msg);
+  });
+  roomListSocket.on("test", (msg) => {
+    console.log(msg);
+  });
+  // ------------------------- test
+
   const navigate = useNavigate();
   // 카테고리 페이지로부터 선택된 카테고리 전달 받음
   const { state } = useLocation();
   // 카테고리 이름, 코드
   const [name, code] = state;
-  // console.log(name, code);
 
-  const bannerImageList = [
-    image.game,
-    image.entertainment,
-    image.sport,
-    image.love,
-    image.marriage,
-    image.company,
-    image.school,
-    image.balancegame,
-  ];
+  const bannerImageList = {
+    game: image.game,
+    entertainment: image.entertainment,
+    sport: image.sport,
+    love: image.love,
+    marriage: image.marriage,
+    company: image.company,
+    school: image.school,
+    balancegame: image.balancegame,
+  };
 
   const bannerTextList = {
     love: [
@@ -55,35 +74,35 @@ function RoomList() {
 
   switch (name) {
     case "게임/프로게이머":
-      bannerImage = bannerImageList[0];
+      bannerImage = bannerImageList.game;
       bannerText = bannerTextList.game;
       break;
     case "연예/이슈":
-      bannerImage = bannerImageList[1];
+      bannerImage = bannerImageList.entertainment;
       bannerText = bannerTextList.entertainment;
       break;
     case "스포츠/운동":
-      bannerImage = bannerImageList[2];
+      bannerImage = bannerImageList.sport;
       bannerText = bannerTextList.sport;
       break;
     case "연애":
-      bannerImage = bannerImageList[3];
+      bannerImage = bannerImageList.love;
       bannerText = bannerTextList.love;
       break;
     case "결혼/육아":
-      bannerImage = bannerImageList[4];
+      bannerImage = bannerImageList.marriage;
       bannerText = bannerTextList.marriage;
       break;
     case "회사생활":
-      bannerImage = bannerImageList[5];
+      bannerImage = bannerImageList.company;
       bannerText = bannerTextList.company;
       break;
     case "학교생활":
-      bannerImage = bannerImageList[6];
+      bannerImage = bannerImageList.school;
       bannerText = bannerTextList.school;
       break;
     case "밸런스게임":
-      bannerImage = bannerImageList[7];
+      bannerImage = bannerImageList.balancegame;
       bannerText = bannerTextList.balancegame;
       break;
     default:
@@ -119,6 +138,7 @@ function RoomList() {
   });
 
   // 방생성 함수 : 지금은 랜덤으로 생성 & 내 화면에만 표시됨으로 향후 수정 필요
+  // createRoom mustation으로 들어가도록 설정 필요
   const createRoomBtnClick = async () => {
     const data = await createRoom();
     const roomData = data.data.data[0];
@@ -132,16 +152,34 @@ function RoomList() {
     navigate("/category");
   };
 
-  useEffect(() => {
-    // console.log(roomList);
-  }, [roomList]);
+  const showRoomListDevidedByNumber = (
+    totalRoomList,
+    startNumber,
+    devideNumber
+  ) => {
+    return totalRoomList
+      ?.slice(startNumber, startNumber + devideNumber)
+      .map((item, index) => (
+        <Room
+          key={item.roomId}
+          number={index + limit * (page - 1)}
+          ß
+          categoryName={item.KategorieName}
+          roomName={item.roomName}
+          debater={item.debater}
+          panel={item.panel}
+          roomId={item.roomId}
+          categoryCode={code}
+        />
+      ));
+  };
 
   return (
     <>
       <Header />
-      <div className="flex flex-col w-full h-[80vh]">
+      <div className="flex flex-col w-full h-[83vh]">
         {/* 배너 부분 */}
-        <div className="relative flex flex-col w-full h-[20vh] bg-white">
+        <div className="relative flex flex-col w-full h-[23vh] bg-white">
           <div className="relative w-full h-full overflow-hidden z-[2]">
             <img
               className="w-full h-full object-fill"
@@ -151,7 +189,7 @@ function RoomList() {
           </div>
           <button
             onClick={goCategoryBtnClick}
-            className="absolute ml-[2vh] text-[2.5vh] font-bold text-[#C6C6C6] top-[10%] z-[4]"
+            className="absolute ml-[3vh] text-[2.5vh] font-bold text-[#C6C6C6] top-[10%] z-[4]"
           >
             ← 카테고리 선택
           </button>
@@ -159,20 +197,22 @@ function RoomList() {
             <div className="w-fit text-[2.7vh] text-white font-medium mx-auto">
               {name}
             </div>
-            <div className="text-white text-[1.5vh] w-fit mt-[1vh]  mx-auto">
+            <div className="text-white text-[1.5vh] w-fit mt-[1vh] mx-auto">
               {bannerText[0]}
             </div>
             <div className="text-white text-[1.5vh] w-fit mx-auto">
               {bannerText[1] && bannerText[1]}
             </div>
           </div>
-          <button
-            onClick={createRoomBtnClick}
-            className="absolute border border-white text-[2.3vh] text-white font-bold px-[3vh] py-[1vh] rounded-[8px] mt-[2%] right-[7%] bottom-[10%] z-[4]"
-          >
-            {" "}
-            방 만들기
-          </button>
+          {localStorage.getItem("kakaoId") === "1" && (
+            <button
+              onClick={createRoomBtnClick}
+              className="absolute border border-white text-[2.3vh] text-white font-bold px-[3vh] py-[1vh] rounded-[8px] mt-[2%] right-[7%] bottom-[10%] z-[4]"
+            >
+              {" "}
+              방 만들기
+            </button>
+          )}
         </div>
         {/* 배너 부분 */}
 
@@ -192,18 +232,7 @@ function RoomList() {
 
         {/* 빙 리스트 본문 */}
         <div className="flex flex-col w-full h-[52vh] px-[6.4vw] overflow-hidden">
-          {roomList?.slice(offset, offset + limit).map((item, index) => (
-            <Room
-              key={item.roomId}
-              number={index + limit * (page - 1)}
-              categoryName={item.KategorieName}
-              roomName={item.roomName}
-              debater={item.debater}
-              panel={item.panel}
-              roomId={item.roomId}
-              categoryCode={code}
-            />
-          ))}
+          {showRoomListDevidedByNumber(roomList, offset, limit)}
         </div>
         {/* 빙 리스트 본문 */}
 

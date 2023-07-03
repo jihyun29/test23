@@ -3,7 +3,6 @@ import Lottie from "lottie-react";
 
 import { useState, useRef, useEffect, useMemo } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { io } from "socket.io-client";
 
 import { useRoulette } from "../util/useRoulette";
 import { useSocketLeaveRoom } from "../util/useSocketLeaveRoom";
@@ -13,6 +12,7 @@ import Prompt from "../components/feature/Prompt";
 import ProgressBar from "../components/feature/Progressbar";
 import lottie from "../lottie";
 import icon from "../icons";
+import { useSocket } from "../util/useSocket";
 
 function GameRoom() {
   const navigate = useNavigate();
@@ -79,21 +79,9 @@ function GameRoom() {
   const titleList = useRef([]);
 
   // --------- 소켓 부분 -----------
-  // [Start] 소켓 연결
-  const connectSocket = () => {
-    const URL = process.env.REACT_APP_BACKEND_SERVER_URL;
-
-    const socket = io.connect(URL, {
-      withCredentials: true,
-      query: {
-        token: localStorage.getItem("Authorization"),
-      },
-    });
-    return socket;
-  };
-
+  // [Start] 소켓 연결 : useSocket
   //서버와 연결된 소켓 캐싱
-  const socket = useMemo(connectSocket, []);
+  const socket = useMemo(useSocket, []);
 
   /* 0. 소켓 연결 성공 시 : 방에 입장
   - 토론자일 시 : joinDebate 이벤트 밣생
@@ -174,9 +162,6 @@ function GameRoom() {
   const setTitleFunc = (ran) => {
     currentTitle = titleList.current[ran];
     const canvas = roulette.current;
-    // if (canvas === null) {
-    //   return;
-    // } // 가드 처리, TypeScript 사용 시에는 build 불가
     canvas.style.transform = `initial`;
     canvas.style.transition = `initial`;
 
@@ -194,10 +179,10 @@ function GameRoom() {
   };
 
   // 3 - 2 - 2. 룰렛 애니메이션 시작 이벤트 수신 후 룰렛 애니메이션 시작
-  socket.on("start_roulette", (ran) => {
+  socket.on("start_roulette", (randomSubject) => {
     console.log(roulette.current);
     // 룰렛 애니메이션 함수
-    setTitleFunc(ran);
+    setTitleFunc(randomSubject);
   });
 
   // 3 - 3 - 1. 결과창 닫기 이벤트 시작 - Retry Button
@@ -234,9 +219,7 @@ function GameRoom() {
   });
 
   // [ Last ] 페이지 언로딩 시 소켓 연결 해제 - socket.disconnect
-  useSocketLeaveRoom({
-    socket,
-  });
+  useSocketLeaveRoom(socket);
   // ---------- 소켓 부분 -----------
 
   // ---------- Web RTC -----------
@@ -291,7 +274,6 @@ function GameRoom() {
     setTimeout(async () => {
       // console.log(await myStream);
       myVideoBox.current.srcObject = await myStream;
-      yourVideoBox.current.srcObject = await myStream;
     }, 0);
   }, [isMuted, isVideoOff, myStream]);
   // ---------- Web RTC -----------

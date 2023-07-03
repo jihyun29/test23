@@ -19,7 +19,7 @@ function Home() {
   return (
     <>
       <Header />
-      <div className="flex flex-col w-full h-[80vh]">
+      <div className="w-full h-[83vh] overflow-x-hidden overflow-y-auto">
         <div className="relative mt-[5vh] flex flex-col items-center w-full h-[20vmin] whitespace-nowrap overflow-hidden">
           <div className="absoulte flex justify-start w-[300vmin] h-[50%] animate-flowTextToLeft">
             <div className="flex w-full h-full items-center justify-start">
@@ -87,6 +87,9 @@ function Home() {
           >
             Let's Go!
           </button>
+        </div>
+        <div className="mt-[9vh]">
+          <icon.MainMidSection width="100%" height="100%" />
         </div>
       </div>
       <Footer />

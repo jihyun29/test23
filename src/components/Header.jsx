@@ -36,16 +36,16 @@ function Header() {
     ) : (
       <Link
         to="/SocialKakao"
-        className="mr-[9vw] border border-white text-white py-[0.5vh] px-[2.1vw] rounded-[1.5vh] text-[2vh]"
+        className="mr-[9vw] border border-white text-white py-[0.1vmin] px-[1.5vmin] rounded-[0.8vmin] text-[1.5vmin]"
       >
         로그인
       </Link>
     );
   return (
-    <div className="relative flex justify-between items-center w-full h-[8vh] border-b border-[#464747]">
-      <div className="flex items-center ml-[9vw] gap-[1.5rem]">
-        <div className="w-[100%] h-[100%]">
-          <icon.DebatoryLogo width="100%" height="77.7%" />
+    <div className="relative flex justify-between items-center w-full h-[5vh] border-b border-[#464747]">
+      <div className="flex items-center ml-[9vw]">
+        <div className="h-[77.7%]">
+          <icon.DebatoryLogo width="70%" height="77.7%" />
         </div>
       </div>
       {userIcon}

@@ -71,14 +71,16 @@ function Room({
 
       {/* 입장하기 버튼 */}
       {isClick ? (
-        <div className="flex ml-[2vw] gap-[1vw] text-[1.1vh]">
-          <button
-            onClick={goGameRoombyTellerHandler}
-            disabled={debaterBtn}
-            className=" rounded-[0.5vh] p-[0.2vh] text-[#EFFE37] text-[1.5vh] font-semibold"
-          >
-            발언자
-          </button>
+        <div className="flex justify-center w-[12vw] ml-auto mr-[3vw] gap-[1vw] text-[1.1vh]">
+          {localStorage.getItem("kakaoId") === "1" && (
+            <button
+              onClick={goGameRoombyTellerHandler}
+              disabled={debaterBtn}
+              className=" rounded-[0.5vh] p-[0.2vh] text-[#EFFE37] text-[1.5vh] font-semibold"
+            >
+              발언자
+            </button>
+          )}
           <button
             onClick={goGameRoombyListenerHandler}
             disabled={panelBtn}

@@ -44,6 +44,7 @@ import { ReactComponent as MainBlah } from "./blah.svg";
 import { ReactComponent as DebatoryLogo } from "./debatoryLogo.svg";
 import { ReactComponent as Login } from "./login.svg";
 import { ReactComponent as Logout } from "./logout.svg";
+import { ReactComponent as MainMidSection } from "./MainMidSection.svg";
 
 export const icon = {
   Debate,
@@ -92,6 +93,7 @@ export const icon = {
   DebatoryLogo,
   Login,
   Logout,
+  MainMidSection,
 };
 
 export default icon;

@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 
-export function useSocketLeaveRoom({ socket }) {
+export function useSocketLeaveRoom(socket) {
   useEffect(() => {
     return () => {
       socket.disconnect();
