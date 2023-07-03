@@ -7,7 +7,7 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <div className="w-[100vw] h-[100vh] bg-[#1B1B1B]">
-        <div className="flex flex-col justify-center items-center w-full h-full mx-auto">
+        <div className="flex flex-col items-center w-full h-full mx-auto">
           <Router />
         </div>
       </div>

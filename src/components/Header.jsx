@@ -2,8 +2,6 @@ import React from "react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import icon from "../icons";
-import lottie from "../lottie";
-import Lottie from "lottie-react";
 
 function Header() {
   const [isClick, setIsClick] = useState(false);
@@ -38,18 +36,15 @@ function Header() {
     ) : (
       <Link
         to="/SocialKakao"
-        className="mr-[9vw] border border-white text-white py-[0.5vh] px-[2.1vw] rounded-[1.5vh] text-[2vh]"
+        className="mr-[9vw] w-fit border border-white text-white py-[0.1vmin] px-[1.5vmin] rounded-[0.8vmin] text-[1.5vmin]"
       >
         로그인
       </Link>
     );
   return (
-    <div className="relative flex justify-between items-center w-full h-[8vh] border-b border-[#464747]">
-      <div className="flex items-center ml-[9vw] gap-[1.5rem]">
-        <div className="w-[5vh] h-[5vh] rounded-[100%]">
-          <Lottie animationData={lottie.title} className="w-full h-full" />
-        </div>
-        <div className="text-[3vh] text-white font-bold">와플</div>
+    <div className="relative flex justify-between items-center w-full h-[5vh] border-b border-[#464747]">
+      <div className="flex items-center h-[4.68vh] ml-[9vw]">
+        <icon.DebatoryLogo width="100%" height="100%" />
       </div>
       {userIcon}
     </div>

@@ -3,60 +3,18 @@ import Lottie from "lottie-react";
 
 import { useState, useRef, useEffect, useMemo } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { io } from "socket.io-client";
-// import { useMutation } from "react-query";
 
 import { useRoulette } from "../util/useRoulette";
-import { useSocketEnterRoom } from "../util/useSocketEnterRoom";
-
-// import { chatgpt } from "../api/api";
+import { useSocketLeaveRoom } from "../util/useSocketLeaveRoom";
 
 import Timer from "../components/feature/Timer";
 import Prompt from "../components/feature/Prompt";
 import ProgressBar from "../components/feature/Progressbar";
 import lottie from "../lottie";
 import icon from "../icons";
+import { useSocket } from "../util/useSocket";
 
 function GameRoom() {
-  const Ment = [
-    {
-      timer: 10,
-      message:
-        "안녕하세요, 토론에 참가해 주신 여러분께 감사드립니다. 오늘은 [주제]에 대해 토론을 진행하도록 하겠습니다.",
-    },
-    {
-      timer: 10,
-      message:
-        "방청객 분들께서는 찬성측과 반대측 발언에 대해서 공감가시는 입장에 토론 종료되기 전까지 투표부탁드립니다",
-    },
-    { timer: 10, message: "모두 준비되셨으면, 시작하겠습니다." },
-    { timer: 10, message: "토론을 시작하겠습니다" },
-    { timer: 10, message: "먼저, 찬성 측 첫번째 발언해주시겠습니까?" },
-    { timer: 150, message: "찬성 측 의견을 말씀해 주세요" },
-    { timer: 150, message: "네, 이번에는 반대 측 의견을 말씀해 주세요" },
-    { timer: 100, message: "찬성 측 반론 있으시면 발언해주세요" },
-    {
-      timer: 100,
-      message: "반대 측 찬성측 발언에 대해 반론이 있으시면 발언해주세요",
-    },
-    { timer: 100, message: "추가로 의견을 제시하실 분은 말씀해주세요" },
-    {
-      timer: 100,
-      message: "시간이 얼마 남지 않았습니다. 마지막 결론 말씀해주세요",
-    },
-    { timer: 100, message: "반대측 부터 발언해주세요" },
-    { timer: 100, message: "마지막으로 찬성 측 발언해주세요" },
-    { timer: 10, message: "토론이 종료되었습니다" },
-    { timer: 10, message: "투표가 종료되었습니다." },
-    { timer: 10, message: "토론배틀에 승자는 {토론자A}입니다. 축하드립니다. " },
-    { timer: 10, message: "다시 한번 참가해 주신 여러분께 감사드립니다. " },
-    {
-      timer: 10,
-      message:
-        "토론에 참가하실 의향이 있으신 분은 도전하기 버튼을 눌러 많은 참여부탁드립니다.",
-    },
-  ];
-
   const navigate = useNavigate();
   // 방 리스트 페이지에서 페이지 이동 시 넘겨는 State : 방 넘버
   const { state } = useLocation();
@@ -66,6 +24,29 @@ function GameRoom() {
 
   // 타이틀 설정 시 사용되는 상태
   const [title, setTitle] = useState(defaultTitle);
+
+  // 게임 멘트 캐싱
+  const Ment = useMemo(
+    () => [
+      {
+        timer: 1,
+        message: ` ${title}에 대해 토론을 진행하도록 하겠습니다.`,
+      },
+      { timer: 4, message: "먼저, 찬성 측 첫번째 발언해주시겠습니까?" },
+      { timer: 1, message: "반대 측 반론 있으시면 발언해주세요" },
+      { timer: 4, message: "네, 이번에는 반대 측 의견을 말씀해 주세요" },
+      { timer: 1, message: "찬성 측 반론 있으시면 발언해주세요" },
+      { timer: 4, message: "추가로 의견을 제시하실 분은 말씀해주세요" },
+      {
+        timer: 1,
+
+        message: "시간이 얼마 남지 않았습니다. 마지막 결론 말씀해주세요",
+      },
+      { timer: 1, message: "투표를 진행합니다." },
+    ],
+    [title]
+  );
+
   // 룰렛 표시 여부에 사용되는 상태
   const [isRoulette, setIsRoulette] = useState(false);
   const [isRouletteResult, setIsRouletteResult] = useState(false);
@@ -78,13 +59,12 @@ function GameRoom() {
   // 유저 닉네임 보여주는 상태
   const [userNickname, setUserNickname] = useState([]);
 
+  // 유저 로딩 창 만들기
   const countReadyBox = () => {
     const count = 10 - userNickname.length;
     return Array(count).fill(<Lottie animationData={lottie.loading} />);
   };
-
-  // const URL = process.env.REACT_APP_BACKEND_SERVER_URL;
-
+  // 유저 로딩 창 결과 캐싱
   const readyBox = useMemo(countReadyBox, [userNickname]);
 
   // 룰렛 React DOM을 point하기 위한 Ref
@@ -95,50 +75,38 @@ function GameRoom() {
   // 채팅 전송을 위한 Ref
   const chatInputValue = useRef("");
 
-  // chatgpt에 카테고리별 주제 받아오는 Ref
+  // BackEnd에 카테고리별 주제 받아오는 Ref
   const titleList = useRef([]);
 
-  /*   // gpt에서 주제 받아오는 api
-  const { mutateAsync: getTitleList, isLoading: isTitleLoading } = useMutation(
-    () => chatgpt.kategorie(categoryName),
-    {
-      onSuccess: (res) => {
-        console.log("title is", res);
-      },
-      onError: (error) => {
-        console.log(error);
-      },
-      retry: 0,
-    }
-  ); */
-
   // --------- 소켓 부분 -----------
-  // 0. 방에 입장
-  const connectSocket = () => {
-    // 배포 시
-    // const URL = process.env.REACT_APP_BACKEND_SERVER_URL;
+  // [Start] 소켓 연결 : useSocket
+  //서버와 연결된 소켓 캐싱
+  const socket = useMemo(useSocket, []);
 
-    // 로컬 테스트 시
-    const URL = process.env.REACT_APP_BACKEND_SERVER_URL;
+  /* 0. 소켓 연결 성공 시 : 방에 입장
+  - 토론자일 시 : joinDebate 이벤트 밣생
+  - 배심원일 시 : joinJuror 이벤트 발생 */
+  socket.on("connect", () => {
+    if (!isTeller) {
+      socket.emit("joinJuror", roomNumber, () => {
+        console.log("참여자로 입장되었습니다!");
+      });
+    } else {
+      socket.emit("joinDebate", roomNumber, (msg) => {
+        // LoginError : 카카오로그인 안한 유저가 토론자로 참여시 에러 발생
+        if (msg) {
+          alert(`Error : ${msg}`);
+          navigate("/roomlist", { state: [categoryName, categoryCode] });
+        }
+        console.log("토론자로 입장되었습니다!");
+      });
+    }
+  });
 
-    const socket = io(URL, {
-      // secure: true,
-      withCredentials: true,
-      query: {
-        token: localStorage.getItem("Authorization"),
-      },
-    });
-    return socket;
-  };
-
-  const socket = useMemo(connectSocket, []);
-
-  useSocketEnterRoom({ socket, roomNumber, isTeller });
-
-  // 1. 방에 입장한 유저 리스트 받아오기
+  // 1. 방에 입장한 유저 닉네임 리스트 받아오기
   socket.on("roomJoined", async (nickName) => {
-    const nickname = await nickName.map((user) => user.nickname);
-    setUserNickname([...nickname]);
+    console.log(nickName);
+    setUserNickname([...nickName]);
   });
 
   // 2. 채팅
@@ -153,7 +121,7 @@ function GameRoom() {
     chatInputValue.current.value = "";
   };
 
-  // 2 - 2. 상대 방이 보낸 채팅 가져옴
+  // 2 - 2. 상대 방이 보낸 채팅 가져와서 화면에 표기
   socket.on("new_chat", (chat) => {
     setTotalChat([...totalChat, chat]);
   });
@@ -165,14 +133,18 @@ function GameRoom() {
 
   // 3 - 1 - 1. 게임 시작 버튼 클릭 시 룰렛 보여주는 이벤트 전송
   const gameStartBtnClickhandler = () => {
-    socket.emit("show_roulette", true, roomNumber, () => {
+    socket.emit("show_roulette", true, (msg) => {
+      if (msg) {
+        alert(`${msg}`);
+        return;
+      }
       console.log("룰렛이 생성되었습니다.");
     });
   };
 
   // 3 - 1 - 1. 룰렛 보여주는 이벤트 수신 후 룰렛 보여줌
-  socket.on("show_roulette", (rouletteData, result) => {
-    titleList.current = [...rouletteData];
+  socket.on("show_roulette", (titleListFromBack, result) => {
+    titleList.current = [...titleListFromBack];
     setIsRoulette(result);
   });
 
@@ -190,9 +162,6 @@ function GameRoom() {
   const setTitleFunc = (ran) => {
     currentTitle = titleList.current[ran];
     const canvas = roulette.current;
-    // if (canvas === null) {
-    //   return;
-    // } // 가드 처리, TypeScript 사용 시에는 build 불가
     canvas.style.transform = `initial`;
     canvas.style.transition = `initial`;
 
@@ -203,18 +172,17 @@ function GameRoom() {
     canvas.style.transform = `rotate(-${rotate}deg)`;
     canvas.style.transition = `2s`;
 
-    // setTimeout(() => {
-    setTitle(currentTitle);
-    setIsRouletteResult(true);
-    // }, 2000);
-    // handleButtonClick();
+    setTimeout(() => {
+      setTitle(currentTitle);
+      setIsRouletteResult(true);
+    }, 2000);
   };
 
   // 3 - 2 - 2. 룰렛 애니메이션 시작 이벤트 수신 후 룰렛 애니메이션 시작
-  socket.on("start_roulette", (ran) => {
+  socket.on("start_roulette", (randomSubject) => {
     console.log(roulette.current);
     // 룰렛 애니메이션 함수
-    setTitleFunc(ran);
+    setTitleFunc(randomSubject);
   });
 
   // 3 - 3 - 1. 결과창 닫기 이벤트 시작 - Retry Button
@@ -242,12 +210,16 @@ function GameRoom() {
   // 3 - 4 - 2. 이벤트 수신 후 룰렛 닫기
   socket.on("close_roulette", (result) => {
     setIsRoulette(result);
+    setTimeout(handleButtonClick, 1000);
   });
 
   // 4. 유저 나갔을 시 발생하는 알람
   socket.on("roomLeft", (nickname) => {
     setTotalChat([...totalChat, `Alarm : ${nickname}님이 나가셨습니다.`]);
   });
+
+  // [ Last ] 페이지 언로딩 시 소켓 연결 해제 - socket.disconnect
+  useSocketLeaveRoom(socket);
   // ---------- 소켓 부분 -----------
 
   // ---------- Web RTC -----------
@@ -257,7 +229,6 @@ function GameRoom() {
     (await myStream)
       .getAudioTracks()
       .forEach((track) => (track.enabled = !track.enabled));
-    // console.log((await myStream).getAudioTracks());
     if (!isMuted) {
       setIsMuted(true);
     } else {
@@ -270,7 +241,6 @@ function GameRoom() {
     (await myStream)
       .getVideoTracks()
       .forEach((track) => (track.enabled = !track.enabled));
-    // console.log((await myStream).getVideoTracks());
     if (!isVideoOff) {
       setIsVideoOff(true);
     } else {
@@ -289,7 +259,6 @@ function GameRoom() {
       Stream.getVideoTracks().forEach(
         (track) => (track.enabled = !track.enabled)
       );
-      // console.log(Stream);
       return Stream;
     } catch (e) {
       console.log(e);
@@ -305,7 +274,6 @@ function GameRoom() {
     setTimeout(async () => {
       // console.log(await myStream);
       myVideoBox.current.srcObject = await myStream;
-      yourVideoBox.current.srcObject = await myStream;
     }, 0);
   }, [isMuted, isVideoOff, myStream]);
   // ---------- Web RTC -----------
@@ -337,6 +305,8 @@ function GameRoom() {
       state: [categoryName, categoryCode],
     });
   };
+
+  // 룰렛 표시 관련 css
   const showRoullete = isRoulette
     ? { visibility: "visible" }
     : { display: "none" };
@@ -463,7 +433,7 @@ function GameRoom() {
         <div className="relative flex justify-center items-center w-full h-[7%] bg-[#1E1E1E] rounded-2xl text-white">
           {/* <ProgressBar timers={Ment} /> */}
           {buttonClicked ? (
-            <ProgressBar timers={Ment} />
+            <ProgressBar timers={Ment} setButtonClick={setButtonClicked} />
           ) : (
             <div className="absolute left-[10%]  bg-gray-500 w-[70%] h-5 rounded-full"></div>
           )}
