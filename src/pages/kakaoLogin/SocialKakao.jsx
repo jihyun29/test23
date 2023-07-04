@@ -17,26 +17,18 @@ const SocialKakao = () => {
   }
 
   return (
-    <div className="flex flex-col justify-between border w-[70vh] h-[80vh] m-auto px-[114px] rounded-[20px]">
-      <div className="w-[100%] h-[10vh] mt-[10vh]">
-        <p className="  text-[3vh] font-medium text-white">Do Debate,</p>
-        <p className="text-[3vh] font-bold text-white">Get Win!</p>
-      </div>
-      <div className="w-full h-[30vh] mx-auto">
-        <icon.Random width="100%" height="100%" />
-      </div>
-      <div className="flex flex-col justify-center mb-[8vh]">
-        <div className="App">
+    <div className="flex flex-col  justify-between items-center  border w-[80vh] h-[80vh] m-auto px-[114px] rounded-[20px]">
+      <div className="w-[100%] h-[full] mt-[8vh] ">
+        <icon.illust_login width="100%" height="60%" />
+        <icon.logo_debatory_middle width="80%" height="20%" />
+        <div className="mt-[5vh] ">
+          <p className="text-[2vh] text-[#ABABAB] whitespace-nowrap mx-auto mt-[1.4vh] mb-[1vh] flex flex-col items-center">
+            카카오톡 소셜 로그인을 통해 내 계정 정보로 접속할 수 있습니다.
+          </p>
           <a href={kakaoLogin}>
-            <img
-              src="//k.kakaocdn.net/14/dn/btqCn0WEmI3/nijroPfbpCa4at5EIsjyf0/o.jpg"
-              alt="카카오로그인"
-            />
+            <icon.kakaologin alt="카카오로그인" width="100%" height="20%" />
           </a>
         </div>
-        <p className="text-[1.7vh] text-[#ABABAB] mx-auto mt-[1.4vh]">
-          카카오톡 소셜 로그인을 통해 내 계정 정보로 접속할 수 있습니다.
-        </p>
       </div>
     </div>
   );

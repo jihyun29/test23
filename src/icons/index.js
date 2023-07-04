@@ -45,6 +45,10 @@ import { ReactComponent as DebatoryLogo } from "./debatoryLogo.svg";
 import { ReactComponent as Login } from "./login.svg";
 import { ReactComponent as Logout } from "./logout.svg";
 import { ReactComponent as MainMidSection } from "./MainMidSection.svg";
+import { ReactComponent as kakaologin } from "./kakaologin.svg";
+import { ReactComponent as icon_debate_versus } from "./icon_debate_versus.svg";
+import { ReactComponent as illust_login } from "./illust_login.svg";
+import { ReactComponent as logo_debatory_middle } from "./logo_debatory_middle.svg";
 
 export const icon = {
   Debate,
@@ -94,6 +98,10 @@ export const icon = {
   Login,
   Logout,
   MainMidSection,
+  kakaologin,
+  icon_debate_versus,
+  illust_login,
+  logo_debatory_middle,
 };
 
 export default icon;
