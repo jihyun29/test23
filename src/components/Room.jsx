@@ -38,11 +38,11 @@ function Room({
 
   // 방이 꽉 찰 경우 접속 불가하도록 설정
   const [debaterStyle, debaterBtn] =
-    debater === 2 ? ["text-red-600", true] : [null, false];
+    debater === 1 ? ["text-red-600", true] : [null, false];
   const [panelStyle, panelBtn] =
-    panel === 8 ? ["text-red-600", true] : [null, false];
+    panel === 2 ? ["text-red-600", true] : [null, false];
   const [style, disabled] =
-    debater + panel === 10
+    debater + panel === 3
       ? ["font-semibold text-[#C6C6C6] text-[1.5vh]", true]
       : ["font-semibold text-[#EFFE37] text-[1.5vh]", false];
 
@@ -64,8 +64,8 @@ function Room({
 
       {/* 인원 */}
       <div className="flex justify-between gap-4 text-[1.5vh] text-[#919191]">
-        <p className={debaterStyle}>발표자 : {debater}/2</p>
-        <p className={panelStyle}>참여자 : {panel}/8</p>
+        <p className={debaterStyle}>발표자 : {debater}/1</p>
+        <p className={panelStyle}>참여자 : {panel}/2</p>
       </div>
       {/* 인원 */}
 

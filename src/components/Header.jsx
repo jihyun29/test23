@@ -19,16 +19,16 @@ function Header() {
     localStorage.getItem("kakaoId") === "1" ? (
       <div
         onClick={userIconClickHandler}
-        className="w-[5vh] h-[5vh] mr-[9vw] rounded-full active:border-[3px]"
+        className="w-[3.5vmin] h-[3.5vmin] mr-[9vw] rounded-full active:outline active:outline-[2px] active:outline-white"
       >
         <icon.Profile width="100%" height="100%" />
         {isClick ? (
-          <div className="absolute flex flex-col w-[14vw] h-[5vh] top-[7vh] right-[4.5vw] rounded-[1vw] p-[1vh] bg-[#F2F2F2] z-[5]">
+          <div className="absolute flex flex-col w-[8vmax] h-[5vh] top-[5vh] right-[9vw] rounded-[20px] px-[1vmax] py-[1vh] bg-[#F2F2F2] z-[5]">
             <div
               onClick={logoutClickHandler}
-              className="flex bg-white h-[3vh] rounded-[1vw] text-[1.5vh] justify-center items-center hover:bg-blue-100"
+              className="flex bg-white h-[3vh] rounded-[20px] text-[1.5vh] justify-center items-center hover:bg-blue-100"
             >
-              로그아웃
+              Logout
             </div>
           </div>
         ) : null}
@@ -36,7 +36,7 @@ function Header() {
     ) : (
       <Link
         to="/SocialKakao"
-        className="mr-[9vw] w-fit border border-white text-white py-[0.1vmin] px-[1.5vmin] rounded-[0.8vmin] text-[1.5vmin]"
+        className="mr-[9vw] w-fit h-[3vh] border border-white text-white py-[0.275vh] px-[1.5vw] rounded-[0.8vmin] text-[1.5vh]"
       >
         로그인
       </Link>

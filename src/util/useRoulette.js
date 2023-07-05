@@ -58,5 +58,5 @@ export function useRoulette({
       };
       newMake();
     }
-  }, [isRoulette, titleList, title]);
+  }, [isRoulette, titleList, title, roulette]);
 }

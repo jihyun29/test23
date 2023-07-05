@@ -42,9 +42,10 @@ import { ReactComponent as School } from "./school.svg";
 import { ReactComponent as Sports } from "./sports.svg";
 import { ReactComponent as MainBlah } from "./blah.svg";
 import { ReactComponent as DebatoryLogo } from "./debatoryLogo.svg";
-import { ReactComponent as Login } from "./login.svg";
-import { ReactComponent as Logout } from "./logout.svg";
+import { ReactComponent as illust_login } from "./loginLogo.svg";
 import { ReactComponent as MainMidSection } from "./MainMidSection.svg";
+import { ReactComponent as kakaologin } from "./kakaologin.svg";
+import { ReactComponent as logo_debatory_middle } from "./middle_signature h with tagline.svg";
 
 export const icon = {
   Debate,
@@ -91,9 +92,10 @@ export const icon = {
   Sports,
   MainBlah,
   DebatoryLogo,
-  Login,
-  Logout,
+  illust_login,
   MainMidSection,
+  kakaologin,
+  logo_debatory_middle,
 };
 
 export default icon;
