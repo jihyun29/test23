@@ -46,7 +46,6 @@ import { ReactComponent as illust_login } from "./loginLogo.svg";
 import { ReactComponent as MainMidSection } from "./MainMidSection.svg";
 import { ReactComponent as kakaologin } from "./kakaologin.svg";
 import { ReactComponent as icon_debate_versus } from "./icon_debate_versus.svg";
-import { ReactComponent as illust_login } from "./illust_login.svg";
 import { ReactComponent as logo_debatory_middle } from "./middle_signature h with tagline.svg";
 import { ReactComponent as githublogo } from "./githublogo.svg";
 import { ReactComponent as teamlogo } from "./teamlogo.svg";
@@ -100,7 +99,6 @@ export const icon = {
   MainMidSection,
   kakaologin,
   icon_debate_versus,
-  illust_login,
   logo_debatory_middle,
   githublogo,
   teamlogo,
