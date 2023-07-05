@@ -1,17 +1,17 @@
 import React, { useState, useMemo, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useMutation, useQuery } from "react-query";
+import { useMutation } from "react-query";
 import { game } from "../api/api";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import Room from "../components/Room";
 import Pagination from "../components/Pagination";
 import image from "../images";
-// import { useRoomListSocket } from "../util/useSocket";
+import { useRoomListSocket } from "../util/useSocket";
 
 function RoomList() {
   // ------------------------- test
-  // const roomListSocket = useMemo(useRoomListSocket, []);
+  const roomListSocket = useMemo(useRoomListSocket, []);
   // ------------------------- test
 
   const navigate = useNavigate();
@@ -21,25 +21,25 @@ function RoomList() {
   const [categoryName, categoryCode] = state;
 
   // ------------------------- test
-  // useEffect(() => {
-  //   roomListSocket.emit("update", categoryCode);
-  //   return () => {
-  //     roomListSocket.disconnect();
-  //     console.log("네임스페이스 소켓의 연결이 끊어졌습니다.");
-  //   };
-  // }, []);
+  useEffect(() => {
+    roomListSocket.emit("update", categoryCode);
+    return () => {
+      roomListSocket.disconnect();
+      console.log("네임스페이스 소켓의 연결이 끊어졌습니다.");
+    };
+  }, []);
 
-  // roomListSocket.on("update_roomList", (roomList) => {
-  //   console.log(roomList);
-  //   setRoomList(roomList);
-  // });
+  roomListSocket.on("update_roomList", (roomList) => {
+    console.log(roomList);
+    setRoomList(roomList);
+  });
 
-  // roomListSocket.on("disconnect", () => {
-  //   console.log("네임스페이스 소켓의 연결이 끊어질 예정입니다.");
-  // });
-  // roomListSocket.on("test", (msg) => {
-  //   console.log(msg);
-  // });
+  roomListSocket.on("disconnect", () => {
+    console.log("네임스페이스 소켓의 연결이 끊어질 예정입니다.");
+  });
+  roomListSocket.on("test", (msg) => {
+    console.log(msg);
+  });
   // ------------------------- test
 
   const bannerImageList = {
@@ -126,7 +126,7 @@ function RoomList() {
 
   //   API로 RoomList 가져오는 부분 -> 향후 삭제
   // useQuery에 대한 것은 queryKey부터 시작해서 좀 더 공부 필요 !!
-  const { isLoading: isRoomListLoading } = useQuery(
+  /*   const { isLoading: isRoomListLoading } = useQuery(
     ["getRoom", categoryCode],
     () => game.getRoomList(categoryCode),
     {
@@ -138,7 +138,7 @@ function RoomList() {
       retry: 0,
     }
   );
-
+ */
   const { mutateAsync: createRoom } = useMutation(
     () => game.createRoom(categoryCode),
     {

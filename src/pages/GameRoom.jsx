@@ -88,11 +88,11 @@ function GameRoom() {
   - 배심원일 시 : joinJuror 이벤트 발생 */
   socket.on("connect", () => {
     if (!isTeller) {
-      socket.emit("joinJuror", roomNumber, () => {
+      socket.emit("joinJuror", roomNumber, categoryCode, () => {
         console.log("참여자로 입장되었습니다!");
       });
     } else {
-      socket.emit("joinDebate", roomNumber, (msg) => {
+      socket.emit("joinDebate", roomNumber, categoryCode, (msg) => {
         // LoginError : 카카오로그인 안한 유저가 토론자로 참여시 에러 발생
         if (msg) {
           alert(`Error : ${msg}`);
@@ -133,7 +133,7 @@ function GameRoom() {
 
   // 3 - 1 - 1. 게임 시작 버튼 클릭 시 룰렛 보여주는 이벤트 전송
   const gameStartBtnClickhandler = () => {
-    socket.emit("show_roulette", true, (msg) => {
+    socket.emit("show_roulette", true, categoryCode, (msg) => {
       if (msg) {
         alert(`${msg}`);
         return;
@@ -150,7 +150,7 @@ function GameRoom() {
 
   // 3 - 2 - 1.룰렛 애니메이션 시작 이벤트 전송
   const setTitleBtnClickHandler = (event) => {
-    socket.emit("start_roulette", roomNumber, () => {
+    socket.emit("start_roulette", roomNumber, categoryCode, () => {
       console.log("주제 정하기 룰렛이 다 돌아갔습니다!");
     });
   };

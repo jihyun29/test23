@@ -19,7 +19,9 @@ function Home() {
   return (
     <>
       <Header />
+
       <div className="w-full h-[83vh]">
+
         <div className="relative mt-[5vh] flex flex-col items-center w-full h-[20vmin] whitespace-nowrap overflow-hidden">
           <div className="absoulte flex justify-start w-[300vmin] h-[50%] animate-flowTextToLeft">
             <div className="flex w-full h-full items-center justify-start">
