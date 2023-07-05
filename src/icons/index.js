@@ -49,6 +49,8 @@ import { ReactComponent as kakaologin } from "./kakaologin.svg";
 import { ReactComponent as icon_debate_versus } from "./icon_debate_versus.svg";
 import { ReactComponent as illust_login } from "./illust_login.svg";
 import { ReactComponent as logo_debatory_middle } from "./logo_debatory_middle.svg";
+import { ReactComponent as githublogo } from "./githublogo.svg";
+import { ReactComponent as teamlogo } from "./teamlogo.svg";
 
 export const icon = {
   Debate,
@@ -102,6 +104,8 @@ export const icon = {
   icon_debate_versus,
   illust_login,
   logo_debatory_middle,
+  githublogo,
+  teamlogo,
 };
 
 export default icon;

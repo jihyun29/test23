@@ -7,6 +7,7 @@ import RoomList from "../pages/RoomList";
 import Kakao from "../pages/kakaoLogin/Kakao";
 import SocialKakao from "../pages/kakaoLogin/SocialKakao";
 import Prompt from "../components/feature/Prompt";
+import TermsOfUse from "../pages/TermsOfUse";
 
 function Router() {
   return (
@@ -21,6 +22,7 @@ function Router() {
         <Route path="/auth/kakao/callback" element={<Kakao />} />
         <Route path="/socialkakao" element={<SocialKakao />} />
         <Route path="/prompt" element={<Prompt />} />
+        <Route path="/tos" element={<TermsOfUse />} />
       </Routes>
     </BrowserRouter>
   );

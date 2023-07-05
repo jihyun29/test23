@@ -10,6 +10,8 @@
     "axios": "^1.4.0",
     "bundle": "^2.1.0",
     "lottie-react": "^2.4.0",
+    "mediasoup": "^3.12.4",
+    "mediasoup-client": "^3.6.91",
     "query-string": "^8.1.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
