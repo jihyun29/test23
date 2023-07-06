@@ -388,7 +388,7 @@ function GameRoom() {
 
           {/* 2. Versus Icon */}
           <div className="absolute w-[3vh] h-[2vh] right-[48%] top-[55%] z-[2]">
-            <icon.Versus width="100%" height="100%" />
+            <icon.icon_debate_versus width="100%" height="100%" />
           </div>
 
           {/* 3. 비디오 */}
