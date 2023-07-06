@@ -1,20 +1,30 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import icon from "../icons";
-import Header from "../components/Header";
 
 function TermsOfUse() {
+  const navigate = useNavigate();
+  const goBackBtnClickHandler = () => {
+    navigate("/");
+  };
   return (
-    <div className="w-[100vw] h-[250vh] bg-[#1B1B1B]">
-      <Header />
+    <div className="relative w-[100vw] h-[100vh] bg-[#1B1B1B] overflow-x-hidden overflow-y-auto">
+      <button
+        onClick={goBackBtnClickHandler}
+        className="absolute bottom-[-70%] left-[10%] text-gray-400 text-[2vh]"
+      >
+        &lt; Go to Homepage
+      </button>
+      <div className="absolute"></div>
       <div className="w-[80%] mt-[5%] ml-[10%]">
         <div className="text-[#C6C6C6] font-bold ">
           <div className="text-[2.4vmin] text-center mb-[5%]">
             <h1>디베토리 서비스 이용약관</h1>
             <h1> ( 2023. 07. 05 개정 ) </h1>
           </div>
-          <div className="grid gap-4">
+          <div className="flex flex-col gap-[2vh]">
             <div>
-              <h2 className="text-2xl">제1조(목적) </h2>
+              <h2 className="text-2xl font-bold">제1조(목적) </h2>
               <p>
                 이 약관은 팀 심심해가 운영하는 Debatory(이하 “디베토리”라
                 한다)에서 제공하는 인터넷 관련 서비스(이하 “서비스”라 한다)를
@@ -22,8 +32,8 @@ function TermsOfUse() {
                 규정함을 목적으로 합니다.
               </p>
             </div>
-            <div>
-              <h2 className="text-2xl">제2조(정의)</h2>
+            <div className="flex flex-col gap-[0.5vh]">
+              <h2 className="text-2xl font-bold">제2조(정의)</h2>
               <p>
                 ① “디베토리”이란 팀 심심해가 토론 커뮤니케이션 서비스를
                 이용자에게 제공하기 위하여 컴퓨터 등 정보통신설비를 이용하여
@@ -46,8 +56,10 @@ function TermsOfUse() {
                 제공하는 기능들을 말합니다.
               </p>
             </div>
-            <div>
-              <h2 className="text-2xl">제3조(서비스의 제공 및 변경)</h2>
+            <div className="flex flex-col gap-[0.5vh]">
+              <h2 className="text-2xl font-bold">
+                제3조(서비스의 제공 및 변경)
+              </h2>
               <p>
                 ① “디베토리”는 다음과 같은 업무를 수행합니다.
                 <p>1. 웹 화상미팅을 통한 토론 및 채팅 커뮤니케이션 서비스 </p>
@@ -60,8 +72,8 @@ function TermsOfUse() {
                 </p>
               </p>
             </div>
-            <div>
-              <h2 className="text-2xl">제4조(회원가입)</h2>
+            <div className="flex flex-col gap-[0.5vh]">
+              <h2 className="text-2xl font-bold">제4조(회원가입)</h2>
               <p>
                 ① 이용자는 “디베토리”가 정한 가입 양식에 따라 회원정보를 기입한
                 후 이 약관에 동의한다는 의사표시를 함으로서 회원가입을
@@ -72,8 +84,10 @@ function TermsOfUse() {
                 </p>
               </p>
             </div>
-            <div>
-              <h2 className="text-2xl">제5조(회원 탈퇴 및 자격 상실 등)</h2>
+            <div className="flex flex-col gap-[0.5vh]">
+              <h2 className="text-2xl font-bold">
+                제5조(회원 탈퇴 및 자격 상실 등)
+              </h2>
               <p>
                 ① 회원은 “디베토리”에 언제든지 탈퇴를 요청할 수 있으며
                 “디베토리”는 즉시 회원탈퇴를 처리합니다.
@@ -106,8 +120,8 @@ function TermsOfUse() {
                 최소한 30일 이상의 기간을 정하여 소명할 기회를 부여합니다.
               </p>
             </div>
-            <div>
-              <h2 className="text-2xl">제6조(개인정보보호)</h2>
+            <div className="flex flex-col gap-[0.5vh]">
+              <h2 className="text-2xl font-bold">제6조(개인정보보호)</h2>
               <p>
                 ① “디베토리”가 이용자의 개인정보 수집시 서비스제공을 위하여
                 필요한 범위에서 최소한의 개인정보를 수집합니다.
@@ -149,8 +163,8 @@ function TermsOfUse() {
                 서비스 제공을 제한하거나 거절하지 않습니다.
               </p>
             </div>
-            <div>
-              <h2 className="text-2xl">제7조(“디베토리”의 의무)</h2>
+            <div className="flex flex-col gap-[0.5vh]">
+              <h2 className="text-2xl font-bold">제7조(“디베토리”의 의무)</h2>
               <p>
                 ① “디베토리”는 법령과 이 약관이 금지하거나 공서양속에 반하는
                 행위를 하지 않으며 이 약관이 정하는 바에 따라 지속적이고,
@@ -165,8 +179,8 @@ function TermsOfUse() {
                 발송하지 않습니다.
               </p>
             </div>
-            <div>
-              <h2 className="text-2xl">
+            <div className="flex flex-col gap-[0.5vh]">
+              <h2 className="text-2xl font-bold">
                 제8조(회원의 ID 및 비밀번호에 대한 의무)
               </h2>
               <p>
@@ -183,8 +197,8 @@ function TermsOfUse() {
                 경우에는 그에 따라야 합니다.
               </p>
             </div>
-            <div>
-              <h2 className="text-2xl">제9조(이용자의 의무)</h2>
+            <div className="flex flex-col gap-[0.5vh]">
+              <h2 className="text-2xl font-bold">제9조(이용자의 의무)</h2>
               <p>이용자는 다음 행위를 하여서는 안 됩니다.</p>
               <p> 1. 신청 또는 변경시 허위 내용의 등록</p>
               <p>2. 타인의 정보 도용</p>
@@ -205,8 +219,10 @@ function TermsOfUse() {
                 정보를 “디베토리”에 공개 또는 게시하는 행위
               </p>
             </div>
-            <div>
-              <h2 className="text-2xl">제10조(저작권의 귀속 및 이용제한)</h2>
+            <div className="flex flex-col gap-[0.5vh]">
+              <h2 className="text-2xl font-bold">
+                제10조(저작권의 귀속 및 이용제한)
+              </h2>
               <p>
                 ① “디베토리”가 작성한 저작물에 대한 저작권 기타 지적재산권은
                 “디베토리”에 귀속합니다.
@@ -222,8 +238,8 @@ function TermsOfUse() {
                 경우 당해 이용자에게 통보하여야 합니다.
               </p>
             </div>
-            <div>
-              <h2 className="text-2xl">제11조(분쟁해결)</h2>
+            <div className="flex flex-col gap-[0.5vh]">
+              <h2 className="text-2xl font-bold">제11조(분쟁해결)</h2>
               <p>
                 ① “디베토리”는 이용자로부터 제출되는 불만사항 및 의견은
                 우선적으로 그 사항을 처리합니다. 다만, 신속한 처리가 곤란한
@@ -235,7 +251,7 @@ function TermsOfUse() {
                 의뢰하는 분쟁조정기관의 조정에 따를 수 있습니다.
               </p>
             </div>
-            <icon.teamlogo className="ml-[80%] mt-[5%] mb-[5%]" />
+            <icon.teamlogo className="w-[20vh] h-[10vh] ml-[80%] mt-[5%] mb-[5%]" />
           </div>
         </div>
       </div>
