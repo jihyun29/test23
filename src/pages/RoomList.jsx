@@ -194,7 +194,7 @@ function RoomList() {
   return (
     <>
       <Header />
-      <div className="flex flex-col w-full h-[83vh]">
+      <div className="flex flex-col w-full h-[95vh]">
         {/* 배너 부분 */}
         <div className="relative flex flex-col w-full h-[23vh] bg-white">
           <div className="relative w-full h-full overflow-hidden z-[2]">
@@ -224,7 +224,7 @@ function RoomList() {
           {localStorage.getItem("kakaoId") === "1" && (
             <button
               onClick={createRoomBtnClick}
-              className="absolute border border-white text-[2.3vh] text-white font-bold px-[3vh] py-[1vh] rounded-[8px] mt-[2%] right-[7%] bottom-[10%] z-[4]"
+              className="absolute border border-white text-[2.3vh] text-white font-bold px-[2.5vh] py-[0.5vh] rounded-[8px] mt-[2%] right-[7%] bottom-[10%] z-[4]"
             >
               {" "}
               방 만들기
@@ -233,38 +233,39 @@ function RoomList() {
         </div>
         {/* 배너 부분 */}
 
-        {/* 방리스트 타이틀 */}
-        <div className="flex items-center w-[87vw] h-[5vh] mx-[6.4vw] mt-auto border-b-2 border-[#777777]">
-          <div className="flex justify-center ml-[3vw] w-[51px] text-[1.6vh] text-[#919191] font-semibold">
-            Num
+        <div className="flex flex-col my-auto w-[87vw] mx-[6.4vw]">
+          {/* 방리스트 타이틀 */}
+          <div className="flex items-center w-full h-[5vh]  border-b-2 border-[#777777]">
+            <div className="flex justify-center ml-[3vw] w-[51px] text-[1.6vh] text-[#919191] font-semibold">
+              Num
+            </div>
+            <p className="ml-[7.5vw] w-[46vw] text-[1.6vh] text-[#919191] font-semibold">
+              방제목
+            </p>
+            <p className="ml-[50px] text-[1.6vh] text-[#919191] font-semibold">
+              인원
+            </p>
           </div>
-          <p className="ml-[7.5vw] w-[46vw] text-[1.6vh] text-[#919191] font-semibold">
-            방제목
-          </p>
-          <p className="ml-[50px] text-[1.6vh] text-[#919191] font-semibold">
-            인원
-          </p>
-        </div>
-        {/* 방리스트 타이틀 */}
+          {/* 방리스트 타이틀 */}
 
-        {/* 빙 리스트 본문 */}
-        <div className="flex flex-col w-full h-[52vh] px-[6.4vw] overflow-hidden">
-          {showRoomListDevidedByNumber(roomList, offset, limit)}
-        </div>
-        {/* 빙 리스트 본문 */}
+          {/* 빙 리스트 본문 */}
+          <div className="flex flex-col w-full h-[50vh] overflow-hidden">
+            {showRoomListDevidedByNumber(roomList, offset, limit)}
+          </div>
+          {/* 빙 리스트 본문 */}
 
-        {/* 페이지네이션 부분 */}
-        <div className="flex justify-center h-[3vh] items-center gap-[0.5vh]">
-          <Pagination
-            total={roomList.length}
-            limit={limit}
-            page={page}
-            setPage={setPage}
-          />
+          {/* 페이지네이션 부분 */}
+          <div className="flex justify-center h-[5vh] items-center gap-[0.5vh] mt-[3vh]">
+            <Pagination
+              total={roomList.length}
+              limit={limit}
+              page={page}
+              setPage={setPage}
+            />
+          </div>
+          {/* 페이지네이션 부분 */}
         </div>
-        {/* 페이지네이션 부분 */}
       </div>
-      <Footer />
     </>
   );
 }
