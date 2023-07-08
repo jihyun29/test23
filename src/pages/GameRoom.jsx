@@ -48,6 +48,7 @@ function GameRoom() {
   // 유저 로딩 창 만들기
   const countReadyBox = () => {
     const count = 5 - userNickname.length;
+    console.log(count);
     return Array(count).fill(<Lottie animationData={lottie.loading} />);
   };
   // 유저 로딩 창 결과 캐싱
@@ -138,7 +139,8 @@ function GameRoom() {
   useRoulette({ isRoulette, titleList, roulette, title });
 
   // 3 - 1 - 1. 게임 시작 버튼 클릭 시 룰렛 보여주는 이벤트 전송
-  const gameStartBtnClickhandler = () => {
+  const gameStartBtnClickHandler = () => {
+    console.log("버튼이 클릭되었습니다.");
     socket.emit("show_roulette", true, categoryCode, (msg) => {
       if (msg) {
         alert(`${msg}`);
@@ -155,7 +157,7 @@ function GameRoom() {
   });
 
   // 3 - 2 - 1.룰렛 애니메이션 시작 이벤트 전송
-  const setTitleBtnClickHandler = (event) => {
+  const setTitleBtnClickHandler = () => {
     socket.emit("start_roulette", roomNumber, categoryCode, () => {
       console.log("주제 정하기 룰렛이 다 돌아갔습니다!");
     });
@@ -488,8 +490,8 @@ function GameRoom() {
           {/* 3. 게임시작 */}
           {isHost && (
             <button
-              className="w-[20%] h-full bg-[#EFFE37] rounded-full ml-auto text-[2vmin] text-center align-middle"
-              onClick={gameStartBtnClickhandler}
+              onClick={gameStartBtnClickHandler}
+              className="w-[20%] h-full bg-[#EFFE37] rounded-full ml-auto text-[2vmin]"
             >
               시작 &gt;
             </button>
@@ -622,7 +624,7 @@ function UserBox({ nickname, userIconInfo }) {
 
 function UserLoadingBox({ item }) {
   return (
-    <div className="flex flex-col h-full rounded-lg text-white justify-center items-center text-[2vmin]">
+    <div className="flex flex-col h-full rounded-lg text-white justify-center items-center text-[2vmin] overflow-hidden">
       <div>{item}</div>
     </div>
   );
