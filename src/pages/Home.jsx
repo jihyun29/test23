@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Lottie from "lottie-react";
 import { useNavigate } from "react-router-dom";
 import Footer from "../components/Footer";
@@ -15,7 +15,6 @@ function Home() {
   return (
     <>
       <Header />
-
       <div className="w-full h-[95vh] overflow-x-hidden overflow-y-auto">
         <div className="relative mt-[5vh] flex flex-col items-center w-full h-[20vmin] whitespace-nowrap overflow-hidden">
           <div className="absoulte flex justify-start w-[300vmin] h-[50%] animate-flowTextToLeft">

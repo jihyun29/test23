@@ -1,13 +1,13 @@
 import React, { useState, useMemo, useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useMutation } from "react-query";
 import { game } from "../api/api";
-import Footer from "../components/Footer";
 import Header from "../components/Header";
 import Room from "../components/Room";
 import Pagination from "../components/Pagination";
 import image from "../images";
 import { useRoomListSocket } from "../util/useSocket";
+import { decrypt, encrypt } from "../util/cryptoJs";
 
 function RoomList() {
   // ------------------------- test
@@ -16,9 +16,9 @@ function RoomList() {
 
   const navigate = useNavigate();
   // 카테고리 페이지로부터 선택된 카테고리 전달 받음
-  const { state } = useLocation();
+  const state = decrypt(sessionStorage.getItem("selectedCategory"));
   // 카테고리 이름, 코드
-  const [categoryName, categoryCode] = state;
+  const { categoryName, categoryCode } = state;
 
   // ------------------------- test
   useEffect(() => {
@@ -33,6 +33,20 @@ function RoomList() {
     console.log(roomList);
     setRoomList(roomList);
   });
+
+  useEffect(() => {
+    console.log("방에 입장하셨습니다.");
+    const handlePopstate = () => {
+      console.log("popstate");
+      console.log(window.history);
+      navigate("/roomlist");
+    };
+    window.history.pushState(null, "", "");
+    window.addEventListener("popstate", handlePopstate);
+    return () => {
+      window.removeEventListener("popstate", handlePopstate);
+    };
+  }, []);
 
   roomListSocket.on("disconnect", () => {
     console.log("네임스페이스 소켓의 연결이 끊어질 예정입니다.");
@@ -117,7 +131,7 @@ function RoomList() {
   }
 
   // 페이지네이션 관련 변수들
-  const limit = 10;
+  const limit = 9;
   const [page, setPage] = useState(1);
   const offset = (page - 1) * limit;
 
@@ -153,15 +167,17 @@ function RoomList() {
   const createRoomBtnClick = async () => {
     const data = await createRoom();
     const roomData = data.data.data[0];
-    navigate(`/room/${roomData.roomId}`, {
-      state: [
-        roomData.roomId,
-        roomData.roomName,
-        categoryName,
-        categoryCode,
-        true,
-      ],
+    const userData = encrypt({
+      roomNumber: roomData.roomId,
+      defaultTitle: roomData.roomName,
+      categoryName,
+      categoryCode,
+      isTeller: true,
+      isHost: true,
     });
+    console.log(userData);
+    sessionStorage.setItem("userData", userData);
+    navigate(`/room/${roomData.roomId}`);
   };
 
   // 카테고리로 이동하는 함수
@@ -235,7 +251,7 @@ function RoomList() {
 
         <div className="flex flex-col my-auto w-[87vw] mx-[6.4vw]">
           {/* 방리스트 타이틀 */}
-          <div className="flex items-center w-full h-[5vh]  border-b-2 border-[#777777]">
+          {/*  <div className="flex items-center w-full h-[5vh]  border-b-2 border-[#777777]">
             <div className="flex justify-center ml-[3vw] w-[51px] text-[1.6vh] text-[#919191] font-semibold">
               Num
             </div>
@@ -245,11 +261,14 @@ function RoomList() {
             <p className="ml-[50px] text-[1.6vh] text-[#919191] font-semibold">
               인원
             </p>
-          </div>
+          </div> */}
           {/* 방리스트 타이틀 */}
 
           {/* 빙 리스트 본문 */}
-          <div className="flex flex-col w-full h-[50vh] overflow-hidden">
+          {/* <div className="flex flex-col w-full h-[50vh] overflow-hidden">
+            {showRoomListDevidedByNumber(roomList, offset, limit)} => offset : 10
+          </div> */}
+          <div className="grid grid-cols-3 grid-rows-3 w-full h-[50vh] gap-4">
             {showRoomListDevidedByNumber(roomList, offset, limit)}
           </div>
           {/* 빙 리스트 본문 */}
