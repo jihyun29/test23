@@ -12,7 +12,7 @@ import lottie from "../lottie";
 import icon from "../icons";
 import { useSocket } from "../util/useSocket";
 import Prompt from "../components/feature/Prompt";
-import ProgressBar from "../components/feature/ProgressBar";
+import Progressbar from "../components/feature/Progressbar";
 import { decrypt } from "../util/cryptoJs";
 
 function GameRoom() {
@@ -446,7 +446,7 @@ function GameRoom() {
         <div className="relative flex flex-col justify-evenly items-center w-full h-[21%] bg-[#1E1E1E] rounded-2xl text-white">
           <div className="flex w-full justify-evenly items-center">
             {isStartGame ? (
-              <ProgressBar endGameSignalHandler={endGameSignalHandler} />
+              <Progressbar endGameSignalHandler={endGameSignalHandler} />
             ) : (
               <>
                 <div className="mx-auto w-[80%] my-10">
