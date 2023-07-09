@@ -44,8 +44,6 @@ export const chatgpt = {
 };
 
 export const game = {
-  getRoomList: async (category) =>
-    await instance.get(`/api/roomlist/${category}`),
   createRoom: async (category) =>
     await instance.post(`/api/roomlist/${category}`, null, {
       headers: { Authorization: localStorage.getItem("Authorization") },

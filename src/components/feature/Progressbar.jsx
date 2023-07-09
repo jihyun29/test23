@@ -1,51 +1,70 @@
-import React, { useEffect, useState, useMemo } from "react";
+import React from "react";
+import { useCallback } from "react";
+import { useState } from "react";
+import { useEffect } from "react";
 
-const ProgressBar = ({ timers, setButtonClick }) => {
-  const [elapsedTime, setElapsedTime] = useState(0);
+function TestProgressComp({ endGameSignalHandler }) {
+  // gameTime : 게임시간 (초 단위)
+  const gameTime = 20;
+  const [runningTime, setRunningTime] = useState(0);
+  const [remainingTime, setRemainingTime] = useState(gameTime);
 
-  const testFunc = () => {
-    let test = 0;
-    timers.forEach((ment) => {
-      test += ment.timer;
-    });
-    return test;
-  };
+  const progressBarPercent = (runningTime / gameTime) * 100;
 
-  const totalTime = useMemo(testFunc, []);
+  const minutes = Math.floor(remainingTime / 60); // 분 계산
+  const seconds = remainingTime % 60; // 초 계산
+
+  const gameEnd = useCallback(
+    () =>
+      setTimeout(() => {
+        endGameSignalHandler();
+      }, 1000),
+    [endGameSignalHandler]
+  );
 
   useEffect(() => {
-    const timerId = setInterval(() => {
-      setElapsedTime((prevTime) => {
-        if (prevTime === totalTime) {
-          alert("다음 게임 준비를 시작합니다!");
-          setButtonClick(false);
-        }
+    const timer = setInterval(() => {
+      setRunningTime((prevTime) => {
+        setRemainingTime(gameTime - (prevTime + 1));
         return prevTime + 1;
       });
     }, 1000);
-
-    return () => clearInterval(timerId);
-  }, [totalTime, setButtonClick]);
-
-  const progress = (elapsedTime / totalTime) * 100;
+    console.log(gameTime, runningTime, progressBarPercent);
+    if (runningTime === gameTime) {
+      gameEnd();
+    }
+    return () => {
+      clearInterval(timer);
+    };
+  }, [runningTime]);
 
   return (
-    <div className="container mx-auto w-[80%] my-10">
-      <div className="relative left-10  bg-gray-500 w-full h-5 rounded-full">
-        <div
-          className="absolute top-[25%] bg-green-500 h-[50%] w-full rounded-full"
-          style={{ width: `${progress}%`, transition: "width 1s" }}
-        >
+    <>
+      <div className="mx-auto w-[80%] my-10">
+        <div className="relative left-10  bg-gray-500 w-full h-5 rounded-full">
           <div
-            className="absolute right-0 top-1/2 transform -translate-y-1/2 w-5 h-5 rounded-full bg-green-500"
+            className="absolute top-[25%] bg-green-500 h-[50%] w-full rounded-full z-[2]"
             style={{
-              transition: "width 1s",
+              width: `${progressBarPercent}%`,
+              transition: "width 0.5s",
             }}
-          ></div>
+          >
+            <div
+              className="absolute right-0 top-1/2 transform -translate-y-1/2 w-5 h-5 rounded-full bg-green-500 z-[3]"
+              style={{
+                transition: "width 1s",
+              }}
+            ></div>
+          </div>
         </div>
       </div>
-    </div>
+      <div className="text-[#C6C6C6] font-bold rounded-2xl text-[2vh] right-10 mx-auto">
+        <p>
+          {minutes}:{seconds}
+        </p>
+      </div>
+    </>
   );
-};
+}
 
-export default ProgressBar;
+export default TestProgressComp;

@@ -1,27 +1,21 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Lottie from "lottie-react";
 import { useNavigate } from "react-router-dom";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import icon from "../icons";
 import lottie from "../lottie";
-// import axios from "axios";
-// import instance from "../api/api";
 
 function Home() {
   const navigate = useNavigate();
   const moveToCategoryPage = () => {
-    // 테스트
-    // instance.put("https://simsimhae.store/api/discussant/36");
     navigate("/category");
   };
 
   return (
     <>
       <Header />
-
-      <div className="w-full h-[83vh]">
-
+      <div className="w-full h-[95vh] overflow-x-hidden overflow-y-auto">
         <div className="relative mt-[5vh] flex flex-col items-center w-full h-[20vmin] whitespace-nowrap overflow-hidden">
           <div className="absoulte flex justify-start w-[300vmin] h-[50%] animate-flowTextToLeft">
             <div className="flex w-full h-full items-center justify-start">
@@ -85,7 +79,7 @@ function Home() {
         <div className="flex justify-center mt-[6vh]">
           <button
             onClick={moveToCategoryPage}
-            className="py-[2vmin] px-[8vw] bg-[#EFFE37] text-black font-bold text-[4vmin] rounded-[60px]"
+            className="py-[2vmin] px-[8vw] bg-[#EFFE37] text-black font-bold text-[4vmin] rounded-[60px] shadow-[#EFFF364D] shadow-xl"
           >
             Let's Go!
           </button>

@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import icon from "../icons";
 import Header from "../components/Header";
-// import Footer from "../components/Footer";
 import { game } from "../api/api";
+import { encrypt } from "../util/cryptoJs";
 
 function Category() {
   const navigate = useNavigate();
@@ -51,6 +51,20 @@ function Category() {
   // 가장 많이 선택된 카테고리
   const example = "게임/프로게이머";
 
+  useEffect(() => {
+    console.log("방에 입장하셨습니다.");
+    const handlePopstate = () => {
+      console.log("popstate");
+      console.log(window.history);
+      navigate(`/category`);
+    };
+    window.history.pushState(null, "", "");
+    window.addEventListener("popstate", handlePopstate);
+    return () => {
+      window.removeEventListener("popstate", handlePopstate);
+    };
+  }, []);
+
   // 입장하기 버튼 클릭 시 실행되는 함수
   // 1. 방 리스트 페이지로 이동
   // 2. 카테고리 선택 안될 시 알람 발생
@@ -59,33 +73,50 @@ function Category() {
     if (selectedCategory === null) {
       return alert("카테고리를 선택해주세요.");
     } else if (selectedCategory === "랜덤") {
+      // 선택된 카데고리가 랜덤일 경우 랜덤을 제외한 8개 중 무작위로 선택
       const randomNumber = Math.round(Math.random() * 7);
+      console.log("랜덤넘버", randomNumber);
       const randomCategoryName = categoryList.filter(
         (item) => item.name !== "랜덤"
       )[randomNumber].name;
-      const randomCategoryCode = randomNumber + 1;
+      console.log("랜덤카테고리", randomCategoryName);
+      const randomCategoryCode = categoryList.filter(
+        (item) => item.name !== "랜덤"
+      )[randomNumber].code;
+      console.log("랜덤카테고리코드", randomCategoryCode);
+      /* api로 서버에 토큰 요청 보내기
+      1. LocalStorage에 토큰 존재할 경우 : 받아오는 토큰 없음
+      2. LocalStorage에 토큰 존재 안할 경우 : 새로운 토큰 받음 
+      */
       const data = game.selectCategory();
+      const selectedCategoryInfoByRandom = encrypt({
+        categoryName: randomCategoryName,
+        categoryCode: randomCategoryCode,
+      });
+      sessionStorage.setItem("selectedCategory", selectedCategoryInfoByRandom);
       const res = (await data).data.data[0];
+      // api요청으로 토큰이 존재할 경우만 localStorage에 저장
       if (res) {
         localStorage.setItem("Authorization", res.Authorization);
         localStorage.setItem("kakaoId", res.kakaoId);
       }
-      return navigate("/roomlist", {
-        state: [randomCategoryName, randomCategoryCode],
-      });
+      return navigate("/roomlist");
     } else {
       const selectedCategoryCode = categoryList.filter(
         (category) => category.name === selectedCategory
       )[0].code;
+      const selectedCategoryInfo = encrypt({
+        categoryName: selectedCategory,
+        categoryCode: selectedCategoryCode,
+      });
+      sessionStorage.setItem("selectedCategory", selectedCategoryInfo);
       const data = game.selectCategory();
       const res = (await data).data.data[0];
       if (res) {
         localStorage.setItem("Authorization", res.Authorization);
         localStorage.setItem("kakaoId", res.kakaoId);
       }
-      navigate("/roomlist", {
-        state: [selectedCategory, selectedCategoryCode],
-      });
+      navigate("/roomlist");
     }
   };
 
