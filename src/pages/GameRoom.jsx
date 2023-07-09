@@ -30,6 +30,7 @@ function GameRoom() {
     isHost = false,
   } = state;
 
+  const [isFirstLoading, setIsFirstLoading] = useState(true);
   // 타이틀 설정 시 사용되는 상태
   const [title, setTitle] = useState(defaultTitle);
 
@@ -100,7 +101,7 @@ function GameRoom() {
   useEffect(() => {
     if (!isTeller) {
       socket.emit("joinJuror", roomNumber, categoryCode, () => {
-        console.log("참여자로 입장되었습니다!");
+        setIsFirstLoading(false);
       });
     } else {
       socket.emit("joinDebate", roomNumber, categoryCode, (msg) => {
@@ -109,7 +110,7 @@ function GameRoom() {
           alert(`Error : ${msg}`);
           navigate("/roomlist", { state: [categoryName, categoryCode] });
         }
-        console.log("토론자로 입장되었습니다!");
+        setIsFirstLoading(false);
       });
     }
   }, []);
@@ -117,19 +118,11 @@ function GameRoom() {
 
   // 1. 방에 입장한 유저 닉네임 리스트 받아오기
   socket.on("roomJoined", (data) => {
-    // console.log("데이터 = ", data);
-    // console.log("닉네임 = ", data[0].nickName);
-    // console.log("아바타 = ", JSON.parse(data[0].avatar));
-    // console.log("호스트 = ", data[0].host);
-    // console.log("디베이터 = ", data[0].debater);
-    // console.log("아바타 네임 = ", JSON.parse(data[0].avatar).name);
     const jurorList = [];
-    const debaterList = [];
-    const hostList = [];
+    let debaterList = {};
+    let hostList = {};
     data.forEach((userInfo) => {
       const { host, debater } = userInfo;
-      // console.log(!!host);
-      // console.log(!!debater);
       if (!debater) {
         jurorList.push({
           nickName: userInfo.nickName,
@@ -137,28 +130,20 @@ function GameRoom() {
         });
       }
       if (host && debater) {
-        hostList.push({
+        hostList = {
           nickName: userInfo.nickName,
           avatar: JSON.parse(userInfo.avatar),
-        });
-        setHostInfo({
-          nickName: userInfo.nickName,
-          avatar: JSON.parse(userInfo.avatar),
-        });
+        };
       } else if (!host && debater) {
-        debaterList.push({
+        debaterList = {
           nickName: userInfo.nickName,
           avatar: JSON.parse(userInfo.avatar),
-        });
-        setDebaterInfo({
-          nickName: userInfo.nickName,
-          avatar: JSON.parse(userInfo.avatar),
-        });
+        };
       }
     });
     setJurorInfo(jurorList);
-    // setHostInfo(hostList);
-    // setDebaterInfo(debaterList);
+    setHostInfo(hostList);
+    setDebaterInfo(debaterList);
   });
 
   // 2. 채팅
@@ -372,6 +357,21 @@ function GameRoom() {
     : { display: "none" };
   return (
     <div className="relative flex gap-3 w-[100vw] h-[100vh] bg-black">
+      {/* ========================================= 로딩 창 ================================================ */}
+      {isFirstLoading && (
+        <div className="absolute flex justify-center items-center w-[100vw] h-[100vh] top-0 left-0 bg-black z-[3]">
+          <div className="flex flex-col items-center absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] z-10">
+            <Lottie
+              className="w-[80%] h-[80%]"
+              animationData={lottie.gameLoading}
+            />
+            <p className="text-white text-[3vmin] mt-[3vmin]">
+              말 많은 사람들을 모으고 있어요...
+            </p>
+          </div>
+        </div>
+      )}
+      {/* ========================================= 로딩 창 ================================================ */}
       {/* ========================================= 룰렛 모달 ================================================ */}
       <div
         style={showRoullete}
@@ -582,7 +582,8 @@ function GameRoom() {
           {isHost && (
             <button
               onClick={gameStartBtnClickHandler}
-              className="w-[20%] h-full bg-[#EFFE37] rounded-full ml-auto text-[2vmin]"
+              disabled={!(hostInfo.nickName && debaterInfo.nickName)}
+              className="w-[20%] h-full bg-[#EFFE37] rounded-full ml-auto text-[2vmin] disabled:bg-slate-200"
             >
               시작 &gt;
             </button>
