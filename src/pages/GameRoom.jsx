@@ -20,6 +20,7 @@ function GameRoom() {
   // 방 리스트 페이지에서 페이지 이동 시 넘겨는 State : 방 넘버
   // const { state } = useLocation();
   const state = useMemo(() => decrypt(sessionStorage.getItem("userData")), []);
+  console.log("디크립트된 state = ", state);
   const {
     roomNumber,
     defaultTitle,
@@ -42,17 +43,21 @@ function GameRoom() {
   // 비디오 끄기, 켜기에 사용되는 상태
   const [isVideoOff, setIsVideoOff] = useState(true);
   // 유저 닉네임 보여주는 상태
-  const [userNickname, setUserNickname] = useState([]);
-  const [userIconInfo, setUserIconInfo] = useState([]);
+  const [hostInfo, setHostInfo] = useState({});
+  const [debaterInfo, setDebaterInfo] = useState({});
+  const [jurorInfo, setJurorInfo] = useState([]);
+  // const [userNickname, setUserNickname] = useState([]);
+  // const [userIconInfo, setUserIconInfo] = useState([]);
 
   // 유저 로딩 창 만들기
   const countReadyBox = () => {
-    const count = 5 - userNickname.length;
+    // const count = 5 - userNickname.length;
+    const count = 5 - jurorInfo.length;
     console.log(count);
     return Array(count).fill(<Lottie animationData={lottie.loading} />);
   };
   // 유저 로딩 창 결과 캐싱
-  const readyBox = useMemo(countReadyBox, [userNickname]);
+  const readyBox = useMemo(countReadyBox, [jurorInfo]);
 
   // 룰렛 React DOM을 point하기 위한 Ref
   const roulette = useRef(null);
@@ -111,9 +116,49 @@ function GameRoom() {
   // });
 
   // 1. 방에 입장한 유저 닉네임 리스트 받아오기
-  socket.on("roomJoined", async (data) => {
-    setUserNickname([...data.nicknames]);
-    setUserIconInfo([...data.avatars]);
+  socket.on("roomJoined", (data) => {
+    // console.log("데이터 = ", data);
+    // console.log("닉네임 = ", data[0].nickName);
+    // console.log("아바타 = ", JSON.parse(data[0].avatar));
+    // console.log("호스트 = ", data[0].host);
+    // console.log("디베이터 = ", data[0].debater);
+    // console.log("아바타 네임 = ", JSON.parse(data[0].avatar).name);
+    const jurorList = [];
+    const debaterList = [];
+    const hostList = [];
+    data.forEach((userInfo) => {
+      const { host, debater } = userInfo;
+      // console.log(!!host);
+      // console.log(!!debater);
+      if (!debater) {
+        jurorList.push({
+          nickName: userInfo.nickName,
+          avatar: JSON.parse(userInfo.avatar),
+        });
+      }
+      if (host && debater) {
+        hostList.push({
+          nickName: userInfo.nickName,
+          avatar: JSON.parse(userInfo.avatar),
+        });
+        setHostInfo({
+          nickName: userInfo.nickName,
+          avatar: JSON.parse(userInfo.avatar),
+        });
+      } else if (!host && debater) {
+        debaterList.push({
+          nickName: userInfo.nickName,
+          avatar: JSON.parse(userInfo.avatar),
+        });
+        setDebaterInfo({
+          nickName: userInfo.nickName,
+          avatar: JSON.parse(userInfo.avatar),
+        });
+      }
+    });
+    setJurorInfo(jurorList);
+    // setHostInfo(hostList);
+    // setDebaterInfo(debaterList);
   });
 
   // 2. 채팅
@@ -225,6 +270,16 @@ function GameRoom() {
   socket.on("roomLeft", (nickname) => {
     setTotalChat([...totalChat, `Alarm : ${nickname}님이 나가셨습니다.`]);
   });
+
+  // 5 - 1. Debator 1 투표 시
+  const voteFirstPersonHandler = () => {
+    socket.emit("vote", roomNumber, 1);
+  };
+
+  // 5 - 2. Debator 2 투표 시
+  const voteSecondPersonHandler = () => {
+    socket.emit("vote", roomNumber, 0);
+  };
 
   // [ Last ] 페이지 언로딩 시 소켓 연결 해제 - socket.disconnect
   useSocketLeaveRoom(state);
@@ -371,13 +426,23 @@ function GameRoom() {
       {isGameEnd && (
         <div className="absolute top-[50%] left-[50%] flex flex-col items-center w-[30%] h-[30%] p-[1.8vmin] bg-white z-[4] translate-y-[-50%] translate-x-[-50%]">
           <p className="text-[1vmin]">투표창</p>
-          <div className="flex w-full h-[60%] justify-between mt-[2vmin] border">
+          <div className="flex w-full h-[60%] justify-between mt-[2vmin]">
             <div className="h-full w-[45%] bg-black text-white"></div>
             <div className="h-full w-[45%] bg-black text-white"></div>
           </div>
-          <div className="flex w-full h-[10%] justify-between mt-[1vmin] border">
-            <p className="w-[45%] h-full text-center">Debator 1</p>
-            <p className="w-[45%] h-full text-center">Debator 2</p>
+          <div className="flex w-full h-[10%] justify-between mt-[1vmin]">
+            <button
+              onClick={voteFirstPersonHandler}
+              className="w-[45%] h-full text-center text-white bg-black"
+            >
+              Debator 1
+            </button>
+            <button
+              onClick={voteSecondPersonHandler}
+              className="w-[45%] h-full text-center text-white bg-black"
+            >
+              Debator 2
+            </button>
           </div>
           <button onClick={closeVoteWindowHandler} className="mt-[4vmin]">
             닫기
@@ -415,6 +480,19 @@ function GameRoom() {
               onMouseEnter={handleMouseEnter}
               onMouseLeave={handleMouseEnter}
             >
+              {hostInfo.nickName && (
+                <div className="absolute flex text-[2vmin] text-white z-[3]">
+                  <Avatar
+                    size="3vmin"
+                    name={hostInfo.avatar.name}
+                    variant="beam"
+                    colors={hostInfo.avatar.color[0].split(",")}
+                  />
+                  <div className="w-full mt-[1vmin] text-center whitespace-nowrap overflow-hidden overflow-ellipsis">
+                    {hostInfo.nickName}
+                  </div>
+                </div>
+              )}
               <video
                 className="w-full h-full rounded-2xl"
                 ref={myVideoBox}
@@ -431,6 +509,19 @@ function GameRoom() {
               onMouseEnter={handleMouseYouEnter}
               onMouseLeave={handleMouseYouEnter}
             >
+              {debaterInfo.nickName && (
+                <div className="absolute flex text-[2vmin] text-white z-[3]">
+                  <Avatar
+                    size="3vmin"
+                    name={debaterInfo.avatar.name}
+                    variant="beam"
+                    colors={debaterInfo.avatar.color[0].split(",")}
+                  />
+                  <div className="w-full mt-[1vmin] text-center whitespace-nowrap overflow-hidden overflow-ellipsis">
+                    {debaterInfo.nickName}
+                  </div>
+                </div>
+              )}
               <video
                 className="  w-full h-full rounded-2xl"
                 ref={yourVideoBox}
@@ -474,13 +565,13 @@ function GameRoom() {
         </div>
         {/*-------------- 유저 창 --------------*/}
         <div className="grid grid-cols-5 grid-rows-1 w-full h-[15%] gap-2">
-          {userNickname.map((nickname, index) => (
-            <UserBox
-              key={nickname}
-              nickname={nickname}
-              userIconInfo={userIconInfo[index]}
-            />
-          ))}
+          {jurorInfo &&
+            jurorInfo.map((userInfo) => {
+              const { nickName, avatar } = userInfo;
+              return (
+                <UserBox key={nickName} nickname={nickName} avatar={avatar} />
+              );
+            })}
           {readyBox.map((item, index) => {
             return <UserLoadingBox key={index} item={item} />;
           })}
@@ -606,14 +697,14 @@ function GameRoom() {
 
 export default GameRoom;
 
-function UserBox({ nickname, userIconInfo }) {
+function UserBox({ nickname, avatar }) {
   return (
     <div className="relative flex flex-col h-full rounded-lg text-white justify-center items-center text-[2vmin]">
       <Avatar
         size="6vmin"
-        name={userIconInfo.name}
+        name={avatar.name}
         variant="beam"
-        colors={userIconInfo.color[0].split(",")}
+        colors={avatar.color[0].split(",")}
       />
       <div className="w-full mt-[1vmin] text-center whitespace-nowrap overflow-hidden overflow-ellipsis">
         {nickname}
