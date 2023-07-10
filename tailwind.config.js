@@ -3,6 +3,9 @@ module.exports = {
   mode: "jit",
   theme: {
     extend: {
+      colors: {
+        "black-transparent": "rgba(0,0,0,0.4)",
+      },
       keyframes: {
         textToLeftLoop: {
           "0%": {

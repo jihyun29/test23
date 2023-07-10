@@ -48,7 +48,7 @@ function GameRoom() {
   const [debaterInfo, setDebaterInfo] = useState({});
   const [jurorInfo, setJurorInfo] = useState([]);
 
-  // 유저 로딩 창 만들기
+  /*   // 유저 로딩 창 만들기
   const countReadyBox = () => {
     // const count = 5 - userNickname.length;
     const count = 5 - jurorInfo.length;
@@ -56,7 +56,7 @@ function GameRoom() {
     return Array(count).fill(<Lottie animationData={lottie.loading} />);
   };
   // 유저 로딩 창 결과 캐싱
-  const readyBox = useMemo(countReadyBox, [jurorInfo]);
+  const readyBox = useMemo(countReadyBox, [jurorInfo]); */
 
   // 룰렛 React DOM을 point하기 위한 Ref
   const roulette = useRef(null);
@@ -359,7 +359,6 @@ function GameRoom() {
           state: { categoryName, categoryCode },
         });
       });
-      // window.history.back();
     }
   };
 
@@ -562,9 +561,6 @@ function GameRoom() {
                 <UserBox key={nickName} nickname={nickName} avatar={avatar} />
               );
             })}
-          {readyBox.map((item, index) => {
-            return <UserLoadingBox key={index} item={item} />;
-          })}
         </div>
         {/*-------------------------------------*/}
         <div className="flex w-full h-[5%]">
@@ -572,7 +568,13 @@ function GameRoom() {
           {isHost && (
             <button
               onClick={gameStartBtnClickHandler}
-              disabled={!(hostInfo.nickName && debaterInfo.nickName)}
+              disabled={
+                !(
+                  hostInfo.nickName &&
+                  debaterInfo.nickName &&
+                  jurorInfo.length !== 0
+                )
+              }
               className="w-[20%] h-full bg-[#EFFE37] rounded-full ml-auto text-[2vmin] disabled:bg-slate-200"
             >
               시작 &gt;
@@ -709,14 +711,14 @@ function UserBox({ nickname, avatar }) {
 }
 
 // 빈 배심원 자리에 보여주는 컴포넌트
-function UserLoadingBox() {
+/* function UserLoadingBox() {
   return (
     <div className="flex flex-col h-full text-white justify-center items-center text-[2vmin] overflow-hidden">
       <div className="w-[6vmin] h-[6vmin] rounded-full bg-gray-300"></div>
       <div className="w-full h-[2vmin] mt-[1vmin] text-center whitespace-nowrap overflow-hidden overflow-ellipsis bg-gray-300"></div>
     </div>
   );
-}
+} */
 
 // 비디오 버튼 컴포넌트
 function VideoIcon() {

@@ -17,7 +17,7 @@ const SocialKakao = () => {
   }
 
   return (
-    <div className="flex justify-center items-center w-[80vmin] h-[90vmin] m-auto border rounded-[20px] ">
+    <div className="flex justify-center items-center w-[80vmin] h-[90vmin] m-auto">
       <div className="w-[100%]">
         <div className="w-[60%] mx-auto">
           <icon.illust_login width="100%" height="60%" />

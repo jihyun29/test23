@@ -49,6 +49,17 @@ import { ReactComponent as icon_debate_versus } from "./icon_debate_versus.svg";
 import { ReactComponent as logo_debatory_middle } from "./middle_signature h with tagline.svg";
 import { ReactComponent as githublogo } from "./githublogo.svg";
 import { ReactComponent as teamlogo } from "./teamlogo.svg";
+import { ReactComponent as SubHeaderDefault } from "./SubHeaderDefault.svg";
+import { ReactComponent as SubHeaderMakeRoomButton } from "./SubHeaderMakeRoomButton.svg";
+import { ReactComponent as SubHeaderLove } from "./SubHeaderLove.svg";
+import { ReactComponent as SubHeaderMarriage } from "./SubHeaderMarriage.svg";
+import { ReactComponent as SubHeaderEntertainment } from "./SubHeaderEntertainment.svg";
+import { ReactComponent as SubHeaderBalanceGame } from "./SubHeaderBalanceGame.svg";
+import { ReactComponent as SubHeaderSports } from "./SubHeaderSports.svg";
+import { ReactComponent as SubHeaderSchool } from "./SubHeaderSchool.svg";
+import { ReactComponent as SubHeaderCompany } from "./SubHeaderCompany.svg";
+import { ReactComponent as ArrowBack } from "./ArrowBack.svg";
+import { ReactComponent as BackToTop } from "./BackToTop.svg";
 
 export const icon = {
   Debate,
@@ -102,6 +113,17 @@ export const icon = {
   logo_debatory_middle,
   githublogo,
   teamlogo,
+  SubHeaderDefault,
+  SubHeaderMakeRoomButton,
+  SubHeaderLove,
+  SubHeaderMarriage,
+  SubHeaderEntertainment,
+  SubHeaderBalanceGame,
+  SubHeaderSports,
+  SubHeaderSchool,
+  SubHeaderCompany,
+  ArrowBack,
+  BackToTop,
 };
 
 export default icon;

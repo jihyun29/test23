@@ -4,6 +4,7 @@ import icon from "../icons";
 import Header from "../components/Header";
 import { game } from "../api/api";
 import { encrypt } from "../util/cryptoJs";
+import SubHeader from "../components/SubHeader";
 
 function Category() {
   const navigate = useNavigate();
@@ -120,11 +121,6 @@ function Category() {
     }
   };
 
-  // 메인으로 클릭 시 실행되는 함수
-  const goHomeHandler = () => {
-    navigate(`/`);
-  };
-
   // 카테고리 클릭 시 실행되는 함수
   // 선택된 카테고리 state에 저장
   const categoryBtnClickHandler = (categoryName) => {
@@ -135,79 +131,75 @@ function Category() {
   return (
     <>
       <Header />
-      <div className="flex w-full h-[95vh]">
-        {/* Left Side bar */}
-        <div className="w-[20%] h-full overflow-hidden">
-          <button
-            onClick={goHomeHandler}
-            className="text-[#C6C6C6] text-[1.8vmin] font-bold mt-[3vmin] ml-[9vw]"
-          >
-            ← 메인으로
-          </button>
-          <div className="flex flex-col justify-between w-fit h-[17vmin] ml-auto px-[1.2vmin] mt-[25%] bg-[#464747] rounded-3xl">
-            <div className="mt-[2vmin] text-[#C6C6C6] text-[1.5vmin] font-sans">
-              <p>지금 가장 많은</p>
-              <p>관심을 받고 있는</p>
-              <p>토론 주제는</p>
-              {/* <p>선택한 토론방은?</p> */}
-              <span className="bg-black text-white w-fit px-[0.5vmin] py-[0.3vmin] rounded-xl mt-[5px] mr-[0px]">
-                {example}
-              </span>{" "}
-              ?
-            </div>
-            <button className="text-[#EFFE37] text-[1.5vmin] font-bold ml-auto mb-[1.5vmin]">
-              바로 선택하기 &gt;
-            </button>
-          </div>
-        </div>
-        {/* Left Side bar */}
-
-        {/* Center */}
-        <div className="w-[60%] h-full">
-          <div className="w-full h-full flex flex-col items-center justify-evenly">
-            <div className="flex justify-between w-[53vmin] py-[0.35vmin] px-[1vmin] bg-[#464747] font-semibold text-[1.5vmin] rounded-2xl text-[#C6C6C6]">
-              <p>
-                내가 최근에 입장한 토론 주제는{" "}
-                <span className="bg-black py-[0.3vmin] px-[0.5vmin] rounded-xl">
+      <div className="relative flex w-full h-[93.98vh]">
+        <SubHeader />
+        <div className="relative flex w-full h-full px-[18.7vw] overflow-x-hidden overflow-y-auto">
+          {/* Left Side bar */}
+          <div className="w-[9.06vw] h-full overflow-hidden">
+            {/* <div className="flex flex-col justify-between w-full h-[17.31vh] px-[1.09vh] mt-[20.65vh] bg-[#464747] rounded-3xl">
+              <div className="mt-[2vmin] text-[#C6C6C6] text-[1.67vh] font-sans">
+                <p>지금 가장 많은</p>
+                <p>관심을 받고 있는</p>
+                <p>토론 주제는</p>
+                <span className="bg-black text-white w-fit px-[0.5vmin] py-[0.3vmin] rounded-xl mt-[5px] mr-[0px]">
                   {example}
                 </span>{" "}
                 ?
-              </p>
-              <div className="text-[#EFFE37] cursor-pointer">
+              </div>
+              <button className="text-[#EFFE37] text-[1.5vmin] font-bold ml-auto mb-[1.5vmin]">
                 바로 선택하기 &gt;
+              </button>
+            </div> */}
+          </div>
+          {/* Left Side bar */}
+
+          {/* Center */}
+          <div className="w-[44.01vw] h-full">
+            <div className="w-full h-[100vh] flex flex-col items-center">
+              <div className="flex justify-between w-[53vmin] mt-[14.8vh] py-[0.35vmin] px-[1vmin] bg-[#464747] font-semibold text-[1.5vmin] rounded-2xl text-[#C6C6C6]">
+                <p>
+                  내가 최근에 입장한 토론 주제는{" "}
+                  <span className="bg-black py-[0.3vmin] px-[0.5vmin] rounded-xl">
+                    {example}
+                  </span>{" "}
+                  ?
+                </p>
+                <div className="text-[#EFFE37] cursor-pointer">
+                  바로 선택하기 &gt;
+                </div>
+              </div>
+
+              {/* 카테고리 카드들 표시되는 부분 */}
+              <div className="grid grid-cols-3 grid-rows-[17vmin_17vmin_17vmin_17vmin] w-[53vmin] h-[71vmin] gap-[1.76vh] mt-[2.8vh]">
+                {categoryList.map((category, index) => {
+                  return (
+                    <CategoryCard
+                      key={category.name}
+                      index={index}
+                      categoryName={category.name}
+                      selectedCategory={selectedCategory}
+                      icon={iconList[index]}
+                      originStyle={originStyleList[index]}
+                      onClickHandler={categoryBtnClickHandler}
+                    />
+                  );
+                })}
+              </div>
+              {/* 카테고리 카드들 표시되는 부분 */}
+              <div>
+                <button
+                  // disabled
+                  onClick={enterRoomList}
+                  className="bg-[#EFFE37] px-[12vmin] py-[2vmin] mt-[6.94vh] mb-[13.29vh] rounded-[60px] text-[1.8vmin] font-bold"
+                >
+                  입장하기
+                </button>
               </div>
             </div>
-
-            {/* 카테고리 카드들 표시되는 부분 */}
-            <div className="grid grid-cols-3 grid-rows-[17vmin_17vmin_17vmin_17vmin] w-[53vmin] h-[71vmin] gap-[1vmin]">
-              {categoryList.map((category, index) => {
-                return (
-                  <CategoryCard
-                    key={category.name}
-                    index={index}
-                    categoryName={category.name}
-                    selectedCategory={selectedCategory}
-                    icon={iconList[index]}
-                    originStyle={originStyleList[index]}
-                    onClickHandler={categoryBtnClickHandler}
-                  />
-                );
-              })}
-            </div>
-            {/* 카테고리 카드들 표시되는 부분 */}
-            <div>
-              <button
-                // disabled
-                onClick={enterRoomList}
-                className="bg-[#EFFE37] px-[12vmin] py-[2vmin] rounded-[60px] text-[1.8vmin] font-bold"
-              >
-                입장하기
-              </button>
-            </div>
           </div>
+          {/* Center */}
+          <div className="w-[20%]"></div>
         </div>
-        {/* Center */}
-        <div className="w-[20%]"></div>
       </div>
       {/* <Footer /> */}
     </>
@@ -238,7 +230,7 @@ const CategoryCard = ({
       onClick={() => {
         onClickHandler(categoryName);
       }}
-      className={bgStyle + " rounded-3xl cursor-pointer"}
+      className={bgStyle + " rounded-[24px] cursor-pointer overflow-hidden"}
     >
       {icon}
       {/* <p className={ftStyle + " text-[2vmin] font-bold"}>{categoryName}</p>
