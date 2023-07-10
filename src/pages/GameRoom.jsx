@@ -17,8 +17,7 @@ import { decrypt } from "../util/cryptoJs";
 
 function GameRoom() {
   const navigate = useNavigate();
-  // 방 리스트 페이지에서 페이지 이동 시 넘겨는 State : 방 넘버
-  // const { state } = useLocation();
+
   const state = useMemo(() => decrypt(sessionStorage.getItem("userData")), []);
   console.log("디크립트된 state = ", state);
   const {
@@ -43,12 +42,11 @@ function GameRoom() {
   const [isMuted, setIsMuted] = useState(false);
   // 비디오 끄기, 켜기에 사용되는 상태
   const [isVideoOff, setIsVideoOff] = useState(true);
+
   // 유저 닉네임 보여주는 상태
   const [hostInfo, setHostInfo] = useState({});
   const [debaterInfo, setDebaterInfo] = useState({});
   const [jurorInfo, setJurorInfo] = useState([]);
-  // const [userNickname, setUserNickname] = useState([]);
-  // const [userIconInfo, setUserIconInfo] = useState([]);
 
   // 유저 로딩 창 만들기
   const countReadyBox = () => {
@@ -71,7 +69,19 @@ function GameRoom() {
   // BackEnd에 카테고리별 주제 받아오는 Ref
   const titleList = useRef([]);
 
-  // ----------- 진행상황 바 표시 및 프롬프트 관련 -----------------
+  // ************************************************ 채팅 창 스크롤 최신 채팅으로 맞추기
+  const chatContainerRef = useRef(null);
+
+  const scrollToRecent = () => {
+    chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+  };
+
+  useEffect(() => {
+    scrollToRecent();
+  }, [totalChat]);
+  // ***************************************************************************
+
+  // ************************************************* 진행상황 바 표시 및 프롬프트 관련
   const [isStartGame, setIsStartGame] = useState(false);
   const [isGameEnd, setIsGameEnd] = useState(false);
 
@@ -87,9 +97,9 @@ function GameRoom() {
     setIsStartGame(false);
     setIsGameEnd(true);
   };
-  // ----------- 진행상황 바 표시 및 프롬프트 관련 -----------------
+  // **************************************************************************
 
-  // --------- 소켓 부분 -----------
+  // ****************************************************************** 소켓 부분
   // [Start] 소켓 연결 : useSocket
   //서버와 연결된 소켓 캐싱
   const socket = useMemo(useSocket, []);
@@ -268,9 +278,9 @@ function GameRoom() {
 
   // [ Last ] 페이지 언로딩 시 소켓 연결 해제 - socket.disconnect
   useSocketLeaveRoom(state);
-  // ---------- 소켓 부분 -----------
+  // ******************************************************************************
 
-  // ---------- Web RTC -----------
+  // ********************************************************************** Web RTC
 
   // 내 오디오 음소거 함수
   const muteClickHandler = async () => {
@@ -324,9 +334,9 @@ function GameRoom() {
       myVideoBox.current.srcObject = await myStream;
     }, 0);
   }, [isMuted, isVideoOff, myStream]);
-  // ---------- Web RTC -----------
+  // *******************************************************************************
 
-  // ---------- 좋아요, 싫어요, 응 버튼 ---------
+  // ************************************************************* 좋아요, 싫어요, 응 버튼
   //
   const [showLikeButton, setShowLikeButton] = useState(false);
   const [showLikeYouButton, setShowLikeYouButton] = useState(false);
@@ -339,25 +349,28 @@ function GameRoom() {
   const handleMouseYouEnter = () => {
     setShowLikeYouButton(!showLikeYouButton);
   };
-  // ---------- 좋아요, 싫어요, 응 버튼 ---------
+  // ********************************************************************************
 
   // 나가기 버튼 클릭 시 실행되는 함수
   const goHomeBtnClick = async () => {
-    socket.emit("leave_room", () => {
-      navigate("/roomlist", {
-        state: { categoryName, categoryCode },
+    if (window.confirm("이 게임방에서 나가실건가요?") === true) {
+      socket.emit("leave_room", () => {
+        navigate("/roomlist", {
+          state: { categoryName, categoryCode },
+        });
       });
       // window.history.back();
-    });
+    }
   };
 
   // 룰렛 표시 관련 css
   const showRoullete = isRoulette
     ? { visibility: "visible" }
     : { display: "none" };
+
   return (
     <div className="relative flex gap-3 w-[100vw] h-[100vh] bg-black">
-      {/* ========================================= 로딩 창 ================================================ */}
+      {/* ========================================= 로딩 모달 창 ================================================ */}
       {isFirstLoading && (
         <div className="absolute flex justify-center items-center w-[100vw] h-[100vh] top-0 left-0 bg-black z-[3]">
           <div className="flex flex-col items-center absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] z-10">
@@ -371,7 +384,8 @@ function GameRoom() {
           </div>
         </div>
       )}
-      {/* ========================================= 로딩 창 ================================================ */}
+      {/* ============================================================================================= */}
+
       {/* ========================================= 룰렛 모달 ================================================ */}
       <div
         style={showRoullete}
@@ -400,7 +414,7 @@ function GameRoom() {
             <div className="absolute flex flex-col justify-center items-center w-[80%] h-[10vh] top-[43%] bg-white text-[3vh] z-[5]">
               결과는 {title}입니다.
               <div className="flex justify-evenly w-full h-[50%] ">
-                {isTeller && (
+                {isHost && (
                   <>
                     <button
                       className="bg-slate-300 px-[5%]"
@@ -421,10 +435,11 @@ function GameRoom() {
           ) : null}
         </div>
       </div>
-      {/* ========================================= 룰렛 모달 ================================================ */}
-      {/* ========================================== 투표 창 ================================================ */}
-      {isGameEnd && (
-        <div className="absolute top-[50%] left-[50%] flex flex-col items-center w-[30%] h-[30%] p-[1.8vmin] bg-white z-[4] translate-y-[-50%] translate-x-[-50%]">
+      {/* ============================================================================================== */}
+
+      {/* ========================================== 투표 모달 창 ================================================ */}
+      {isGameEnd && !isTeller && (
+        <div className="absolute top-[50%] left-[50%] flex flex-col items-center w-[50%] h-[50%] p-[1.8vmin] bg-white z-[4] translate-y-[-50%] translate-x-[-50%]">
           <p className="text-[1vmin]">투표창</p>
           <div className="flex w-full h-[60%] justify-between mt-[2vmin]">
             <div className="h-full w-[45%] bg-black text-white"></div>
@@ -449,7 +464,7 @@ function GameRoom() {
           </button>
         </div>
       )}
-      {/* ========================================== 투표 창 ================================================ */}
+      {/* ================================================================================================ */}
 
       {/* ========================================== 게임 창 ================================================ */}
       <div className="flex flex-col gap-[1%] w-[75%] h-full py-[1%] pl-[1%]">
@@ -471,7 +486,6 @@ function GameRoom() {
           <div className="relative flex justify-between items-center w-full h-[85%]">
             {/* 비디오 html : srcObject는 내 오디오, 비디오 장비,연결 시 자동으로 Play되는 autoPlay 속성 적용 */}
             {/* playsinline : 모바일 기기가 비디오를 재생할 때 전체화면이 되지 않도록 설정 */}
-            {/* 2. Versus Icon */}
             <div className="absolute w-[8vmin] h-[8vmin] left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%] z-[2]">
               <icon.icon_debate_versus width="100%" height="100%" />
             </div>
@@ -480,19 +494,7 @@ function GameRoom() {
               onMouseEnter={handleMouseEnter}
               onMouseLeave={handleMouseEnter}
             >
-              {hostInfo.nickName && (
-                <div className="absolute flex text-[2vmin] text-white z-[3]">
-                  <Avatar
-                    size="3vmin"
-                    name={hostInfo.avatar.name}
-                    variant="beam"
-                    colors={hostInfo.avatar.color[0].split(",")}
-                  />
-                  <div className="w-full mt-[1vmin] text-center whitespace-nowrap overflow-hidden overflow-ellipsis">
-                    {hostInfo.nickName}
-                  </div>
-                </div>
-              )}
+              {hostInfo.nickName && <TellerIcon userInfo={hostInfo} />}
               <video
                 className="w-full h-full rounded-2xl"
                 ref={myVideoBox}
@@ -509,19 +511,7 @@ function GameRoom() {
               onMouseEnter={handleMouseYouEnter}
               onMouseLeave={handleMouseYouEnter}
             >
-              {debaterInfo.nickName && (
-                <div className="absolute flex text-[2vmin] text-white z-[3]">
-                  <Avatar
-                    size="3vmin"
-                    name={debaterInfo.avatar.name}
-                    variant="beam"
-                    colors={debaterInfo.avatar.color[0].split(",")}
-                  />
-                  <div className="w-full mt-[1vmin] text-center whitespace-nowrap overflow-hidden overflow-ellipsis">
-                    {debaterInfo.nickName}
-                  </div>
-                </div>
-              )}
+              {debaterInfo.nickName && <TellerIcon userInfo={debaterInfo} />}
               <video
                 className="  w-full h-full rounded-2xl"
                 ref={yourVideoBox}
@@ -535,7 +525,7 @@ function GameRoom() {
         </div>
         {/*----------- 주제 + 비디오 ---------- */}
 
-        {/*-----------Progress bar --------- */}
+        {/*----------- Progress bar --------- */}
         <div className="relative flex flex-col justify-evenly items-center w-full h-[21%] bg-[#1E1E1E] rounded-2xl text-white">
           <div className="flex w-full justify-evenly items-center">
             {isStartGame ? (
@@ -551,7 +541,7 @@ function GameRoom() {
               </>
             )}
           </div>
-          {/*-----------Progress bar --------- */}
+          {/*---------------------------------- */}
 
           {/*-------------- 프롬프트 --------------*/}
           <div className="flex justify-center items-center w-full h-[50%] bg-[#2F3131] text-[#C6C6C6] font-bold rounded-2xl text-[2vh]">
@@ -561,7 +551,7 @@ function GameRoom() {
               <div>아래 Start버튼을 눌러 시작해주세요!</div>
             )}
           </div>
-          {/*-------------- 프롬프트 --------------*/}
+          {/*------------------------------------*/}
         </div>
         {/*-------------- 유저 창 --------------*/}
         <div className="grid grid-cols-5 grid-rows-1 w-full h-[15%] gap-2">
@@ -576,7 +566,7 @@ function GameRoom() {
             return <UserLoadingBox key={index} item={item} />;
           })}
         </div>
-        {/*-------------- 유저 창 --------------*/}
+        {/*-------------------------------------*/}
         <div className="flex w-full h-[5%]">
           {/* 3. 게임시작 */}
           {isHost && (
@@ -641,9 +631,9 @@ function GameRoom() {
             </button>
           </div>
         </div>
-        {/*------------- 기능 버튼들 ------------*/}
+        {/*--------------------------------------------*/}
       </div>
-      {/* ========================================== 게임 창 ================================================ */}
+      {/* =============================================================================================== */}
 
       {/* ========================================= 채팅 박스 ================================================ */}
       <div className="flex w-[25%] flex-col">
@@ -651,10 +641,13 @@ function GameRoom() {
           <p className="w-fit">채팅</p>
         </div>
         <form
-          className="flex flex-col ml-auto  w-full h-full"
+          className="flex flex-col ml-auto  w-full h-[95%]"
           onSubmit={chatSubmitHandler}
         >
-          <div className="h-[95%] border border-black p-2 break-words overflow-x-hidden overflow-y-auto bg-[#1B1B1B]">
+          <div
+            ref={chatContainerRef}
+            className="h-[95%] border border-black p-2 break-words overflow-x-hidden overflow-y-auto bg-[#1B1B1B]"
+          >
             <ul>
               {totalChat?.map((chat, index) => {
                 if (chat.split(":")[0] === "You") {
@@ -691,13 +684,14 @@ function GameRoom() {
         </form>
       </div>
 
-      {/* ========================================= 채팅 박스 =================================================*/}
+      {/* ==============================================================================================*/}
     </div>
   );
 }
 
 export default GameRoom;
 
+// 배심원으로 들어온 유저 보여주는 컴포넌트
 function UserBox({ nickname, avatar }) {
   return (
     <div className="relative flex flex-col h-full rounded-lg text-white justify-center items-center text-[2vmin]">
@@ -707,21 +701,24 @@ function UserBox({ nickname, avatar }) {
         variant="beam"
         colors={avatar.color[0].split(",")}
       />
-      <div className="w-full mt-[1vmin] text-center whitespace-nowrap overflow-hidden overflow-ellipsis">
+      <div className="w-full text-[2vmin] mt-[1vmin] text-center whitespace-nowrap overflow-hidden overflow-ellipsis">
         {nickname}
       </div>
     </div>
   );
 }
 
-function UserLoadingBox({ item }) {
+// 빈 배심원 자리에 보여주는 컴포넌트
+function UserLoadingBox() {
   return (
-    <div className="flex flex-col h-full rounded-lg text-white justify-center items-center text-[2vmin] overflow-hidden">
-      <div>{item}</div>
+    <div className="flex flex-col h-full text-white justify-center items-center text-[2vmin] overflow-hidden">
+      <div className="w-[6vmin] h-[6vmin] rounded-full bg-gray-300"></div>
+      <div className="w-full h-[2vmin] mt-[1vmin] text-center whitespace-nowrap overflow-hidden overflow-ellipsis bg-gray-300"></div>
     </div>
   );
 }
 
+// 비디오 버튼 컴포넌트
 function VideoIcon() {
   return (
     <div className="absolute flex items-center justify-center w-full h-[20%] bottom-0 opacity-95">
@@ -730,6 +727,23 @@ function VideoIcon() {
       <icon.hateButton className="cursor-pointer" />
       <icon.whyButton className="cursor-pointer" />
       <icon.reportButton className="right-0 cursor-pointer" />
+    </div>
+  );
+}
+
+// 토론자 및 호스트 유저아이콘 컴포넌트
+function TellerIcon({ userInfo }) {
+  return (
+    <div className="absolute flex items-center gap-[1vmin] text-[2vmin] text-white z-[3]">
+      <Avatar
+        size="3vmin"
+        name={userInfo.avatar.name}
+        variant="beam"
+        colors={userInfo.avatar.color[0].split(",")}
+      />
+      <div className="w-full text-[2vmin] text-center whitespace-nowrap overflow-hidden overflow-ellipsis">
+        {userInfo.nickName}
+      </div>
     </div>
   );
 }

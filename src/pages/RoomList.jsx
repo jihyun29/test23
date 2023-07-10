@@ -138,21 +138,6 @@ function RoomList() {
   // 방 리스트 만들기 위해 더미데이터 이용 => api로 받아와야 되는 부분들
   const [roomList, setRoomList] = useState([]);
 
-  //   API로 RoomList 가져오는 부분 -> 향후 삭제
-  // useQuery에 대한 것은 queryKey부터 시작해서 좀 더 공부 필요 !!
-  /*   const { isLoading: isRoomListLoading } = useQuery(
-    ["getRoom", categoryCode],
-    () => game.getRoomList(categoryCode),
-    {
-      onSuccess: (data) => {
-        // console.log(data);
-        setRoomList([...data.data.data]);
-      },
-      refetchOnWindowFocus: false,
-      retry: 0,
-    }
-  );
- */
   const { mutateAsync: createRoom } = useMutation(
     () => game.createRoom(categoryCode),
     {
@@ -275,12 +260,14 @@ function RoomList() {
 
           {/* 페이지네이션 부분 */}
           <div className="flex justify-center h-[5vh] items-center gap-[0.5vh] mt-[3vh]">
-            <Pagination
-              total={roomList.length}
-              limit={limit}
-              page={page}
-              setPage={setPage}
-            />
+            {roomList.length !== 0 && (
+              <Pagination
+                total={roomList.length}
+                limit={limit}
+                page={page}
+                setPage={setPage}
+              />
+            )}
           </div>
           {/* 페이지네이션 부분 */}
         </div>
