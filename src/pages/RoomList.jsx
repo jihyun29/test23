@@ -31,11 +31,6 @@ function RoomList() {
     };
   }, []);
 
-  roomListSocket.on("update_roomList", (roomList) => {
-    console.log(roomList);
-    setRoomList(roomList);
-  });
-
   // 뒤로가기 막기
   useEffect(() => {
     console.log("방에 입장하셨습니다.");
@@ -51,11 +46,11 @@ function RoomList() {
     };
   }, []);
 
-  roomListSocket.on("disconnect", () => {
-    console.log("네임스페이스 소켓의 연결이 끊어질 예정입니다.");
-  });
-  roomListSocket.on("test", (msg) => {
-    console.log(msg);
+  useEffect(() => {
+    roomListSocket.on("update_roomList", (roomList) => {
+      console.log(roomList);
+      setRoomList(roomList);
+    });
   });
 
   // 페이지네이션 관련 변수들

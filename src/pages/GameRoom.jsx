@@ -4,6 +4,7 @@ import Lottie from "lottie-react";
 import { useState, useRef, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import Avatar from "boring-avatars";
+import jwt_decode from "jwt-decode";
 
 import { useRoulette } from "../util/useRoulette";
 import { useSocketLeaveRoom } from "../util/useSocketLeaveRoom";
@@ -19,19 +20,16 @@ function GameRoom() {
   const navigate = useNavigate();
 
   const state = useMemo(() => decrypt(sessionStorage.getItem("userData")), []);
-  console.log("디크립트된 state = ", state);
-  const {
-    roomNumber,
-    defaultTitle,
-    categoryName,
-    categoryCode,
-    isTeller,
-    isHost = false,
-  } = state;
+
+  let { roomNumber, defaultTitle, categoryName, categoryCode } = state;
 
   const [isFirstLoading, setIsFirstLoading] = useState(true);
   // 타이틀 설정 시 사용되는 상태
   const [title, setTitle] = useState(defaultTitle);
+  // 호스트 변경 시 사용
+  const [isHost, setIsHost] = useState(state.isHost);
+  // 배심원이 토론자로 변경될 시 사용
+  const [isTeller, setIsTeller] = useState(state.isTeller);
 
   // 룰렛 표시 여부에 사용되는 상태
   const [isRoulette, setIsRoulette] = useState(false);
@@ -126,36 +124,6 @@ function GameRoom() {
   }, []);
   // });
 
-  // 1. 방에 입장한 유저 닉네임 리스트 받아오기
-  socket.on("roomJoined", (data) => {
-    const jurorList = [];
-    let debaterList = {};
-    let hostList = {};
-    data.forEach((userInfo) => {
-      const { host, debater } = userInfo;
-      if (!debater) {
-        jurorList.push({
-          nickName: userInfo.nickName,
-          avatar: JSON.parse(userInfo.avatar),
-        });
-      }
-      if (host && debater) {
-        hostList = {
-          nickName: userInfo.nickName,
-          avatar: JSON.parse(userInfo.avatar),
-        };
-      } else if (!host && debater) {
-        debaterList = {
-          nickName: userInfo.nickName,
-          avatar: JSON.parse(userInfo.avatar),
-        };
-      }
-    });
-    setJurorInfo(jurorList);
-    setHostInfo(hostList);
-    setDebaterInfo(debaterList);
-  });
-
   // 2. 채팅
   // 2 - 1. 내 채팅 내용 화면에 띄어줌, 채팅 상대방에게 전송
   const chatSubmitHandler = (event) => {
@@ -167,11 +135,6 @@ function GameRoom() {
     setTotalChat([...totalChat, `You: ${myChat}`]);
     chatInputValue.current.value = "";
   };
-
-  // 2 - 2. 상대 방이 보낸 채팅 가져와서 화면에 표기
-  socket.on("new_chat", (chat) => {
-    setTotalChat([...totalChat, chat]);
-  });
 
   // 3. 룰렛
 
@@ -189,12 +152,6 @@ function GameRoom() {
       console.log("룰렛이 생성되었습니다.");
     });
   };
-
-  // 3 - 1 - 1. 룰렛 보여주는 이벤트 수신 후 룰렛 보여줌
-  socket.on("show_roulette", (titleListFromBack, result) => {
-    titleList.current = [...titleListFromBack];
-    setIsRoulette(result);
-  });
 
   // 3 - 2 - 1.룰렛 애니메이션 시작 이벤트 전송
   const setTitleBtnClickHandler = () => {
@@ -226,13 +183,6 @@ function GameRoom() {
     }, 2000);
   };
 
-  // 3 - 2 - 2. 룰렛 애니메이션 시작 이벤트 수신 후 룰렛 애니메이션 시작
-  socket.on("start_roulette", (randomSubject) => {
-    console.log(roulette.current);
-    // 룰렛 애니메이션 함수
-    setTitleFunc(randomSubject);
-  });
-
   // 3 - 3 - 1. 결과창 닫기 이벤트 시작 - Retry Button
   const closeResultModal = () => {
     socket.emit("close_result", false, roomNumber, () => {
@@ -243,28 +193,12 @@ function GameRoom() {
     });
   };
 
-  // 3 - 3 - 2. 이벤트 수신 후 결과 창 닫기
-  socket.on("close_result", (result) => {
-    setIsRouletteResult(result);
-  });
-
   // 3 - 4 - 1. 룰렛 닫기 이벤트 시작 - Start Button
   const closeRouletteModal = () => {
     socket.emit("close_result", false, roomNumber, () => {
       console.log("주제가 확정되었습니다. 게임이 시작됩니다!");
     });
   };
-
-  // 3 - 4 - 2. 이벤트 수신 후 룰렛 닫기
-  socket.on("close_roulette", (result) => {
-    setIsRoulette(result);
-    setTimeout(startGameSignalHandler, 1000);
-  });
-
-  // 4. 유저 나갔을 시 발생하는 알람
-  socket.on("roomLeft", (nickname) => {
-    setTotalChat([...totalChat, `Alarm : ${nickname}님이 나가셨습니다.`]);
-  });
 
   // 5 - 1. Debator 1 투표 시
   const voteFirstPersonHandler = () => {
@@ -275,6 +209,93 @@ function GameRoom() {
   const voteSecondPersonHandler = () => {
     socket.emit("vote", roomNumber, 0);
   };
+
+  // 나가기 버튼 클릭 시 실행되는 함수
+  const goHomeBtnClick = async () => {
+    if (window.confirm("이 게임방에서 나가실건가요?") === true) {
+      socket.emit("leave_room", () => {
+        socket.disconnect();
+        navigate("/roomlist", {
+          state: { categoryName, categoryCode },
+        });
+      });
+    }
+  };
+
+  useEffect(() => {
+    // 1. 방에 입장한 유저 닉네임 리스트 받아오기
+    socket.on("roomJoined", (data) => {
+      const jurorList = [];
+      let debaterList = {};
+      let hostList = {};
+      data.forEach((userInfo) => {
+        const { host, debater } = userInfo;
+        if (!debater) {
+          jurorList.push({
+            nickName: userInfo.nickName,
+            avatar: JSON.parse(userInfo.avatar),
+          });
+        }
+        if (host && debater) {
+          hostList = {
+            nickName: userInfo.nickName,
+            avatar: JSON.parse(userInfo.avatar),
+          };
+        } else if (!host && debater) {
+          debaterList = {
+            nickName: userInfo.nickName,
+            avatar: JSON.parse(userInfo.avatar),
+          };
+        }
+      });
+      setJurorInfo(jurorList);
+      setHostInfo(hostList);
+      setDebaterInfo(debaterList);
+    });
+
+    // 2 - 2. 상대 방이 보낸 채팅 가져와서 화면에 표기
+    socket.on("new_chat", (chat) => {
+      setTotalChat([...totalChat, chat]);
+    });
+
+    // 3 - 1 - 1. 룰렛 보여주는 이벤트 수신 후 룰렛 보여줌
+    socket.on("show_roulette", (titleListFromBack, result) => {
+      titleList.current = [...titleListFromBack];
+      setIsRoulette(result);
+    });
+
+    // 3 - 2 - 2. 룰렛 애니메이션 시작 이벤트 수신 후 룰렛 애니메이션 시작
+    socket.on("start_roulette", (randomSubject) => {
+      console.log(roulette.current);
+      // 룰렛 애니메이션 함수
+      setTitleFunc(randomSubject);
+    });
+
+    // 3 - 3 - 2. 이벤트 수신 후 결과 창 닫기
+    socket.on("close_result", (result) => {
+      setIsRouletteResult(result);
+    });
+
+    // 3 - 4 - 2. 이벤트 수신 후 룰렛 닫기
+    socket.on("close_roulette", (result) => {
+      setIsRoulette(result);
+      setTimeout(startGameSignalHandler, 1000);
+    });
+
+    // 4. 유저 나갔을 시 발생하는 알람
+    socket.on("roomLeft", (nickname) => {
+      setTotalChat([...totalChat, `Alarm : ${nickname}님이 나가셨습니다.`]);
+    });
+
+    // 5. 호스트 변경 발생
+    socket.on("changeHost", (id) => {
+      const { userId } = jwt_decode(localStorage.getItem("Authorization"));
+      if (userId === id) {
+        alert("방장으로 권한이 변경되었습니다.");
+        setIsHost(true);
+      }
+    });
+  }, []);
 
   // [ Last ] 페이지 언로딩 시 소켓 연결 해제 - socket.disconnect
   useSocketLeaveRoom(state);
@@ -350,17 +371,6 @@ function GameRoom() {
     setShowLikeYouButton(!showLikeYouButton);
   };
   // ********************************************************************************
-
-  // 나가기 버튼 클릭 시 실행되는 함수
-  const goHomeBtnClick = async () => {
-    if (window.confirm("이 게임방에서 나가실건가요?") === true) {
-      socket.emit("leave_room", () => {
-        navigate("/roomlist", {
-          state: { categoryName, categoryCode },
-        });
-      });
-    }
-  };
 
   // 룰렛 표시 관련 css
   const showRoullete = isRoulette

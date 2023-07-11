@@ -101,7 +101,7 @@ function SubHeader({ categoryName, categoryCode }) {
       ) : (
         <icon.SubHeaderDefault className="h-[2.51vh]" />
       )}
-      {categoryName ? (
+      {categoryName && localStorage.getItem("kakaoId") === "1" ? (
         <icon.SubHeaderMakeRoomButton
           onClick={createRoomBtnClick}
           className={makeRoomBtnStyle + " cursor-pointer"}

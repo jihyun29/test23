@@ -233,8 +233,6 @@ const CategoryCard = ({
       className={bgStyle + " rounded-[24px] cursor-pointer overflow-hidden"}
     >
       {icon}
-      {/* <p className={ftStyle + " text-[2vmin] font-bold"}>{categoryName}</p>
-      <div className="h-[60%] ml-auto mt-auto overflow-hidden">{icon}</div> */}
     </div>
   );
 };
