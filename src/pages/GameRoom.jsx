@@ -136,6 +136,11 @@ function GameRoom() {
     chatInputValue.current.value = "";
   };
 
+  // 2 - 2. 상대 방이 보낸 채팅 가져와서 화면에 표기
+  socket.on("new_chat", (chat) => {
+    setTotalChat([...totalChat, chat]);
+  });
+
   // 3. 룰렛
 
   // 룰렛 그려주는 함수 - useEffect()
@@ -200,6 +205,11 @@ function GameRoom() {
     });
   };
 
+  // 4. 유저 나갔을 시 발생하는 알람
+  socket.on("roomLeft", (nickname) => {
+    setTotalChat([...totalChat, `Alarm : ${nickname}님이 나가셨습니다.`]);
+  });
+
   // 5 - 1. Debator 1 투표 시
   const voteFirstPersonHandler = () => {
     socket.emit("vote", roomNumber, 1);
@@ -253,11 +263,6 @@ function GameRoom() {
       setDebaterInfo(debaterList);
     });
 
-    // 2 - 2. 상대 방이 보낸 채팅 가져와서 화면에 표기
-    socket.on("new_chat", (chat) => {
-      setTotalChat([...totalChat, chat]);
-    });
-
     // 3 - 1 - 1. 룰렛 보여주는 이벤트 수신 후 룰렛 보여줌
     socket.on("show_roulette", (titleListFromBack, result) => {
       titleList.current = [...titleListFromBack];
@@ -280,11 +285,6 @@ function GameRoom() {
     socket.on("close_roulette", (result) => {
       setIsRoulette(result);
       setTimeout(startGameSignalHandler, 1000);
-    });
-
-    // 4. 유저 나갔을 시 발생하는 알람
-    socket.on("roomLeft", (nickname) => {
-      setTotalChat([...totalChat, `Alarm : ${nickname}님이 나가셨습니다.`]);
     });
 
     // 5. 호스트 변경 발생
