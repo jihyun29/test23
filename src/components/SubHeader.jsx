@@ -47,7 +47,7 @@ function SubHeader({ categoryName, categoryCode }) {
   let categoryIcon;
   switch (categoryName) {
     case "게임/프로게이머":
-      categoryIcon = null; // 향후 추가 필요
+      categoryIcon = <icon.SubHeaderGame className={middleIconStyle} />; // 향후 추가 필요
       break;
     case "연예/이슈":
       categoryIcon = (

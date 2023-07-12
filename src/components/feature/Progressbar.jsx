@@ -5,7 +5,7 @@ import { useEffect } from "react";
 
 function TestProgressComp({ endGameSignalHandler }) {
   // gameTime : 게임시간 (초 단위)
-  const gameTime = 20;
+  const gameTime = 7;
   const [runningTime, setRunningTime] = useState(0);
   const [remainingTime, setRemainingTime] = useState(gameTime);
 

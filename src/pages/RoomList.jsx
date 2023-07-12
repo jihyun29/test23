@@ -54,7 +54,7 @@ function RoomList() {
   });
 
   // 페이지네이션 관련 변수들
-  const limit = 9;
+  const limit = 10;
   const [page, setPage] = useState(1);
   const offset = (page - 1) * limit;
 
@@ -126,20 +126,20 @@ function RoomList() {
               </button>
             </div>
             <div className="w-full overflow-x-auto overflow-y-hidden">
-              <div className="flex gap-[1.04vw] w-fit h-[23.25vh] mt-[3.34vh]">
-                <div className="w-[23.75vw] h-full bg-[#2F3131] rounded-[24px]"></div>
-                <div className="w-[23.75vw] h-full bg-[#2F3131] rounded-[24px]"></div>
-                <div className="w-[23.75vw] h-full bg-[#2F3131] rounded-[24px]"></div>
-                <div className="w-[23.75vw] h-full bg-[#2F3131] rounded-[24px]"></div>
+              <div className="flex gap-[1.04vw] w-fit h-[278px] mt-[3.34vh]">
+                <div className="w-[456px] h-full bg-[#2F3131] rounded-[24px]"></div>
+                <div className="w-[456px] h-full bg-[#2F3131] rounded-[24px]"></div>
+                <div className="w-[456px] h-full bg-[#2F3131] rounded-[24px]"></div>
+                <div className="w-[456px] h-full bg-[#2F3131] rounded-[24px]"></div>
               </div>
             </div>
           </div>
           {/* 핫한 방 리스트 */}
 
           <div className="flex flex-col my-auto w-full mx-[6.4vw] mt-[9.78vh] ">
-            <p className="text-white text-[2.01vh] font-bold">방 리스트</p>
+            <p className="text-white text-[24px] font-bold">방 리스트</p>
             {/* 빙 리스트 본문 */}
-            <div className="grid grid-cols-2 grid-rows-[26.25vh_26.25vh_26.25vh_26.25vh_26.25vh] w-full gap-[2.51vh] mt-[3.01vh] ">
+            <div className="grid grid-cols-2 grid-rows-[314px_314px_314px_314px_314px] w-full gap-[2.51vh] mt-[3.01vh] ">
               {roomList.length !== 0 ? (
                 showRoomListDevidedByNumber(roomList, offset, limit)
               ) : (

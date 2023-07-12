@@ -60,6 +60,9 @@ import { ReactComponent as SubHeaderSchool } from "./SubHeaderSchool.svg";
 import { ReactComponent as SubHeaderCompany } from "./SubHeaderCompany.svg";
 import { ReactComponent as ArrowBack } from "./ArrowBack.svg";
 import { ReactComponent as BackToTop } from "./BackToTop.svg";
+import { ReactComponent as SubHeaderGame } from "./SubHeaderGame.svg";
+import { ReactComponent as RoulettePin } from "./pin.svg";
+import { ReactComponent as IconOnly } from "./icononly.svg";
 
 export const icon = {
   Debate,
@@ -124,6 +127,9 @@ export const icon = {
   SubHeaderCompany,
   ArrowBack,
   BackToTop,
+  SubHeaderGame,
+  RoulettePin,
+  IconOnly,
 };
 
 export default icon;

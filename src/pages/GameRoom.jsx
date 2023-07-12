@@ -172,7 +172,7 @@ function GameRoom() {
   const setTitleFunc = (ran) => {
     currentTitle = titleList.current[ran];
     const canvas = roulette.current;
-    canvas.style.transform = `initial`;
+    canvas.style.transform = null;
     canvas.style.transition = `initial`;
 
     const arc = 360 / titleList.current.length;
@@ -295,8 +295,23 @@ function GameRoom() {
         setIsHost(true);
       }
     });
+
+    // 6. 투표 결과 받기
+    socket.on("voteResult", (result) => {
+      console.log(result);
+    });
   }, []);
 
+  // 7. 토론에서 진 유저 추방하기
+  socket.on("loserExit", (exitUserId) => {
+    const { userId } = jwt_decode(localStorage.getItem("Authorization"));
+    if (userId === exitUserId) {
+      socket.disconnect();
+      navigate("/roomlist", {
+        state: { categoryName, categoryCode },
+      });
+    }
+  });
   // [ Last ] 페이지 언로딩 시 소켓 연결 해제 - socket.disconnect
   useSocketLeaveRoom(state);
   // ******************************************************************************
@@ -393,7 +408,7 @@ function GameRoom() {
           </div>
         </div>
       )}
-      {/* ============================================================================================= */}
+      {/* =================================================================================================== */}
 
       {/* ========================================= 룰렛 모달 ================================================ */}
       <div
@@ -403,7 +418,7 @@ function GameRoom() {
         <div className="relative flex justify-center items-center w-[75vmin] h-[75vmin] z-[3]">
           <canvas
             ref={roulette}
-            className="w-[90%] h-[90%] border-[2vh] border-gray-400 rounded-[100%] outline outline-[3vh]"
+            className="w-[90%] h-[90%] border-[2vh] border-[#7A48DE]  rounded-[100%]"
             width="450px"
             height="450px"
           />
@@ -411,66 +426,85 @@ function GameRoom() {
             <button
               onClick={setTitleBtnClickHandler}
               disabled={!isTeller}
-              className=" text-green-300 text-[2.5vmin] font-semibold"
+              className=" text-white text-[3vmin] font-semibold"
             >
-              룰렛돌리기
+              START!
             </button>
           </div>
-          <div className="absolute w-[1vh] h-[1vh] top-[1.5vmin] left-[47%] text-[5vh] z-[4]">
-            ▼
+          <div className="absolute w-fit h-fit top-0 left-[50%] translate-x-[-50%] z-[4]">
+            <icon.RoulettePin className="w-[10vmin] h-[10vmin]" />
           </div>
-          {isRouletteResult ? (
-            <div className="absolute flex flex-col justify-center items-center w-[80%] h-[10vh] top-[43%] bg-white text-[3vh] z-[5]">
-              결과는 {title}입니다.
-              <div className="flex justify-evenly w-full h-[50%] ">
-                {isHost && (
-                  <>
-                    <button
-                      className="bg-slate-300 px-[5%]"
-                      onClick={closeResultModal}
-                    >
-                      Start
-                    </button>
-                    <button
-                      className="bg-slate-300 px-[5%]"
-                      onClick={closeRouletteModal}
-                    >
-                      Retry
-                    </button>
-                  </>
-                )}
-              </div>
-            </div>
-          ) : null}
         </div>
       </div>
       {/* ============================================================================================== */}
 
+      {/* ========================================== 결과 모달 창 ======================================== */}
+      {isRouletteResult ? (
+        <div className="absolute flex justify-center items-center w-[100vw] h-[100vh] top-0 left-0 bg-slate-200/40 z-[3]">
+          <div className="absolute flex flex-col justify-center items-center w-fit h-[21.91%] p-[2.5%] top-[50%] translate-y-[-50%] z-[5] bg-[#2F3131] rounded-[16px]">
+            <div className="flex flex-col items-center">
+              <p className="text-[2.26vh] text-[white] font-bold">
+                토론 주제가 선정되었어요.
+              </p>
+              <div className="flex items-center w-full text-[#EFFE37] text-[1.76vh] font-bold mt-[2.13%]">
+                <icon.IconOnly className="h-[1.76vh]" />
+                &nbsp;&nbsp;
+                {title}
+              </div>
+              <p className="text-[1.76vh] text-[#C6C6C6] mt-[2.13%]">
+                이 창은 3초후에 닫힙니다.
+              </p>
+            </div>
+            <div className="flex justify-evenly w-full mt-[2.01vh] gap-[0.63vw]">
+              {isHost && (
+                <>
+                  <button
+                    className="w-[50%] bg-[#D73232] px-[5%] py-[1.34vh] text-[1.5vh] text-white font-bold rounded-[1.34vh]"
+                    onClick={closeRouletteModal}
+                  >
+                    다시 돌리기
+                  </button>
+                  <button
+                    className="w-[50%] bg-[#EFFE37] px-[5%] py-[1.34vh] text-[1.5vh] font-bold rounded-[1.34vh]"
+                    onClick={closeResultModal}
+                  >
+                    토론 시작하기
+                  </button>
+                </>
+              )}
+            </div>
+          </div>
+        </div>
+      ) : null}
+      {/* ============================================================================================== */}
+
       {/* ========================================== 투표 모달 창 ================================================ */}
       {isGameEnd && !isTeller && (
-        <div className="absolute top-[50%] left-[50%] flex flex-col items-center w-[50%] h-[50%] p-[1.8vmin] bg-white z-[4] translate-y-[-50%] translate-x-[-50%]">
-          <p className="text-[1vmin]">투표창</p>
-          <div className="flex w-full h-[60%] justify-between mt-[2vmin]">
-            <div className="h-full w-[45%] bg-black text-white"></div>
-            <div className="h-full w-[45%] bg-black text-white"></div>
-          </div>
-          <div className="flex w-full h-[10%] justify-between mt-[1vmin]">
-            <button
-              onClick={voteFirstPersonHandler}
-              className="w-[45%] h-full text-center text-white bg-black"
-            >
-              Debator 1
+        <div className="absolute flex justify-center items-center w-[100vw] h-[100vh] top-0 left-0 bg-slate-200/40 z-[3]">
+          <div className="absolute top-[50%] left-[50%] flex flex-col items-center w-[50%] h-[50%] p-[1.8vmin] bg-white z-[4] translate-y-[-50%] translate-x-[-50%]">
+            <p className="text-[1vmin]">투표창</p>
+            <div className="flex w-full h-[60%] justify-between mt-[2vmin]">
+              <div className="h-full w-[45%] bg-black text-white"></div>
+              <div className="h-full w-[45%] bg-black text-white"></div>
+            </div>
+            <div className="flex w-full h-[10%] justify-between mt-[1vmin]">
+              <button
+                onClick={voteFirstPersonHandler}
+                className="w-[45%] h-full text-center text-white bg-black"
+              >
+                Debator 1
+              </button>
+              <button
+                onClick={voteSecondPersonHandler}
+                className="w-[45%] h-full text-center text-white bg-black"
+              >
+                Debator 2
+              </button>
+            </div>
+            <button onClick={closeVoteWindowHandler} className="mt-[4vmin]">
+              닫기
             </button>
-            <button
-              onClick={voteSecondPersonHandler}
-              className="w-[45%] h-full text-center text-white bg-black"
-            >
-              Debator 2
-            </button>
           </div>
-          <button onClick={closeVoteWindowHandler} className="mt-[4vmin]">
-            닫기
-          </button>
         </div>
       )}
       {/* ================================================================================================ */}
