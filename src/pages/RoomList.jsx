@@ -72,13 +72,13 @@ function RoomList() {
         <Room
           key={item.roomId}
           number={index + limit * (page - 1)}
-          ß
           categoryName={item.KategorieName}
           roomName={item.roomName}
           debater={item.debater}
           panel={item.panel}
           roomId={item.roomId}
           categoryCode={categoryCode}
+          gameStart={item.gameStart}
         />
       ));
   };

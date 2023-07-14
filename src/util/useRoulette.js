@@ -9,13 +9,9 @@ export function useRoulette({
 }) {
   useEffect(() => {
     const colors = ["#919191", "#C6C6C6"];
-    // console.log(isTitleLoading);
-    // console.log(isRoulette);
-    // && !isTitleLoading
-    // if (isRoulette) {
     const canvasRef = roulette.current;
-    console.log(canvasRef);
     const canvas = canvasRef.getContext(`2d`);
+    console.log(canvas);
 
     const newMake = async () => {
       // 캔버스의 중앙점 구하기
@@ -52,12 +48,16 @@ export function useRoulette({
           ch + Math.sin(angle) * (ch - 75)
         );
         canvas.rotate(angle + Math.PI);
-        canvas.fillText(titleList.current[i], 0, i, 140);
+        const titleListItem =
+          titleList.current[i]?.length >= 10
+            ? titleList.current[i]?.substring(0, 10) + "..."
+            : titleList.current[i];
+        canvas.fillText(titleListItem, 15, i, 160);
         canvas.restore();
       }
     };
     newMake();
     // }
-  }, [isRoulette, titleList]);
+  }, [isRoulette, titleList, title]);
   // isRoulette, titleList, title, roulette
 }

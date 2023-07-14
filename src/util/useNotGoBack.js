@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-export function useSocketLeaveRoom(state) {
+export function useNotGoBack(state) {
   const { roomNumber } = state;
   const navigate = useNavigate();
   useEffect(() => {
@@ -13,22 +13,19 @@ export function useSocketLeaveRoom(state) {
     };
     window.history.pushState(null, "", "");
     window.addEventListener("popstate", handlePopstate);
-    return () => {
+
+    /* 새로고침 감지  
+   const handleBeforeUnload = (event) => {
+      event.preventDefault();
+      alert("새로고침되었습니다.");
+      // event.returnValue = ''; // 이 부분은 브라우저에 메시지를 표시할 수도 있습니다.
+    }; 
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    */
+    return async () => {
       window.removeEventListener("popstate", handlePopstate);
+      // window.removeEventListener("beforeunload", handleBeforeUnload);
     };
   }, []);
-
-  // 새로고침 시 알람 띄우는 코드
-  // useEffect(() => {
-  //   const unloadHandler = (e) => {
-  //     e.preventDefault();
-  //     e.returnValue = "";
-  //   };
-
-  //   window.addEventListener("beforeunload", unloadHandler);
-
-  //   return () => {
-  //     window.removeEventListener("beforeunload", unloadHandler);
-  //   };
-  // }, []);
 }

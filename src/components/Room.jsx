@@ -11,6 +11,8 @@ function Room({
   roomId,
   categoryName,
   categoryCode,
+  // 게임시작시 : 1(true)
+  gameStart,
 }) {
   const navigate = useNavigate();
 
@@ -47,10 +49,21 @@ function Room({
     panel === 5 ? ["text-[#505050]", true] : [null, false];
 
   const [tellerBtnStyle, isTeller] =
-    localStorage.getItem("kakaoId") === "1"
+    /* 카카오 로그인 여부 & 게임시작 여부 확인
+    1. 카카오 로그인 시에는 노란색
+    2. 게임시작 시 안할 시에는 노란색
+    둘 다 만족해야 노란색 아니면 회색
+  */
+    localStorage.getItem("kakaoId") === "1" && !gameStart
       ? ["text-[#EFFE37] hover:hover:bg-[#EFFE37] hover:text-[#1B1B1B]", true]
       : ["text-[#505050]", false];
-
+  const [jurorBtnStyleByGameStart, statusTextStyleByGameStart] =
+    gameStart === 1
+      ? ["text-[#505050]", "text-[#505050]"]
+      : [
+          "text-[#EFFE37] hover:hover:bg-[#EFFE37] hover:text-[#1B1B1B]",
+          "text-[#919191]",
+        ];
   return (
     <div className="flex flex-col w-[30.3vw] h-full rounded-3xl bg-[#2F3131] text-white">
       <div className="flex flex-col w-full h-[73.25%] px-[6.87%] pt-[6.87%] pb-[6.01%]">
@@ -58,9 +71,14 @@ function Room({
           {roomName}
         </div>
         <div className="flex flex-col mt-[48px]">
-          <p className="flex items-center text-[18px] font-bold">
+          <p
+            className={
+              statusTextStyleByGameStart +
+              " flex items-center text-[18px] font-bold"
+            }
+          >
             <span className="text-[#919191] text-[16px]">토론 &nbsp;</span>
-            대기 중
+            {gameStart === 0 ? "대기 중" : "게임 중"}
           </p>
 
           <p className="flex items-center mt-[1.72%]">
@@ -80,7 +98,7 @@ function Room({
       <div className="flex justify-evenly w-full h-[26.75%] border-t border-[#777777] mt-auto">
         <button
           onClick={goGameRoombyTellerHandler}
-          disabled={debaterBtn || !isTeller}
+          disabled={debaterBtn || !isTeller || gameStart}
           className={
             tellerBtnStyle +
             " w-full rounded-bl-3xl p-[0.2vh] text-[18px] font-semibold"
@@ -90,8 +108,11 @@ function Room({
         </button>
         <button
           onClick={goGameRoombyListenerHandler}
-          disabled={panelBtn}
-          className="w-full rounded-br-3xl p-[0.2vh] text-[#EFFE37] text-[18px] font-semibold hover:bg-[#EFFE37] hover:text-[#1B1B1B]"
+          disabled={panelBtn || gameStart}
+          className={
+            jurorBtnStyleByGameStart +
+            " w-full rounded-br-3xl p-[0.2vh] text-[18px] font-semibold]"
+          }
         >
           배심원으로 참여
         </button>

@@ -43,7 +43,7 @@ import { ReactComponent as Sports } from "./sports.svg";
 import { ReactComponent as MainBlah } from "./blah.svg";
 import { ReactComponent as DebatoryLogo } from "./debatoryLogo.svg";
 import { ReactComponent as illust_login } from "./loginLogo.svg";
-import { ReactComponent as MainMidSection } from "./MainMidSection.svg";
+
 import { ReactComponent as kakaologin } from "./kakaologin.svg";
 import { ReactComponent as icon_debate_versus } from "./icon_debate_versus.svg";
 import { ReactComponent as logo_debatory_middle } from "./middle_signature h with tagline.svg";
@@ -63,6 +63,28 @@ import { ReactComponent as BackToTop } from "./BackToTop.svg";
 import { ReactComponent as SubHeaderGame } from "./SubHeaderGame.svg";
 import { ReactComponent as RoulettePin } from "./pin.svg";
 import { ReactComponent as IconOnly } from "./icononly.svg";
+
+// 홈 화면 미드 요소들
+import { ReactComponent as MainMidSection } from "./MainMidSection.svg";
+import { ReactComponent as MainMidSection2 } from "./MainMidSection2.svg";
+import { ReactComponent as MainMidSection3 } from "./MainMidSection3.svg";
+import { ReactComponent as MainMidArrow } from "./MainMidArrow.svg";
+import { ReactComponent as MainMidDoubleArrow } from "./MainMidDoubleArrow.svg";
+
+// 투표 결과 창
+import { ReactComponent as Win } from "./WIN.svg";
+import { ReactComponent as Lose } from "./LOSE.svg";
+import { ReactComponent as Fin } from "./FIN.svg";
+import { ReactComponent as Draw } from "./DRAW.svg";
+import { ReactComponent as WinIcon } from "./WinIcon.svg";
+import { ReactComponent as LoseIcon } from "./LoseIcon.svg";
+import { ReactComponent as DrawIcon } from "./DrawIcon.svg";
+
+// 게임 창
+import { ReactComponent as GameRoomTitleLogo } from "./Vector.svg";
+import { ReactComponent as UserIcon } from "./UserIcon.svg";
+import { ReactComponent as ArrowRight } from "./ArrowRight.svg";
+import { ReactComponent as ArrowRightDisabled } from "./ArrowRightDisabled.svg";
 
 export const icon = {
   Debate,
@@ -111,6 +133,10 @@ export const icon = {
   DebatoryLogo,
   illust_login,
   MainMidSection,
+  MainMidSection2,
+  MainMidSection3,
+  MainMidArrow,
+  MainMidDoubleArrow,
   kakaologin,
   icon_debate_versus,
   logo_debatory_middle,
@@ -130,6 +156,17 @@ export const icon = {
   SubHeaderGame,
   RoulettePin,
   IconOnly,
+  Win,
+  Lose,
+  Draw,
+  Fin,
+  WinIcon,
+  DrawIcon,
+  LoseIcon,
+  GameRoomTitleLogo,
+  UserIcon,
+  ArrowRight,
+  ArrowRightDisabled,
 };
 
 export default icon;

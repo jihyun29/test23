@@ -27,7 +27,6 @@ instance.interceptors.response.use(
     return response;
   },
   function (error) {
-    // 에러 발생 시 작업 내용
     return Promise.reject(error);
   }
 );
