@@ -85,8 +85,6 @@ function GameRoom() {
   // BackEnd에 카테고리별 주제 받아오는 Ref
   const titleList = useRef([]);
 
-  // 뒤로가기 막기 & 새로고침 시 게임진행 중이면 잘못된 접속으로 홈페이지로 이동
-  useNotGoBack(state);
   // ************************************************ 채팅 창 스크롤 최신 채팅으로 맞추기
   const chatContainerRef = useRef(null);
 
@@ -124,6 +122,9 @@ function GameRoom() {
   // [Start] 소켓 연결 : useSocket
   //서버와 연결된 소켓 캐싱
   const socket = useMemo(useSocket, []);
+
+  // 뒤로가기 막기 & 새로고침 시 게임진행 중이면 잘못된 접속으로 홈페이지로 이동
+  useNotGoBack(state, socket);
 
   /* 0. 소켓 연결 성공 시 : 방에 입장
   - 토론자일 시 : joinDebate 이벤트 밣생
