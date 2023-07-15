@@ -127,10 +127,9 @@ function RoomList() {
             </div>
             <div className="w-full overflow-x-auto overflow-y-hidden">
               <div className="flex gap-[1.04vw] w-fit h-[278px] mt-[3.34vh]">
-                <div className="w-[456px] h-full bg-[#2F3131] rounded-[24px]"></div>
-                <div className="w-[456px] h-full bg-[#2F3131] rounded-[24px]"></div>
-                <div className="w-[456px] h-full bg-[#2F3131] rounded-[24px]"></div>
-                <div className="w-[456px] h-full bg-[#2F3131] rounded-[24px]"></div>
+                <div className="w-[456px] h-full bg-[#2F3131] rounded-[24px] overflow-hidden">
+                  <icon.UpperNoRoom className="w-[456px] h-full" />
+                </div>
               </div>
             </div>
           </div>
@@ -143,18 +142,9 @@ function RoomList() {
               {roomList.length !== 0 ? (
                 showRoomListDevidedByNumber(roomList, offset, limit)
               ) : (
-                <>
-                  <div className="w-[30.3vw] h-full bg-[#2F3131] rounded-[24px]"></div>
-                  <div className="w-[30.3vw] h-full bg-[#2F3131] rounded-[24px]"></div>
-                  <div className="w-[30.3vw] h-full bg-[#2F3131] rounded-[24px]"></div>
-                  <div className="w-[30.3vw] h-full bg-[#2F3131] rounded-[24px]"></div>
-                  <div className="w-[30.3vw] h-full bg-[#2F3131] rounded-[24px]"></div>
-                  <div className="w-[30.3vw] h-full bg-[#2F3131] rounded-[24px]"></div>
-                  <div className="w-[30.3vw] h-full bg-[#2F3131] rounded-[24px]"></div>
-                  <div className="w-[30.3vw] h-full bg-[#2F3131] rounded-[24px]"></div>
-                  <div className="w-[30.3vw] h-full bg-[#2F3131] rounded-[24px]"></div>
-                  <div className="w-[30.3vw] h-full bg-[#2F3131] rounded-[24px]"></div>
-                </>
+                <div className="w-[30.3vw] h-full bg-[#2F3131] rounded-[24px] overflow-hidden">
+                  <icon.LowerNoRoom className="w-[30.3vw] h-full" />
+                </div>
               )}
             </div>
             {/* 빙 리스트 본문 */}
@@ -171,6 +161,7 @@ function RoomList() {
               )}
             </div>
             {/* 페이지네이션 부분 */}
+
             <div className="flex justify-center mb-[7.02vh]">
               <icon.BackToTop
                 onClick={goBackBtnClickHandler}

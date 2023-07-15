@@ -38,15 +38,15 @@ function Category() {
   ];
 
   const originStyleList = [
-    "flex-col row-start-1 row-end-3 bg-[#B484F1] rounded-2xl",
-    "flex-col bg-[#464747] rounded-2xl",
-    "flex-col bg-[#F7FF7D] rounded-2xl",
-    "flex-col bg-[#F7FF7D] rounded-2xl",
-    "flex-col bg-[#464747] rounded-2xl",
-    "flex-col bg-[#F7FF7D] rounded-2xl",
-    "col-start-2 col-end-4 bg-[#B484F1] rounded-2xl",
-    "col-start-1 col-end-3 bg-[#464747] rounded-2xl",
-    "flex-col bg-[#F7FF7D] rounded-2xl",
+    "flex-col row-start-1 row-end-3 bg-[#B484F1] rounded-[24px]",
+    "flex-col bg-[#464747] rounded-[24px]",
+    "flex-col bg-[#F7FF7D] rounded-[24px]",
+    "flex-col bg-[#F7FF7D] rounded-[24px]",
+    "flex-col bg-[#464747] rounded-[24px]",
+    "flex-col bg-[#F7FF7D] rounded-[24px]",
+    "col-start-2 col-end-4 bg-[#B484F1] rounded-[24px]",
+    "col-start-1 col-end-3 bg-[#464747] rounded-[24px]",
+    "flex-col bg-[#F7FF7D] rounded-[24px]",
   ];
 
   // 가장 많이 선택된 카테고리
@@ -71,58 +71,85 @@ function Category() {
   // 2. 카테고리 선택 안될 시 알람 발생
   // 3. 랜덤 선택 시 임의의 주제 넘겨줌
   const enterRoomList = async () => {
+    // 키테고리 선택 안할 시 알람 띄우고 진행 불가
     if (selectedCategory === null) {
       return alert("카테고리를 선택해주세요.");
+
+      // 카테고리 값이 랜덤일 경우
     } else if (selectedCategory === "랜덤") {
       // 선택된 카데고리가 랜덤일 경우 랜덤을 제외한 8개 중 무작위로 선택
       const randomNumber = Math.round(Math.random() * 7);
       console.log("랜덤넘버", randomNumber);
+
+      // 카테고리 리스트 중 랜덤만 삭제 후 7개 중 임의의 값 가져옴
       const randomCategoryName = categoryList.filter(
         (item) => item.name !== "랜덤"
       )[randomNumber].name;
       console.log("랜덤카테고리", randomCategoryName);
+
+      // 카테고리 코드(카테고리 Id)도 가져옴
       const randomCategoryCode = categoryList.filter(
         (item) => item.name !== "랜덤"
       )[randomNumber].code;
       console.log("랜덤카테고리코드", randomCategoryCode);
-      /* api로 서버에 토큰 요청 보내기
-      1. LocalStorage에 토큰 존재할 경우 : 받아오는 토큰 없음
-      2. LocalStorage에 토큰 존재 안할 경우 : 새로운 토큰 받음 
-      */
-      const data = game.selectCategory();
+
+      //* ----------------   중 복 코 드 ------------------*/
+      // 룸리스트 페이지로 전달할 값 인코딩 및 세션스토리지 저장
       const selectedCategoryInfoByRandom = encrypt({
         categoryName: randomCategoryName,
         categoryCode: randomCategoryCode,
       });
       sessionStorage.setItem("selectedCategory", selectedCategoryInfoByRandom);
+
+      // api로 token 받아오기 ( kakao로그인 윺저 : 기존 토큰 사용, 비로그인 유저 : 임시 토큰 할당 )
+      const data = game.selectCategory();
+
+      // token 값만 가져오기 위해 data parsing
       const res = (await data).data.data[0];
+
       // api요청으로 토큰이 존재할 경우만 localStorage에 저장
       if (res) {
         localStorage.setItem("Authorization", res.Authorization);
         localStorage.setItem("kakaoId", res.kakaoId);
       }
+
+      // 룸리스트 페이지로 이동
       return navigate("/roomlist");
+
+      // 그냥 카테고리 중 아무거나 선택 시 진행되는 로직
     } else {
+      // 선택된 카테고리 코드 가져옴
       const selectedCategoryCode = categoryList.filter(
         (category) => category.name === selectedCategory
       )[0].code;
+
+      //* ----------------   중 복 코 드 ------------------*/
+      // 룸리스트 페이지로 전달할 값 인코딩 및 세션스토리지 저장
       const selectedCategoryInfo = encrypt({
         categoryName: selectedCategory,
         categoryCode: selectedCategoryCode,
       });
       sessionStorage.setItem("selectedCategory", selectedCategoryInfo);
+
+      // api로 token 받아오기 ( kakao로그인 윺저 : 기존 토큰 사용, 비로그인 유저 : 임시 토큰 할당 )
       const data = game.selectCategory();
+
+      // token 값만 가져오기 위해 data parsing
       const res = (await data).data.data[0];
+
+      // api요청으로 토큰이 존재할 경우만 localStorage에 저장
       if (res) {
         localStorage.setItem("Authorization", res.Authorization);
         localStorage.setItem("kakaoId", res.kakaoId);
       }
+
+      // 룸리스트 페이지로 이동
       navigate("/roomlist");
     }
   };
 
-  // 카테고리 클릭 시 실행되는 함수
-  // 선택된 카테고리 state에 저장
+  // 카테고리 클릭
+  // 하위 컴포넌트에서 선택된 카테고리를 state에 저장
   const categoryBtnClickHandler = (categoryName) => {
     console.log(categoryName);
     setSelectedCategory(categoryName);

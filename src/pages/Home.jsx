@@ -1,17 +1,20 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Lottie from "lottie-react";
 import { useNavigate } from "react-router-dom";
+
 import Footer from "../components/Footer";
 import Header from "../components/Header";
+
 import icon from "../icons";
 import lottie from "../lottie";
 
 function Home() {
   const navigate = useNavigate();
+
+  // Let's Go!
   const moveToCategoryPage = () => {
     navigate("/category");
   };
-
   return (
     <>
       <Header />

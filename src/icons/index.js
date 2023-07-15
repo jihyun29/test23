@@ -86,6 +86,10 @@ import { ReactComponent as UserIcon } from "./UserIcon.svg";
 import { ReactComponent as ArrowRight } from "./ArrowRight.svg";
 import { ReactComponent as ArrowRightDisabled } from "./ArrowRightDisabled.svg";
 
+// 룸리스트 빈 화면 요소
+import { ReactComponent as UpperNoRoom } from "./UpperNoRoom.svg";
+import { ReactComponent as LowerNoRoom } from "./LowerNoRoom.svg";
+
 export const icon = {
   Debate,
   Profile,
@@ -167,6 +171,8 @@ export const icon = {
   UserIcon,
   ArrowRight,
   ArrowRightDisabled,
+  UpperNoRoom,
+  LowerNoRoom,
 };
 
 export default icon;

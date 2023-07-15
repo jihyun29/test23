@@ -26,6 +26,7 @@ export function useNotGoBack(state) {
     return async () => {
       window.removeEventListener("popstate", handlePopstate);
       // window.removeEventListener("beforeunload", handleBeforeUnload);
+      console.log("나가졌습니다.");
     };
   }, []);
 }

@@ -8,13 +8,14 @@ import jwt_decode from "jwt-decode";
 
 import { useRoulette } from "../util/useRoulette";
 import { useNotGoBack } from "../util/useNotGoBack";
+import { useSocket } from "../util/useSocket";
+import { decrypt } from "../util/cryptoJs";
+
+import Prompt from "../components/feature/Prompt";
+import Progressbar from "../components/feature/Progressbar";
 
 import lottie from "../lottie";
 import icon from "../icons";
-import { useSocket } from "../util/useSocket";
-import Prompt from "../components/feature/Prompt";
-import Progressbar from "../components/feature/Progressbar";
-import { decrypt } from "../util/cryptoJs";
 
 function GameRoom() {
   const navigate = useNavigate();
@@ -42,20 +43,26 @@ function GameRoom() {
   const [isVideoOff, setIsVideoOff] = useState(true);
 
   // 유저 닉네임 보여주는 상태
+  // 1. 방장 정보
   const [hostInfo, setHostInfo] = useState({});
+  // 2. 토론자 정보
   const [debaterInfo, setDebaterInfo] = useState({});
+  // 3. 배심원들 정보
   const [jurorInfo, setJurorInfo] = useState([]);
 
   // 게임 결과 보여주는 상태
   const [isVoteEnd, setIsVoteEnd] = useState(false);
+  const [winnerNick, setWinnerNick] = useState("");
   const [isWinner, setIsWinner] = useState(false);
   const [isLoser, setIsLoser] = useState(false);
   const [isDraw, setIsDraw] = useState(false);
-  const [winnerNick, setWinnerNick] = useState("");
 
   // 찬성, 반대에 따라 유저 div 색상 지정
   const [hostDivDesign, setHostDivDesign] = useState("bg-black");
   const [debaterDivDesign, setDebaterDivDesign] = useState("bg-black");
+
+  // 투표 시 남은 시간 설정
+  const [remainTime, setRemainTime] = useState("30");
 
   /*   // 유저 로딩 창 만들기
   const countReadyBox = () => {
@@ -78,6 +85,8 @@ function GameRoom() {
   // BackEnd에 카테고리별 주제 받아오는 Ref
   const titleList = useRef([]);
 
+  // 뒤로가기 막기 & 새로고침 시 게임진행 중이면 잘못된 접속으로 홈페이지로 이동
+  useNotGoBack(state);
   // ************************************************ 채팅 창 스크롤 최신 채팅으로 맞추기
   const chatContainerRef = useRef(null);
 
@@ -91,17 +100,23 @@ function GameRoom() {
   // ***************************************************************************
 
   // ************************************************* 진행상황 바 표시 및 프롬프트 관련
+  // 프로그레스 바 진행 관련 상태
   const [isStartGame, setIsStartGame] = useState(false);
+  // 투표 창 보여주는 상태
   const [isGameEnd, setIsGameEnd] = useState(false);
 
+  // 게임 시작
   const startGameSignalHandler = () => {
     setIsStartGame(true);
   };
 
+  // 게임 종료
   const endGameSignalHandler = () => {
     setIsStartGame(false);
     setIsGameEnd(true);
-    socket.emit("voteStart", roomNumber, categoryCode);
+    socket.emit("voteStart", roomNumber, categoryCode, () => {
+      setIsGameEnd(false);
+    });
   };
   // **************************************************************************
 
@@ -154,24 +169,18 @@ function GameRoom() {
   // 룰렛 그려주는 함수 - useEffect()
   useRoulette({ isRoulette, titleList, roulette, title });
 
-  // 3 - 1 - 1. 게임 시작 버튼 클릭 시 룰렛 보여주는 이벤트 전송
+  // 3 - 1 - 1. 게임 시작 버튼 클릭 시 룰렛 보여줌
   const gameStartBtnClickHandler = () => {
     console.log("버튼이 클릭되었습니다.");
-    socket.emit("show_roulette", true, categoryCode, (msg) => {
-      if (msg) {
-        alert(`${msg}`);
-        return;
-      }
-      console.log("룰렛이 생성되었습니다.");
-    });
+    socket.emit("show_roulette", true, categoryCode);
   };
 
-  // 3 - 2 - 1.룰렛 애니메이션 시작 이벤트 전송
+  // 3 - 2 - 1.룰렛 애니메이션 시작 - 룰렛의 Start 버튼
   const setTitleBtnClickHandler = () => {
     socket.emit("start_roulette", roomNumber, categoryCode);
   };
 
-  /* 룰렛 애니메이션 작동하는 함수 
+  /* 룰렛 애니메이션 작동
   - 시작점 : start_roulette 이벤트 수신 시
   */
   let currentTitle;
@@ -200,19 +209,15 @@ function GameRoom() {
     }, 1);
   };
 
-  // 3 - 3 - 1. 결과창 닫기 이벤트 시작 - Retry Button
+  // 3 - 3 - 1. 결과창 닫기  - 다시돌리기 Button
   const closeResultModal = () => {
-    socket.emit("close_result", false, roomNumber);
-    socket.emit("close_roulette", false, roomNumber, () => {
-      console.log("주제가 확정되었습니다. 게임이 시작됩니다!");
-    });
+    socket.emit("close_result", false, roomNumber, categoryCode);
+    socket.emit("close_roulette", false, roomNumber, categoryCode);
   };
 
-  // 3 - 4 - 1. 룰렛 닫기 이벤트 시작 - Start Button
+  // 3 - 4 - 1. 룰렛 닫기  - 토론 시작하기 Button
   const closeRouletteModal = () => {
-    socket.emit("close_result", false, roomNumber, categoryCode, () => {
-      console.log("주제가 확정되었습니다. 게임이 시작됩니다!");
-    });
+    socket.emit("close_result", false, roomNumber, categoryCode);
   };
 
   // 4. 유저 나갔을 시 발생하는 알람
@@ -220,19 +225,19 @@ function GameRoom() {
     setTotalChat([...totalChat, `Alarm : ${nickname}님이 나가셨습니다.`]);
   });
 
-  // 5 - 1. Debator 1 투표 시
+  // 5 - 1. Host 투표
   const voteFirstPersonHandler = () => {
     socket.emit("vote", roomNumber, 1, categoryCode);
     setIsGameEnd(false);
   };
 
-  // 5 - 2. Debator 2 투표 시
+  // 5 - 2. Debator 투표
   const voteSecondPersonHandler = () => {
     socket.emit("vote", roomNumber, 0, categoryCode);
     setIsGameEnd(false);
   };
 
-  // 나가기 버튼 클릭 시 실행되는 함수
+  // 페이지 나가기 버튼 클릭 함수
   const gameOutBtnClick = async () => {
     if (window.confirm("이 게임방에서 나가실건가요?") === true) {
       socket.emit("leave_room", () => {
@@ -244,9 +249,9 @@ function GameRoom() {
     }
   };
 
-  // 단밣성 이벤트
+  // 백 웹 소켓 서버에서 이벤트 받는 함수 (매번 생성할 필요 없이 페이지 마운트 시 한 번만 생성할 함수)
   useEffect(() => {
-    // 1. 방에 입장한 유저 닉네임 리스트 받아오기
+    // 1. 방에 입장한 유저 닉네임 리스트 받아오기 [ 전체 수신 ]
     socket.on("roomJoined", (data) => {
       const jurorList = [];
       let debaterList = {};
@@ -276,25 +281,25 @@ function GameRoom() {
       setDebaterInfo(debaterList);
     });
 
-    // 3 - 1 - 1. 룰렛 보여주는 이벤트 수신 후 룰렛 보여줌
+    // 3 - 1 - 1. 룰렛 보여줌 [ 전체 수신 ]
     socket.on("show_roulette", (titleListFromBack, result) => {
       titleList.current = [...titleListFromBack];
       setIsRoulette(result);
     });
 
-    //currentTitle, titleList, roulette, ran, setTitle, setIsRouletteResult
-    // 3 - 2 - 2. 룰렛 애니메이션 시작 이벤트 수신 후 룰렛 애니메이션 시작
+    // 3 - 2 - 2. 룰렛 애니메이션 시작 [ 전체 수신 ]
     socket.on("start_roulette", (randomSubjectIndex) => {
       console.log(roulette.current);
       // 룰렛 애니메이션 함수
       setTitleFunc(randomSubjectIndex);
     });
 
-    // 3 - 3 - 2. 이벤트 수신 후 결과 창 닫기
+    // 3 - 3 - 2. 결과 창 닫기 [ 전체 수신 ]
     socket.on("close_result", (result) => {
       setIsRouletteResult(result);
     });
 
+    // 찬성 반대에 따른 색상 지정 함수 ( 찬성 : 파란색, 반대 : 빨간색 )
     const setDebaterPosition = (debatersInfo) => {
       if (!debatersInfo) {
         console.log("찬성/반대에 대한 정보가 전달되지 않았습니다.");
@@ -310,7 +315,8 @@ function GameRoom() {
         console.log("호스트 반대");
       }
     };
-    // 3 - 4 - 2. 이벤트 수신 후 룰렛 닫기
+
+    // 3 - 4 - 2. 이벤트 수신 후 룰렛 닫기 [ 전체 수신 ]
     socket.on("close_roulette", (result, debatersInfo) => {
       console.log(debatersInfo);
       setIsRoulette(result);
@@ -318,7 +324,7 @@ function GameRoom() {
       setTimeout(startGameSignalHandler, 1000);
     });
 
-    // 5. 호스트 변경 발생
+    // 5. 호스트 변경 발생 [ 전체 수신 ]
     socket.on("changeHost", (id) => {
       const { userId } = jwt_decode(localStorage.getItem("Authorization"));
       if (userId === id) {
@@ -326,8 +332,9 @@ function GameRoom() {
       }
     });
 
-    // 6. 투표 결과 받기
+    // 6. 투표 결과 받기 [ 전체 수신 ]
     socket.on("voteResult", (result, done) => {
+      setRemainTime("30");
       setIsVoteEnd(true);
       setWinnerNick(result.winnerNickName);
       /*
@@ -352,6 +359,7 @@ function GameRoom() {
         loserCount: loserCount,
       }
       */
+        // 승자 있을 경우 jwt에서 userId가져와서 어느 유저가 승리자인지 확인
         const { userId: myUserId } = jwt_decode(
           localStorage.getItem("Authorization")
         );
@@ -360,11 +368,12 @@ function GameRoom() {
           setIsWinner(true);
         }
       }
+      // 게임이 끝났음으로 호스트 및 토론자 div 색상 기본 값으로 재설정
       setDebaterDivDesign("bg-black");
       setHostDivDesign("bg-black");
     });
 
-    // 7. 토론에서 진 유저 추방하기
+    // 7. 토론에서 진 유저 추방하기 [ 전체 수신 ]
     socket.on("loserExit", (exitUserId) => {
       const { userId } = jwt_decode(localStorage.getItem("Authorization"));
       if (userId === exitUserId) {
@@ -372,10 +381,11 @@ function GameRoom() {
         setIsLoser(true);
       }
     });
-  }, []);
 
-  // 뒤로가기 막기
-  useNotGoBack(state);
+    socket.on("sendRemainTime", (remainTime) => {
+      setRemainTime(remainTime);
+    });
+  }, []);
   // ******************************************************************************
 
   // ********************************************************************** Web RTC
@@ -548,51 +558,78 @@ function GameRoom() {
               {title}
             </p>
             <p className="text-[1.76vh] text-[#C6C6C6] mt-[3.43vh]">
-              투표가 30초 남았습니다.
+              투표가 {remainTime}초 남았습니다.
             </p>
 
-            <div className="flex w-full h-[10%] justify-between mt-[2.01vh]">
+            <div className="flex w-full h-[10%] justify-between gap-[1vh] mt-[2.01vh]">
               <div
                 onClick={voteFirstPersonHandler}
                 className={
                   hostDivDesign +
-                  " flex flex-col justify-between items-center w-[45%] h-[7.02vh] px-[1.77vw] py-[0.67vh] text-white font-bold rounded-[16px] cursor-pointer"
+                  " flex justify-between items-center gap-[0.67vh] w-[50%] h-[4.68vh] px-[1.77vw] py-[0.67vh] text-white font-bold rounded-[16px] cursor-pointer"
                 }
               >
-                <div className="flex w-full">
-                  <Avatar size="2.68vh" />
-                  <div className="flex flex-col justify-center ">
-                    <div className="w-full text-[1.34vh] whitespace-nowrap overflow-hidden overflow-ellipsis">
-                      {hostInfo.nickName}
-                    </div>
+                <Avatar
+                  name={hostInfo.avatar?.name}
+                  variant="beam"
+                  color={hostInfo.avatar?.color[0].split(",")}
+                  className="h-[2.68vh]"
+                />
+                <div className="w-[70%] flex flex-col justify-center">
+                  {hostDivDesign === "bg-[#14B5FF]" ? (
+                    <p>찬성 발언자</p>
+                  ) : hostDivDesign === "bg-[#FA3C3C]" ? (
+                    <p>반대 발언자</p>
+                  ) : null}
+                  <div className="w-full text-[1.34vh] whitespace-nowrap overflow-hidden overflow-ellipsis">
+                    {hostInfo.nickName}
                   </div>
                 </div>
-                <p>에게 투표</p>
               </div>
               <div
                 onClick={voteSecondPersonHandler}
                 className={
                   debaterDivDesign +
-                  " flex flex-col justify-between items-center w-[45%]  h-[7.02vh] px-[1.77vw] py-[0.67vh] text-white font-bold rounded-[16px] cursor-pointer"
+                  " flex justify-between items-center gap-[0.67vh] w-[50%] h-[4.68vh] px-[1.77vw] py-[0.67vh] text-white font-bold rounded-[16px] cursor-pointer"
                 }
               >
-                <div className="flex w-full">
-                  <Avatar size="2.68vh" />
-                  <div className="w-full border flex flex-col justify-center whitespace-nowrap overflow-hidden overflow-ellipsis">
-                    <div className="text-[1.34vh] whitespace-nowrap overflow-hidden overflow-ellipsis">
-                      {debaterInfo.nickName}
-                    </div>
+                <Avatar
+                  name={debaterInfo.avatar?.name}
+                  variant="beam"
+                  color={debaterInfo.avatar?.color[0].split(",")}
+                  className="h-[2.68vh]"
+                />
+                <div className="w-[70%] flex flex-col justify-center">
+                  {debaterDivDesign === "bg-[#14B5FF]" ? (
+                    <p>찬성 발언자</p>
+                  ) : debaterDivDesign === "bg-[#FA3C3C]" ? (
+                    <p>반대 발언자</p>
+                  ) : null}
+                  <div className="text-[1.34vh] whitespace-nowrap overflow-hidden overflow-ellipsis">
+                    {debaterInfo.nickName}
                   </div>
                 </div>
-                <p>에게 투표</p>
               </div>
             </div>
           </div>
         </div>
       )}
+      {isGameEnd && isTeller && (
+        <div className="absolute flex justify-center items-center w-[100vw] h-[100vh] top-0 left-0 bg-slate-200/40 z-[3]">
+          <div className="absolute top-[50%] left-[50%] flex flex-col justify-evenly items-center w-fit h-[33.33%] p-[4.01vh] bg-[#2F3131] rounded-[16px] z-[4] translate-y-[-50%] translate-x-[-50%]">
+            <p className="text-[2.26vh] text-white font-bold">
+              투표가 진행중입니다.
+            </p>
+            <p className="text-[2.01vh] text-[#EFFE37] font-bold">{title}</p>
+            <p className="text-[1.76vh] text-[#C6C6C6]">
+              투표가 {remainTime}초 남았습니다.
+            </p>
+          </div>
+        </div>
+      )}
       {/* ================================================================================================ */}
 
-      {/* ========================================== 게임 결과 모달 창 ================================================ */}
+      {/* ========================================== 투표 결과 모달 창 ================================================ */}
       {isVoteEnd && (
         <div className="absolute flex justify-center items-center w-[100vw] h-[100vh] top-0 left-0 bg-slate-200/40 z-[3]">
           <div className="absolute flex flex-col items-center justify-evenly w-[25.83%] h-[53.43%] p-[4.01vh] bg-[#2F3131]">
@@ -837,6 +874,7 @@ function GameRoom() {
             <button
               className="text-white my-2 ml-auto"
               onClick={gameOutBtnClick}
+              disabled={isStartGame}
             >
               <icon.Exit width="8vh" height="100%" />
             </button>
