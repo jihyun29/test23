@@ -1,21 +1,21 @@
 import game from "./game.jpg";
-import celebrity from "./celebrity.jpg";
-import sports from "./sports.jpg";
+import entertainment from "./entertainment.jpg";
+import sport from "./sport.jpg";
 import love from "./love.jpg";
 import marriage from "./marriage.jpg";
-import work from "./work.jpg";
+import company from "./company.jpg";
 import school from "./school.jpg";
-import balance from "./balance.png";
+import balancegame from "./balancegame.jpg";
 
 const image = {
   game,
-  celebrity,
-  sports,
+  entertainment,
+  sport,
   love,
   marriage,
-  work,
+  company,
   school,
-  balance,
+  balancegame,
 };
 
 export default image;

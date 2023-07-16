@@ -1,7 +1,6 @@
 import React from "react";
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { socket } from "../socket";
+import { encrypt } from "../util/cryptoJs";
 
 // 방 리스트 1개 컴포넌트
 function Room({
@@ -12,95 +11,112 @@ function Room({
   roomId,
   categoryName,
   categoryCode,
+  // 게임시작시 : 1(true)
+  gameStart,
 }) {
   const navigate = useNavigate();
 
-  const [isClick, setIsClick] = useState(false);
-  // 방 입장 시 방 넘버 넘겨줌
-  const goGameRoomHandler = () => {
-    setIsClick(true);
-  };
-
   const goGameRoombyTellerHandler = () => {
-    navigate(`/room/${roomId}`, {
-      state: [roomId, roomName, categoryName, categoryCode],
+    const userData = encrypt({
+      roomNumber: roomId,
+      defaultTitle: roomName,
+      categoryName,
+      categoryCode,
+      isTeller: true,
     });
+    console.log(userData);
+    sessionStorage.setItem("userData", userData);
+    navigate(`/room/${roomId}`);
   };
 
   const goGameRoombyListenerHandler = () => {
-    navigate(`/room/${roomId}`, {
-      state: [roomId, roomName, categoryName, categoryCode],
+    const userData = encrypt({
+      roomNumber: roomId,
+      defaultTitle: roomName,
+      categoryName,
+      categoryCode,
+      isTeller: false,
     });
-  };
-
-  const closeBtnClick = () => {
-    setIsClick(false);
+    console.log(userData);
+    sessionStorage.setItem("userData", userData);
+    navigate(`/room/${roomId}`);
   };
 
   // 방이 꽉 찰 경우 접속 불가하도록 설정
-  const debaterStyle = debater === 2 ? "text-red-600" : null;
-  const panelStyle = panel === 8 ? "text-red-600" : null;
-  const [style, disabled] =
-    debater + panel === 10
-      ? ["font-semibold text-[#C6C6C6] text-[1.5vh]", true]
-      : ["font-semibold text-[#35C585] text-[1.5vh]", false];
+  const [debaterStyle, debaterBtn] =
+    debater === 2 ? ["text-[#505050]", true] : [null, false];
+  const [panelStyle, panelBtn] =
+    panel === 5 ? ["text-[#505050]", true] : [null, false];
 
+  const [tellerBtnStyle, isTeller] =
+    /* 카카오 로그인 여부 & 게임시작 여부 확인
+    1. 카카오 로그인 시에는 노란색
+    2. 게임시작 시 안할 시에는 노란색
+    둘 다 만족해야 노란색 아니면 회색
+  */
+    localStorage.getItem("kakaoId") === "1" && !gameStart
+      ? ["text-[#EFFE37] hover:hover:bg-[#EFFE37] hover:text-[#1B1B1B]", true]
+      : ["text-[#505050]", false];
+  const [jurorBtnStyleByGameStart, statusTextStyleByGameStart] =
+    gameStart === 1
+      ? ["text-[#505050]", "text-[#505050]"]
+      : [
+          "text-[#EFFE37] hover:hover:bg-[#EFFE37] hover:text-[#1B1B1B]",
+          "text-[#919191]",
+        ];
   return (
-    <div className="flex items-center w-full h-[10%] border-b">
-      {/* 방 넘버 */}
-      <div className="flex justify-center itmes-center w-[51px] ml-[3vw] text-[1.5vh]">
-        {number + 1}
-      </div>
-      {/* 방 넘버 */}
-
-      {/* 방제목 */}
-      <div className="ml-[7.5vw] w-[45vw] text-[1.5vh]">
-        <p onClick={goGameRoomHandler} className="w-fit hover:cursor-pointer">
+    <div className="flex flex-col w-[30.3vw] h-full rounded-3xl bg-[#2F3131] text-white">
+      <div className="flex flex-col w-full h-[73.25%] px-[6.87%] pt-[6.87%] pb-[6.01%]">
+        <div className="w-full h-[53px] text-[21px] font-medium">
           {roomName}
-        </p>
-      </div>
-      {/* 방제목 */}
+        </div>
+        <div className="flex flex-col mt-[48px]">
+          <p
+            className={
+              statusTextStyleByGameStart +
+              " flex items-center text-[18px] font-bold"
+            }
+          >
+            <span className="text-[#919191] text-[16px]">토론 &nbsp;</span>
+            {gameStart === 0 ? "대기 중" : "게임 중"}
+          </p>
 
-      {/* 인원 */}
-      <div className="flex justify-between gap-4 text-[1.5vh]">
-        <p className={debaterStyle}>발표자 : {debater}/2</p>
-        <p className={panelStyle}>참여자 : {panel}/8</p>
+          <p className="flex items-center mt-[1.72%]">
+            <span className="text-[#919191] text-[16px]">인원 &nbsp;</span>
+            <span className={debaterStyle + " text-[18px] font-bold"}>
+              발표자 ({debater}/2)
+            </span>
+            &nbsp; &nbsp;{" "}
+            <span className={panelStyle + " text-[18px] font-bold"}>
+              참가자 ({panel}/5)
+            </span>
+          </p>
+        </div>
       </div>
-      {/* 인원 */}
 
       {/* 입장하기 버튼 */}
-      {isClick ? (
-        <div className="flex ml-[2vw] gap-[1vw] text-[1.1vh]">
-          <button
-            onClick={goGameRoombyTellerHandler}
-            className=" rounded-[0.5vh] bg-[#DEE5ED] p-[0.2vh]"
-          >
-            발언자
-          </button>
-          <button
-            onClick={goGameRoombyListenerHandler}
-            className="rounded-[0.5vh] bg-[#DEE5ED] p-[0.2vh]"
-          >
-            배심원
-          </button>
-          <button
-            onClick={closeBtnClick}
-            className="rounded-[0.5vh] bg-red-100 p-[0.2vh]"
-          >
-            닫기
-          </button>
-        </div>
-      ) : (
-        <div className="ml-[4vw]">
-          <button
-            disabled={disabled}
-            onClick={goGameRoomHandler}
-            className={style}
-          >
-            입장하기
-          </button>
-        </div>
-      )}
+      <div className="flex justify-evenly w-full h-[26.75%] border-t border-[#777777] mt-auto">
+        <button
+          onClick={goGameRoombyTellerHandler}
+          disabled={debaterBtn || !isTeller || gameStart}
+          className={
+            tellerBtnStyle +
+            " w-full rounded-bl-3xl p-[0.2vh] text-[18px] font-semibold"
+          }
+        >
+          발언자로 참여
+        </button>
+        <button
+          onClick={goGameRoombyListenerHandler}
+          disabled={panelBtn || gameStart}
+          className={
+            jurorBtnStyleByGameStart +
+            " w-full rounded-br-3xl p-[0.2vh] text-[18px] font-semibold]"
+          }
+        >
+          배심원으로 참여
+        </button>
+      </div>
       {/* 입장하기 버튼 */}
     </div>
   );

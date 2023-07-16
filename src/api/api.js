@@ -27,7 +27,6 @@ instance.interceptors.response.use(
     return response;
   },
   function (error) {
-    // 에러 발생 시 작업 내용
     return Promise.reject(error);
   }
 );
@@ -44,10 +43,14 @@ export const chatgpt = {
 };
 
 export const game = {
-  getRoomList: async (category) =>
-    await instance.get(`/api/roomlist/${category}`),
   createRoom: async (category) =>
-    await instance.post(`/api/roomlist/${category}`),
+    await instance.post(`/api/roomlist/${category}`, null, {
+      headers: { Authorization: localStorage.getItem("Authorization") },
+    }),
+  selectCategory: async () =>
+    await instance.put("api/user", null, {
+      headers: { Authorization: localStorage.getItem("Authorization") },
+    }),
 };
 
 export default instance;

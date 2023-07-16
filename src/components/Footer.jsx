@@ -1,23 +1,35 @@
 import React from "react";
+import icon from "../icons";
+import { Link } from "react-router-dom";
 
 function Footer() {
   return (
-    <div className="w-full h-[12vh] mx-auto bg-[#464747]">
-      <div className="w-[30vw] h-[8vh] ml-[9vw] mt-[2vh]">
-        <div className="flex items-center">
-          <div className="w-[2vh] h-[2vh] bg-[#D9D9D9]"></div>
-          <p className="ml-[2rem] text-white text-[2vh] font-bold">
-            팀 SIMSIMHAE
-          </p>
+    <div className="w-full h-[18.2vh] bg-[#2F3131] px-[18.7vw]">
+      <div className="w-full h-full flex flex-col justify-center">
+        <div className="w-[10.37vh] h-[2.17vh]">
+          <icon.teamlogo className="w-[100%] h-[100%]" />
         </div>
-        <p className="text-[#F2F2F2] font-light text-[1.4vh]">
-          팀 심심해는 사람들에게 재미를 전하는 것들을 만듭니다.
+        <p className="flex w-full h-[1.84vh] items-center text-[#C6C6C6] font-regular whitespace-nowrap text-[1.5vh] mt-[1.33vh]">
+          심심함, 그 속에서 가치있는 원석을 찾아내 사람들의 공감을 얻을 수 있게
+          다듬고 빛냅니다.
         </p>
-        <div className="w-full flex justify-between text-[#919191] text-[1.5vh]">
-          <p>이용약관</p>
-          <p>운영정책</p>
-          <p>개인정보처리방침</p>
+        <div className="flex h-[2.67vh] gap-[2.5vw] items-center text-[#C6C6C6] text-[1.25vh] font-bold mt-[1.17vh]">
+          <a
+            href="https://github.com/4simsimhae"
+            target="_blank"
+            rel="noreferrer"
+          >
+            <icon.githublogo className="w-[2.67vh] h-[2.67vh]" />
+          </a>
+          <Link to="/tos">
+            <p>이용약관</p>
+          </Link>
           <p>Contact Us</p>
+        </div>
+        <div>
+          <p className="flex items-center text-[#777777] h-[1.42vh] text-[1.17vh] font-light mt-[1.17vh]">
+            ©2023. TEAM SIMSIMHAE. All Rights reserved,
+          </p>
         </div>
       </div>
     </div>

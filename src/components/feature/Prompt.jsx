@@ -1,39 +1,39 @@
-import React from "react";
-import { useState } from "react";
-import { useEffect } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 
-function Prompt() {
-  const promptTextList = [
-    "토론을 시작하겟습니다",
-    "찬성 발언해주세요",
-    "반대 발언해주세요",
-    "토론이 종료되었습니다",
-  ];
+const Prompt = ({ title }) => {
+  const [currentIndex, setCurrentIndex] = useState(0);
 
-  const durations = [5000, 10000, 10000, 3000];
+  const Ment = useMemo(
+    () => [
+      {
+        timer: 1,
+        message: ` ${title}에 대해 토론을 진행하도록 하겠습니다.`,
+      },
+      { timer: 1, message: "먼저, 찬성 측 첫번째 발언해주시겠습니까?" },
+      { timer: 1, message: "반대 측 반론 있으시면 발언해주세요" },
+      { timer: 1, message: "네, 이번에는 반대 측 의견을 말씀해 주세요" },
+      { timer: 1, message: "찬성 측 반론 있으시면 발언해주세요" },
+      { timer: 1, message: "추가로 의견을 제시하실 분은 말씀해주세요" },
+      {
+        timer: 1,
 
-  const [index, setIndex] = useState(0);
-  let remainTime = durations[index];
+        message: "시간이 얼마 남지 않았습니다. 마지막 결론 말씀해주세요",
+      },
+    ],
+    [title]
+  );
 
-  const time = () => {
-    if (remainTime === 0) {
-      setIndex(index + 1);
-      remainTime = durations[index];
-    }
-    remainTime -= 1000;
-    console.log(index);
-    console.log(remainTime);
-  };
-
-  if (index > 3) {
-    clearInterval(time);
-  }
   useEffect(() => {
-    setInterval(time, 1000);
-    return clearInterval(time);
-  }, []);
+    if (currentIndex < Ment.length - 1) {
+      const timerId = setTimeout(() => {
+        setCurrentIndex((prevIndex) => prevIndex + 1);
+      }, Ment[currentIndex].timer * 1000);
 
-  return <div>{promptTextList[index]}</div>;
-}
+      return () => clearTimeout(timerId);
+    }
+  }, [currentIndex, Ment]);
+
+  return <p>{Ment[currentIndex].message}</p>;
+};
 
 export default Prompt;

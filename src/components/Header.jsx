@@ -1,9 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Profile } from "../icons";
-import lottie from "../lottie";
-import Lottie from "lottie-react";
+import icon from "../icons";
 
 function Header() {
   const [isClick, setIsClick] = useState(false);
@@ -13,41 +11,40 @@ function Header() {
     console.log(isClick);
   };
   const logoutClickHandler = () => {
-    localStorage.removeItem("authorization");
+    localStorage.removeItem("Authorization");
+    localStorage.removeItem("kakaoId");
     navigate("/");
   };
-  const userIcon = localStorage.getItem("authorization") ? (
-    <div
-      onClick={userIconClickHandler}
-      className="w-[5vh] h-[5vh] mr-[9vw] border rounded-full active:border-[3px]"
-    >
-      <Profile width="100%" height="100%" />
-      {isClick ? (
-        <div className="absolute flex flex-col w-[14vw] h-[5vh] top-[7vh] right-[4.5vw] rounded-[1vw] p-[1vh] bg-[#F2F2F2] z-[2]">
-          <div
-            onClick={logoutClickHandler}
-            className="flex bg-white h-[3vh] rounded-[1vw] text-[1.5vh] justify-center items-center hover:bg-blue-100"
-          >
-            로그아웃
+  const userIcon =
+    localStorage.getItem("kakaoId") === "1" ? (
+      <div
+        onClick={userIconClickHandler}
+        className="w-[2.3vh] h-[2.3vh] mr-[18.7vw] rounded-full active:outline active:outline-[2px] active:outline-white"
+      >
+        <icon.Profile className="w-[100%] h-[100%]" />
+        {isClick ? (
+          <div className="absolute flex flex-col justify-center w-[8vmax] h-[4vh] top-[5vh] right-[18.7vw] translate-x-[40%] rounded-[20px] px-[0.5vw] py-[0.2vh] bg-[#F2F2F2] z-[5]">
+            <div
+              onClick={logoutClickHandler}
+              className="flex bg-white h-[3vh] rounded-[20px] text-[1.5vh] justify-center items-center hover:bg-blue-100"
+            >
+              Logout
+            </div>
           </div>
-        </div>
-      ) : null}
-    </div>
-  ) : (
-    <Link
-      to="/SocialKakao"
-      className="mr-[9vw] bg-[#2F3131] text-white py-[1vh] px-[1.5vw] rounded-[5rem] text-[2vh]"
-    >
-      로그인
-    </Link>
-  );
+        ) : null}
+      </div>
+    ) : (
+      <Link
+        to="/SocialKakao"
+        className="flex mr-[18.7vw] w-fit h-[3.01vh] items-center border border-white text-white py-[1vh] px-[2.17vh] rounded-[0.8vmin] text-[1.5vh]"
+      >
+        로그인
+      </Link>
+    );
   return (
-    <div className="relative flex justify-between items-center w-full h-[8vh] border-b border-[#DEE5ED]">
-      <div className="flex items-center ml-[9vw] gap-[1.5rem]">
-        <div className="w-[5vh] h-[5vh] border rounded-[100%]">
-          <Lottie animationData={lottie.title} className="w-full h-full" />
-        </div>
-        <div className="text-[3vh] text-[#ABABAB] font-bold">WHA! PLE</div>
+    <div className="relative flex justify-between items-center w-full h-[6.02vh] border-b border-[#464747]">
+      <div className="flex items-center h-[2.1vh] ml-[18.7vw]">
+        <icon.DebatoryLogo className="w-[100%] h-[100%]" />
       </div>
       {userIcon}
     </div>

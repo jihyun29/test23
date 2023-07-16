@@ -1,33 +1,12 @@
 //socialKaka0
-import { useEffect } from "react";
 import React from "react";
-import { LoginLogo } from "../../icons";
-import { useNavigate } from "react-router-dom";
-import { useCookies } from "react-cookie";
 import { useLocation } from "react-router-dom";
 import queryString from "query-string";
+import icon from "../../icons";
 
 //restapi 방법
 const SocialKakao = () => {
-  const [cookie, setCookie, removeCookie] = useCookies(["authorization"]);
   const kakaoLogin = `${process.env.REACT_APP_BACKEND_SERVER_URL}/auth/kakao/callback`;
-  const navigate = useNavigate();
-  useEffect(() => {
-    // 현재 URL에서 쿼리 파라미터 추출
-    const urlParams = new URLSearchParams(window.location.search);
-    const token = urlParams.get("token");
-    console.log("urlparan", urlParams);
-    console.log("token ", token);
-
-    if (token) {
-      console.log(token);
-      localStorage.setItem("authorization", JSON.stringify(`Bearer ${token}`));
-      setCookie("authorization", `Bearer ${token}`);
-      console.log("token");
-      navigate("/");
-    }
-    // 추출한 토큰을 로컬 스토리지에 저장
-  }, [navigate]);
 
   const { search } = useLocation();
   const token = queryString.parse(search);
@@ -38,39 +17,25 @@ const SocialKakao = () => {
   }
 
   return (
-    <div className="flex flex-col justify-between w-[600px] h-[671px] border border-[#777777] m-auto px-[114px] rounded-[20px]">
-      <div className="w-[131px] h-[60ox] mt-[117px]">
-        <p className="  text-[24px] leading-[30px] font-medium">Do Debate,</p>
-        <p className="text-[24px] leading-[30px] font-bold">Get Win!</p>
-      </div>
-      <div className="w-[181px] h-[181px] mx-auto">
-        <LoginLogo width="100%" height="100%" />
-      </div>
-      <div className="flex flex-col justify-center mb-[78px]">
-        <div className="App">
-          <a href={kakaoLogin}>
-            <img src="//k.kakaocdn.net/14/dn/btqCn0WEmI3/nijroPfbpCa4at5EIsjyf0/o.jpg" />
-          </a>
+    <div className="flex justify-center items-center w-[80vmin] h-[90vmin] m-auto">
+      <div className="w-[100%]">
+        <div className="w-[60%] mx-auto">
+          <icon.illust_login width="100%" height="60%" />
         </div>
-        <p className="text-[14px] text-[#777777] leading-[18.5px] mx-auto mt-[15px]">
+        <div className="w-[50%] mx-auto mt-[5vmin]">
+          <icon.logo_debatory_middle width="100%" height="20%" />
+        </div>
+        <p className="text-[2.1vmin] text-[#ABABAB] whitespace-nowrap mx-auto mt-[8vmin] mb-[2.5vmin] flex flex-col items-center">
           카카오톡 소셜 로그인을 통해 내 계정 정보로 접속할 수 있습니다.
         </p>
+        <div className="w-[60%] mx-auto">
+          <a href={kakaoLogin}>
+            <icon.kakaologin alt="카카오로그인" width="100%" height="20%" />
+          </a>
+        </div>
       </div>
     </div>
   );
 };
-export default SocialKakao;
 
-//TODO: 소셜로그인 - kakao
-// export function kakaoSignIn(code:string)
-// {
-// return new Promise(async (resolve,reject)=>{
-//   await post(`/auth/kakao`,code)
-//     .then((data)=>{
-//       resolve(data)
-//     })
-//     .catch((error)=>{
-//       reject(error)
-//     })
-// })
-// }
+export default SocialKakao;
