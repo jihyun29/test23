@@ -57,14 +57,14 @@ function Category() {
     const handlePopstate = () => {
       console.log("popstate");
       console.log(window.history);
-      navigate(`/category`);
+      navigate("/category");
     };
-    window.history.pushState(null, "", "");
+    window.history.pushState(null, ", ");
     window.addEventListener("popstate", handlePopstate);
     return () => {
       window.removeEventListener("popstate", handlePopstate);
     };
-  }, []);
+  }, [navigate]);
 
   // 입장하기 버튼 클릭 시 실행되는 함수
   // 1. 방 리스트 페이지로 이동
@@ -74,9 +74,9 @@ function Category() {
     // 키테고리 선택 안할 시 알람 띄우고 진행 불가
     if (selectedCategory === null) {
       return alert("카테고리를 선택해주세요.");
-
       // 카테고리 값이 랜덤일 경우
-    } else if (selectedCategory === "랜덤") {
+    }
+    if (selectedCategory === "랜덤") {
       // 선택된 카데고리가 랜덤일 경우 랜덤을 제외한 8개 중 무작위로 선택
       const randomNumber = Math.round(Math.random() * 7);
       console.log("랜덤넘버", randomNumber);
@@ -117,35 +117,34 @@ function Category() {
       return navigate("/roomlist");
 
       // 그냥 카테고리 중 아무거나 선택 시 진행되는 로직
-    } else {
-      // 선택된 카테고리 코드 가져옴
-      const selectedCategoryCode = categoryList.filter(
-        (category) => category.name === selectedCategory
-      )[0].code;
-
-      //* ----------------   중 복 코 드 ------------------*/
-      // 룸리스트 페이지로 전달할 값 인코딩 및 세션스토리지 저장
-      const selectedCategoryInfo = encrypt({
-        categoryName: selectedCategory,
-        categoryCode: selectedCategoryCode,
-      });
-      sessionStorage.setItem("selectedCategory", selectedCategoryInfo);
-
-      // api로 token 받아오기 ( kakao로그인 윺저 : 기존 토큰 사용, 비로그인 유저 : 임시 토큰 할당 )
-      const data = game.selectCategory();
-
-      // token 값만 가져오기 위해 data parsing
-      const res = (await data).data.data[0];
-
-      // api요청으로 토큰이 존재할 경우만 localStorage에 저장
-      if (res) {
-        localStorage.setItem("Authorization", res.Authorization);
-        localStorage.setItem("kakaoId", res.kakaoId);
-      }
-
-      // 룸리스트 페이지로 이동
-      navigate("/roomlist");
     }
+    // 선택된 카테고리 코드 가져옴
+    const selectedCategoryCode = categoryList.filter(
+      (category) => category.name === selectedCategory
+    )[0].code;
+
+    //* ----------------   중 복 코 드 ------------------*/
+    // 룸리스트 페이지로 전달할 값 인코딩 및 세션스토리지 저장
+    const selectedCategoryInfo = encrypt({
+      categoryName: selectedCategory,
+      categoryCode: selectedCategoryCode,
+    });
+    sessionStorage.setItem("selectedCategory", selectedCategoryInfo);
+
+    // api로 token 받아오기 ( kakao로그인 윺저 : 기존 토큰 사용, 비로그인 유저 : 임시 토큰 할당 )
+    const data = game.selectCategory();
+
+    // token 값만 가져오기 위해 data parsing
+    const res = (await data).data.data[0];
+
+    // api요청으로 토큰이 존재할 경우만 localStorage에 저장
+    if (res) {
+      localStorage.setItem("Authorization", res.Authorization);
+      localStorage.setItem("kakaoId", res.kakaoId);
+    }
+
+    // 룸리스트 페이지로 이동
+    navigate("/roomlist");
   };
 
   // 카테고리 클릭
@@ -162,22 +161,7 @@ function Category() {
         <SubHeader />
         <div className="relative flex w-full h-full px-[18.7vw] overflow-x-hidden overflow-y-auto">
           {/* Left Side bar */}
-          <div className="w-[9.06vw] h-full overflow-hidden">
-            {/* <div className="flex flex-col justify-between w-full h-[17.31vh] px-[1.09vh] mt-[20.65vh] bg-[#464747] rounded-3xl">
-              <div className="mt-[2vmin] text-[#C6C6C6] text-[1.67vh] font-sans">
-                <p>지금 가장 많은</p>
-                <p>관심을 받고 있는</p>
-                <p>토론 주제는</p>
-                <span className="bg-black text-white w-fit px-[0.5vmin] py-[0.3vmin] rounded-xl mt-[5px] mr-[0px]">
-                  {example}
-                </span>{" "}
-                ?
-              </div>
-              <button className="text-[#EFFE37] text-[1.5vmin] font-bold ml-auto mb-[1.5vmin]">
-                바로 선택하기 &gt;
-              </button>
-            </div> */}
-          </div>
+          <div className="w-[9.06vw] h-full overflow-hidden" />
           {/* Left Side bar */}
 
           {/* Center */}
@@ -198,24 +182,21 @@ function Category() {
 
               {/* 카테고리 카드들 표시되는 부분 */}
               <div className="grid grid-cols-3 grid-rows-[17vmin_17vmin_17vmin_17vmin] w-[53vmin] h-[71vmin] gap-[1.76vh] mt-[2.8vh]">
-                {categoryList.map((category, index) => {
-                  return (
-                    <CategoryCard
-                      key={category.name}
-                      index={index}
-                      categoryName={category.name}
-                      selectedCategory={selectedCategory}
-                      icon={iconList[index]}
-                      originStyle={originStyleList[index]}
-                      onClickHandler={categoryBtnClickHandler}
-                    />
-                  );
-                })}
+                {categoryList.map((category, index) => (
+                  <CategoryCard
+                    key={category.name}
+                    index={index}
+                    categoryName={category.name}
+                    selectedCategory={selectedCategory}
+                    icon={iconList[index]}
+                    originStyle={originStyleList[index]}
+                    onClickHandler={categoryBtnClickHandler}
+                  />
+                ))}
               </div>
               {/* 카테고리 카드들 표시되는 부분 */}
               <div>
                 <button
-                  // disabled
                   onClick={enterRoomList}
                   className="bg-[#EFFE37] px-[12vmin] py-[2vmin] mt-[6.94vh] mb-[13.29vh] rounded-[60px] text-[1.8vmin] font-bold"
                 >
@@ -225,7 +206,7 @@ function Category() {
             </div>
           </div>
           {/* Center */}
-          <div className="w-[20%]"></div>
+          <div className="w-[20%]" />
         </div>
       </div>
       {/* <Footer /> */}

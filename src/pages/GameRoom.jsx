@@ -30,7 +30,8 @@ function GameRoom() {
   // 호스트 변경 시 사용
   const [isHost, setIsHost] = useState(state.isHost);
   // 배심원이 토론자로 변경될 시 사용할 예정
-  const [isTeller, setIsTeller] = useState(state.isTeller);
+  const isTeller = useMemo(() => state.isTeller, [state.isTeller]);
+  // const [isTeller, setIsTeller] = useState(state.isTeller);
 
   // 룰렛 표시 여부에 사용되는 상태
   const [isRoulette, setIsRoulette] = useState(false);
@@ -144,7 +145,7 @@ function GameRoom() {
         setIsFirstLoading(false);
       });
     }
-  }, []);
+  }, [categoryCode, categoryName, isTeller, navigate, roomNumber, socket]);
   // });
 
   // 2. 채팅
@@ -178,35 +179,6 @@ function GameRoom() {
   // 3 - 2 - 1.룰렛 애니메이션 시작 - 룰렛의 Start 버튼
   const setTitleBtnClickHandler = () => {
     socket.emit("start_roulette", roomNumber, categoryCode);
-  };
-
-  /* 룰렛 애니메이션 작동
-  - 시작점 : start_roulette 이벤트 수신 시
-  */
-  let currentTitle;
-  const setTitleFunc = async (ran) => {
-    currentTitle = titleList.current[ran];
-    const canvas = roulette.current;
-    console.log(canvas);
-    canvas.style.transform = `initial`;
-    canvas.style.transition = `initial`;
-    console.log(canvas.style.transform);
-    console.log(canvas.style.transition);
-
-    // 룰렛 애니메이션 작동안하는 이유 : 초기화 후 순차적으로 진행 필요? setTimeout 적용하니 해결됨
-    setTimeout(() => {
-      const arc = 360 / titleList.current.length;
-      const rotate = ran * arc + 3600 + arc * 3 - arc / 2;
-      console.log(rotate);
-
-      canvas.style.transform = `rotate(-${rotate}deg)`;
-      canvas.style.transition = `2s`;
-
-      setTimeout(() => {
-        setTitle(currentTitle);
-        setIsRouletteResult(true);
-      }, 2000);
-    }, 1);
   };
 
   // 3 - 3 - 1. 결과창 닫기  - 다시돌리기 Button
@@ -287,6 +259,35 @@ function GameRoom() {
       setIsRoulette(result);
     });
 
+    /* 룰렛 애니메이션 작동
+  - 시작점 : start_roulette 이벤트 수신 시
+  */
+    let currentTitle;
+    const setTitleFunc = async (ran) => {
+      currentTitle = titleList.current[ran];
+      const canvas = roulette.current;
+      console.log(canvas);
+      canvas.style.transform = `initial`;
+      canvas.style.transition = `initial`;
+      console.log(canvas.style.transform);
+      console.log(canvas.style.transition);
+
+      // 룰렛 애니메이션 작동안하는 이유 : 초기화 후 순차적으로 진행 필요? setTimeout 적용하니 해결됨
+      setTimeout(() => {
+        const arc = 360 / titleList.current.length;
+        const rotate = ran * arc + 3600 + arc * 3 - arc / 2;
+        console.log(rotate);
+
+        canvas.style.transform = `rotate(-${rotate}deg)`;
+        canvas.style.transition = `2s`;
+
+        setTimeout(() => {
+          setTitle(currentTitle);
+          setIsRouletteResult(true);
+        }, 2000);
+      }, 1);
+    };
+
     // 3 - 2 - 2. 룰렛 애니메이션 시작 [ 전체 수신 ]
     socket.on("start_roulette", (randomSubjectIndex) => {
       console.log(roulette.current);
@@ -320,8 +321,8 @@ function GameRoom() {
     socket.on("close_roulette", (result, debatersInfo) => {
       console.log(debatersInfo);
       setIsRoulette(result);
+      setTimeout(startGameSignalHandler, 100);
       setDebaterPosition(debatersInfo);
-      setTimeout(startGameSignalHandler, 1000);
     });
 
     // 5. 호스트 변경 발생 [ 전체 수신 ]
@@ -385,7 +386,23 @@ function GameRoom() {
     socket.on("sendRemainTime", (remainTime) => {
       setRemainTime(remainTime);
     });
-  }, []);
+
+    // 방 폭파 시 배심원들 나가게 하기 위한 로직
+    socket.on("userDisconnected", (jurorUserId) => {
+      const { userId } = jwt_decode(localStorage.getItem("Authorization"));
+      if (userId === jurorUserId) {
+        socket.disconnect();
+        navigate("/");
+      }
+    });
+
+    // 게임 중 토론자 유저 나갈 경우
+    socket.on("gameEnd", () => {
+      setIsStartGame(false);
+      setHostDivDesign("bg-black");
+      setDebaterDivDesign("bg-black");
+    });
+  }, [navigate, socket]);
   // ******************************************************************************
 
   // ********************************************************************** Web RTC
@@ -448,6 +465,10 @@ function GameRoom() {
 
   // 룰렛 표시 관련 css
   const showRoullete = isRoulette
+    ? { visibility: "visible" }
+    : { display: "none" };
+
+  const hideStartBtn = !isStartGame
     ? { visibility: "visible" }
     : { display: "none" };
 
@@ -807,6 +828,7 @@ function GameRoom() {
           {isHost && (
             <button
               onClick={gameStartBtnClickHandler}
+              style={hideStartBtn}
               disabled={
                 !(
                   hostInfo.nickName &&
@@ -814,7 +836,7 @@ function GameRoom() {
                   jurorInfo.length !== 0
                 )
               }
-              className="flex justify-center items-center w-[20%] h-full bg-[#EFFE37] rounded-full ml-auto text-[2.01vh] font-semibold disabled:bg-[#919191] disabled:text-[#505050]"
+              className=" flex justify-center items-center w-[20%] h-full bg-[#EFFE37] rounded-full ml-auto text-[2.01vh] font-semibold disabled:bg-[#919191] disabled:text-[#505050]"
             >
               <p>시작</p>
               {hostInfo.nickName &&

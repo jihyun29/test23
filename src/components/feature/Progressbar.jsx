@@ -9,10 +9,7 @@ function TestProgressComp({ endGameSignalHandler }) {
   const [runningTime, setRunningTime] = useState(0);
   const [remainingTime, setRemainingTime] = useState(gameTime);
 
-  const progressBarPercent = (runningTime / gameTime) * 100;
-
-  const minutes = Math.floor(remainingTime / 60); // 분 계산
-  const seconds = remainingTime % 60; // 초 계산
+  const progressbarPercent = (runningTime / gameTime) * 100;
 
   const gameEnd = useCallback(
     () =>
@@ -29,14 +26,14 @@ function TestProgressComp({ endGameSignalHandler }) {
         return prevTime + 1;
       });
     }, 1000);
-    console.log(gameTime, runningTime, progressBarPercent);
+    console.log(gameTime, runningTime, remainingTime, progressbarPercent);
     if (runningTime === gameTime) {
       gameEnd();
     }
     return () => {
       clearInterval(timer);
     };
-  }, [runningTime]);
+  }, [runningTime, gameEnd, progressbarPercent, remainingTime]);
 
   return (
     <>
@@ -45,7 +42,7 @@ function TestProgressComp({ endGameSignalHandler }) {
           <div
             className="absolute top-[25%] bg-[#EFFE37] h-[50%] w-full rounded-full z-[2]"
             style={{
-              width: `${progressBarPercent}%`,
+              width: `${progressbarPercent}%`,
               transition: "width 0.5s",
             }}
           >

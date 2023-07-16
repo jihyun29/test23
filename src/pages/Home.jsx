@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import Lottie from "lottie-react";
 import { useNavigate } from "react-router-dom";
 

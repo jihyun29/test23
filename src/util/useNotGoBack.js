@@ -28,5 +28,5 @@ export function useNotGoBack(state) {
       // window.removeEventListener("beforeunload", handleBeforeUnload);
       console.log("나가졌습니다.");
     };
-  }, []);
+  }, [navigate, roomNumber]);
 }

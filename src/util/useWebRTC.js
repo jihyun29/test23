@@ -54,7 +54,7 @@ export function useWebRTC() {
         socket.disconnect(); // Socket.IO 연결 종료
       }
     };
-  }, []);
+  }, [peer, roomNumber, socket]);
   useEffect(() => {
     // Offer를 수신하고 처리하는 로직-on 메서드를 사용
     if (socket) {
