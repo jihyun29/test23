@@ -64,12 +64,17 @@ import { ReactComponent as SubHeaderGame } from "./SubHeaderGame.svg";
 import { ReactComponent as RoulettePin } from "./pin.svg";
 import { ReactComponent as IconOnly } from "./icononly.svg";
 
+// 홈 화면 흐르는 텍스트
+import { ReactComponent as Low } from "./아랫줄.svg";
+import { ReactComponent as Top } from "./윗줄.svg";
+
 // 홈 화면 미드 요소들
 import { ReactComponent as MainMidSection } from "./MainMidSection.svg";
 import { ReactComponent as MainMidSection2 } from "./MainMidSection2.svg";
 import { ReactComponent as MainMidSection3 } from "./MainMidSection3.svg";
 import { ReactComponent as MainMidArrow } from "./MainMidArrow.svg";
 import { ReactComponent as MainMidDoubleArrow } from "./MainMidDoubleArrow.svg";
+import { ReactComponent as MainBottom } from "./MainBottom.svg";
 
 // 투표 결과 창
 import { ReactComponent as Win } from "./WIN.svg";
@@ -109,6 +114,8 @@ export const icon = {
   hateButton,
   challenge,
   whyButton,
+  Low,
+  Top,
   reportButton,
   MainFlowText1,
   MainFlowText2,
@@ -141,6 +148,7 @@ export const icon = {
   MainMidSection3,
   MainMidArrow,
   MainMidDoubleArrow,
+  MainBottom,
   kakaologin,
   icon_debate_versus,
   logo_debatory_middle,

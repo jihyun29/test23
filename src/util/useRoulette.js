@@ -8,15 +8,13 @@ export function useRoulette({
   title,
 }) {
   useEffect(() => {
-    const colors = ["#919191", "#C6C6C6"];
+    const colors = ["#FFFFFF", "#F1F1F1"];
     const canvasRef = roulette.current;
     const canvas = canvasRef.getContext(`2d`);
-    console.log(canvas);
 
     const newMake = async () => {
       // 캔버스의 중앙점 구하기
       const [cw, ch] = [canvasRef.width / 2, canvasRef.height / 2];
-      console.log(cw, ch);
       const arc = Math.PI / 4;
       // 룰렛 배경 항목 수에 따라 그리기 : 8개
       for (let i = 0; i < 8; i++) {
@@ -33,9 +31,9 @@ export function useRoulette({
         canvas.fill();
         canvas.closePath();
       }
-      canvas.fillStyle = "white";
+      canvas.fillStyle = "#464747";
       canvas.textAlign = "center";
-      canvas.font = "24px SUITE-Variable";
+      canvas.font = "normal 500 17px SUIT";
 
       // 아이템 표기
       for (let i = 0; i < 8; i++) {
@@ -47,12 +45,82 @@ export function useRoulette({
           cw + Math.cos(angle) * (cw - 75),
           ch + Math.sin(angle) * (ch - 75)
         );
-        canvas.rotate(angle + Math.PI);
-        const titleListItem =
-          titleList.current[i]?.length >= 10
-            ? titleList.current[i]?.substring(0, 10) + "..."
-            : titleList.current[i];
-        canvas.fillText(titleListItem, 15, i, 160);
+        canvas.rotate(angle + Math.PI / 2);
+        // const titleListItem =
+        //   titleList.current[i]?.split(" ").length >= 2
+        //     ? `${titleList.current[i]?.split(" ")[0]} ${
+        //         titleList.current[i]?.split(" ")[1]
+        //       }`
+        //     : titleList.current[i];
+        // canvas.fillText(titleListItem, 0, i, 160);
+        const first = 16;
+        const second = 14;
+        const third = 12;
+        const fourth = 10;
+        const final = 8;
+        const lineHeight = 28;
+        // ----------------------- 룰렛 텍스트 박스 -------------------------
+        if (titleList.current[i]?.length >= first) {
+          const firstLine = titleList.current[i]?.substr(0, first);
+          canvas.fillText(firstLine, 0, 0, 200);
+        } else {
+          const firstLine = titleList.current[i];
+          canvas.fillText(firstLine, 0, 0, 200);
+        }
+        // 2번째 라인
+        if (titleList.current[i]?.length - second >= second) {
+          const secondLine = titleList.current[i]?.substr(first, second);
+          canvas.fillText(secondLine, 0, lineHeight * 1, 180);
+        } else {
+          const secondLine = titleList.current[i]?.substr(first);
+          canvas.fillText(secondLine, 0, lineHeight * 1, 180);
+        }
+        // 3번째 라인
+        if (titleList.current[i]?.length - (first + second) >= third) {
+          const thirdLine = titleList.current[i]?.substr(first + second, third);
+          canvas.fillText(thirdLine, 0, lineHeight * 2, 160);
+        } else {
+          const thirdLine = titleList.current[i]?.substr(first + second);
+          canvas.fillText(thirdLine, 0, lineHeight * 2, 160);
+        }
+        // 4번째 라인
+        if (titleList.current[i]?.length - (first + second + third) >= fourth) {
+          const fourthLine = titleList.current[i]?.substr(
+            first + second + third,
+            fourth
+          );
+          canvas.fillText(fourthLine, 0, lineHeight * 3, 140);
+        } else {
+          const fourthlLine = titleList.current[i]?.substr(
+            first + second + third
+          );
+          canvas.fillText(fourthlLine, 0, lineHeight * 3, 140);
+        }
+        // 5번째 라인
+        if (
+          titleList.current[i]?.length - (first + second + third + fourth) >=
+          final
+        ) {
+          const finalLine = titleList.current[i]?.substr(
+            first + second + third + fourth,
+            final
+          );
+          canvas.fillText(finalLine, 0, lineHeight * 4, 120);
+        } else {
+          const finallLine = titleList.current[i]?.substr(
+            first + second + third + fourth
+          );
+          canvas.fillText(finallLine, 0, lineHeight * 4, 120);
+        }
+        // ...표시
+        if (
+          titleList.current[i]?.length -
+            (first + second + third + fourth + final) >
+          0
+        ) {
+          canvas.fillText("...", 0, lineHeight * 5, 100);
+        }
+        // ----------------------- 룰렛 텍스트 박스 -------------------------
         canvas.restore();
       }
     };

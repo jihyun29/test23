@@ -1,12 +1,10 @@
 import React from "react";
-import Lottie from "lottie-react";
 import { useNavigate } from "react-router-dom";
 
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 
 import icon from "../icons";
-import lottie from "../lottie";
 
 function Home() {
   const navigate = useNavigate();
@@ -18,76 +16,36 @@ function Home() {
   return (
     <>
       <Header />
-      <div className="w-full h-[95vh] overflow-x-hidden overflow-y-auto">
-        <div className="relative mt-[9.4vh] flex flex-col items-center w-full h-[20vmin] whitespace-nowrap overflow-hidden">
-          <div className="absoulte flex justify-start w-[300vmin] h-[50%] animate-flowTextToLeft">
-            <div className="flex w-full h-full items-center justify-start">
-              <icon.MainFlowText1 width="19%" height="100%" />
-              <Lottie className="w-[12%]" animationData={lottie.globe} />
-              <icon.MainFlowText2 width="38%" height="100%" />
-              <icon.MainHearts width="10%" height="290%" />
-              <icon.MainFlowText3 width="54%" height="100%" />
-              <icon.MainArrow width="12%" height="100%" />
-              <icon.MainFlowText4 width="46%" height="100%" />
-              <icon.MainBlah width="20%" height="100%" />
-              <icon.MainFlowText5 width="39%" height="100%" />
-              <p className="w-[2vmin]"></p>
+      <div className="w-full h-full overflow-x-hidden overflow-y-auto scrollbar-hide">
+        <div className="relative flex flex-col justify-center mt-[150px] items-center w-[3202px] h-[214px] whitespace-nowrap overflow-hidden">
+          <div className="absoulte flex w-full h-full animate-flowTextToLeft">
+            <div className="flex w-full h-full items-center">
+              <icon.Top />
             </div>
             <div className="flex w-full h-full items-center">
-              <icon.MainFlowText1 width="19%" height="100%" />
-              <Lottie className="w-[12%]" animationData={lottie.globe} />
-              <icon.MainFlowText2 width="38%" height="100%" />
-              <icon.MainHearts width="10%" height="290%" />
-              <icon.MainFlowText3 width="54%" height="100%" />
-              <icon.MainArrow width="12%" height="100%" />
-              <icon.MainFlowText4 width="46%" height="100%" />
-              <icon.MainBlah width="20%" height="100%" />
-              <icon.MainFlowText5 width="39%" height="100%" />
-              <p className="w-[2vmin]"></p>
-            </div>
-          </div>
-          <div className="absoulte flex w-[300vmin] h-[50%] animate-flowTextToRight">
-            <div className="flex w-full h-full items-center">
-              <icon.MainFlowText6 width="22%" height="100%" />
-              <p className="w-[2vmin]"></p>
-              <icon.MainLoL width="20%" height="100%" />
-              <icon.MainFlowText7 width="30%" height="100%" />
-              <p className="w-[2vmin]"></p>
-              <icon.MainProp width="8%" height="100%" />
-              <p className="w-[2vmin]"></p>
-              <icon.MainFlowText8 width="33%" height="100%" />
-              <p className="w-[2vmin]"></p>
-              <icon.MainSound width="12%" height="100%" />
-              <p className="w-[2vmin]"></p>
-              <icon.MainFlowText9 width="25%" height="100%" />
-              <p className="w-[2vmin]"></p>
-            </div>
-            <div className="flex w-full h-full items-center">
-              <icon.MainFlowText6 width="22%" height="100%" />
-              <p className="w-[2vmin]"></p>
-              <icon.MainLoL width="20%" height="100%" />
-              <icon.MainFlowText7 width="30%" height="100%" />
-              <p className="w-[2vmin]"></p>
-              <icon.MainProp width="8%" height="100%" />
-              <p className="w-[2vmin]"></p>
-              <icon.MainFlowText8 width="33%" height="100%" />
-              <p className="w-[2vmin]"></p>
-              <icon.MainSound width="12%" height="100%" />
-              <p className="w-[2vmin]"></p>
-              <icon.MainFlowText9 width="25%" height="100%" />
-              <p className="w-[2vmin]"></p>
+              <icon.Top />
             </div>
           </div>
         </div>
-        <div className="flex justify-center mt-[9.4vh]">
+        <div className="relative flex flex-col justify-center mt-[-46px] items-center w-[2747px] h-[214px] whitespace-nowrap overflow-hidden">
+          <div className="absoulte flex w-full h-full animate-flowTextToRight">
+            <div className="flex w-full h-full items-center">
+              <icon.Low />
+            </div>
+            <div className="flex w-full h-full items-center">
+              <icon.Low />
+            </div>
+          </div>
+        </div>
+        <div className="flex justify-center mt-[150px]">
           <button
             onClick={moveToCategoryPage}
-            className="py-[2vmin] px-[8vw] bg-[#EFFE37] text-black font-bold text-[4vmin] rounded-[60px] shadow-[#EFFF364D] shadow-xl"
+            className="py-[2vmin] px-[8vw] bg-[#EFFE37] text-black font-bold text-[4vmin] rounded-[60px] hover:shadow-[#EFFF364D] hover:shadow-xl"
           >
             Let's Go!
           </button>
         </div>
-        <div className="flex flex-col items-center mt-[7.4vh]">
+        <div className="flex flex-col items-center mt-[60px]">
           <p className="text-[#777777] text-[2.01vh]">How to</p>
           <icon.MainMidDoubleArrow className="h-[2.01vh]" />
         </div>
@@ -100,6 +58,9 @@ function Home() {
         </div>
         <div>
           <icon.MainMidSection3 width="100%" height="100%" />
+        </div>
+        <div>
+          <icon.MainBottom width="100%" height="100%" />
         </div>
         <Footer />
       </div>

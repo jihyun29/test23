@@ -107,10 +107,10 @@ function Category() {
       // token 값만 가져오기 위해 data parsing
       const res = (await data).data.data[0];
 
-      // api요청으로 토큰이 존재할 경우만 localStorage에 저장
+      // api요청으로 토큰이 존재할 경우만 sessionStorage에 저장
       if (res) {
-        localStorage.setItem("Authorization", res.Authorization);
-        localStorage.setItem("kakaoId", res.kakaoId);
+        sessionStorage.setItem("Authorization", res.Authorization);
+        sessionStorage.setItem("kakaoId", res.kakaoId);
       }
 
       // 룸리스트 페이지로 이동
@@ -139,8 +139,8 @@ function Category() {
 
     // api요청으로 토큰이 존재할 경우만 localStorage에 저장
     if (res) {
-      localStorage.setItem("Authorization", res.Authorization);
-      localStorage.setItem("kakaoId", res.kakaoId);
+      sessionStorage.setItem("Authorization", res.Authorization);
+      sessionStorage.setItem("kakaoId", res.kakaoId);
     }
 
     // 룸리스트 페이지로 이동
@@ -157,17 +157,13 @@ function Category() {
   return (
     <>
       <Header />
-      <div className="relative flex w-full h-[93.98vh]">
-        <SubHeader />
-        <div className="relative flex w-full h-full px-[18.7vw] overflow-x-hidden overflow-y-auto">
-          {/* Left Side bar */}
-          <div className="w-[9.06vw] h-full overflow-hidden" />
-          {/* Left Side bar */}
-
+      <SubHeader />
+      <div className="relative flex w-full h-full overflow-x-hidden overflow-y-auto scrollbar-hide">
+        <div className="relative flex justify-center w-full min-w-[787px] h-full px-[18.7vw]">
           {/* Center */}
           <div className="w-[44.01vw] h-full">
             <div className="w-full h-[100vh] flex flex-col items-center">
-              <div className="flex justify-between w-[53vmin] mt-[14.8vh] py-[0.35vmin] px-[1vmin] bg-[#464747] font-semibold text-[1.5vmin] rounded-2xl text-[#C6C6C6]">
+              <div className="flex justify-between w-[787px] mt-[177px] py-[8px] px-[16px] bg-[#464747] font-semibold text-[20px] rounded-2xl text-[#C6C6C6]">
                 <p>
                   내가 최근에 입장한 토론 주제는{" "}
                   <span className="bg-black py-[0.3vmin] px-[0.5vmin] rounded-xl">
@@ -181,7 +177,7 @@ function Category() {
               </div>
 
               {/* 카테고리 카드들 표시되는 부분 */}
-              <div className="grid grid-cols-3 grid-rows-[17vmin_17vmin_17vmin_17vmin] w-[53vmin] h-[71vmin] gap-[1.76vh] mt-[2.8vh]">
+              <div className="grid grid-cols-3 grid-rows-[248px_248px_248px_248px] w-[787px] h-[1058px] gap-[22px] mt-[30px]">
                 {categoryList.map((category, index) => (
                   <CategoryCard
                     key={category.name}
@@ -198,7 +194,7 @@ function Category() {
               <div>
                 <button
                   onClick={enterRoomList}
-                  className="bg-[#EFFE37] px-[12vmin] py-[2vmin] mt-[6.94vh] mb-[13.29vh] rounded-[60px] text-[1.8vmin] font-bold"
+                  className="bg-[#EFFE37] w-[600px] py-[40px] mt-[83px] mb-[159px] rounded-[60px] text-[27px] font-bold hover:shadow-[#EFFF364D] hover:shadow-xl"
                 >
                   입장하기
                 </button>
@@ -206,7 +202,6 @@ function Category() {
             </div>
           </div>
           {/* Center */}
-          <div className="w-[20%]" />
         </div>
       </div>
       {/* <Footer /> */}
