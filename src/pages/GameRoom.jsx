@@ -216,9 +216,9 @@ function GameRoom() {
     // 1. 방에 입장한 유저 닉네임 리스트 받아오기 [ 전체 수신 ]
     socket.on("roomJoined", (data) => {
       console.log("데이터 = ", data);
-      console.log("로컬스토리지 값", localStorage.getItem("Authorization"));
+      console.log("로컬스토리지 값", sessionStorage.getItem("Authorization"));
       const { userId: myUserId } = jwt_decode(
-        localStorage.getItem("Authorization")
+        sessionStorage.getItem("Authorization")
       );
       console.log("내 아이디 = ", myUserId);
       console.log("내 아이디 = ", typeof myUserId);
@@ -361,7 +361,7 @@ function GameRoom() {
       */
         // 승자 있을 경우 jwt에서 userId가져와서 어느 유저가 승리자인지 확인
         const { userId: myUserId } = jwt_decode(
-          localStorage.getItem("Authorization")
+          sessionStorage.getItem("Authorization")
         );
         console.log(myUserId);
         if (result.winner === myUserId) {
@@ -375,7 +375,7 @@ function GameRoom() {
 
     // 7. 토론에서 진 유저 추방하기 [ 전체 수신 ]
     socket.on("loserExit", (exitUserId) => {
-      const { userId } = jwt_decode(localStorage.getItem("Authorization"));
+      const { userId } = jwt_decode(sessionStorage.getItem("Authorization"));
       if (userId === exitUserId) {
         socket.disconnect();
         setIsLoser(true);
@@ -388,7 +388,7 @@ function GameRoom() {
 
     // 방 폭파 시 배심원들 나가게 하기 위한 로직
     socket.on("userDisconnected", (jurorUserId) => {
-      const { userId } = jwt_decode(localStorage.getItem("Authorization"));
+      const { userId } = jwt_decode(sessionStorage.getItem("Authorization"));
       if (userId === jurorUserId) {
         socket.disconnect();
         navigate("/");
