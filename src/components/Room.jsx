@@ -54,7 +54,7 @@ function Room({
     2. 게임시작 시 안할 시에는 노란색
     둘 다 만족해야 노란색 아니면 회색
   */
-    localStorage.getItem("kakaoId") === "1" && !gameStart
+    sessionStorage.getItem("kakaoId") === "1" && !gameStart
       ? ["text-[#EFFE37] hover:hover:bg-[#EFFE37] hover:text-[#1B1B1B]", true]
       : ["text-[#505050]", false];
   const [jurorBtnStyleByGameStart, statusTextStyleByGameStart] =
