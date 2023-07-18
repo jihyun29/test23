@@ -11,12 +11,12 @@ function Header() {
     console.log(isClick);
   };
   const logoutClickHandler = () => {
-    localStorage.removeItem("Authorization");
-    localStorage.removeItem("kakaoId");
+    sessionStorage.removeItem("Authorization");
+    sessionStorage.removeItem("kakaoId");
     navigate("/");
   };
   const userIcon =
-    localStorage.getItem("kakaoId") === "1" ? (
+    sessionStorage.getItem("kakaoId") === "1" ? (
       <div
         onClick={userIconClickHandler}
         className="w-[28px] h-[28px] mr-[18.7vw] rounded-full active:outline active:outline-[2px] active:outline-white"
