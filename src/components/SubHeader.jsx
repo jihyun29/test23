@@ -7,8 +7,8 @@ import { game } from "../api/api";
 
 function SubHeader({ categoryName, categoryCode }) {
   const navigate = useNavigate();
-  const makeRoomBtnStyle = "w-[10.54vw] h-[3.51vh]";
-  const middleIconStyle = "h-[5.27vh]";
+  const makeRoomBtnStyle = "w-[10.54vw] h-[52px]";
+  const middleIconStyle = "h-[630px]";
   // 메인으로 클릭 시 실행되는 함수
   const goHomeHandler = () => {
     navigate(`/`);
@@ -21,27 +21,28 @@ function SubHeader({ categoryName, categoryCode }) {
     () => game.createRoom(categoryCode),
     {
       onSuccess: (res) => {
-        console.log(res);
+        const roomData = res.data.data[0];
+        const userData = encrypt({
+          roomNumber: roomData.roomId,
+          defaultTitle: roomData.roomName,
+          categoryName,
+          categoryCode,
+          isTeller: true,
+          isHost: true,
+        });
+        sessionStorage.setItem("userData", userData);
+        navigate(`/room/${roomData.roomId}`);
+      },
+      onError: (err) => {
+        alert(err);
       },
     }
   );
 
   // 방생성 함수 : 지금은 랜덤으로 생성 & 내 화면에만 표시됨으로 향후 수정 필요
   // createRoom mustation으로 들어가도록 설정 필요
-  const createRoomBtnClick = async () => {
-    const data = await createRoom();
-    const roomData = data.data.data[0];
-    const userData = encrypt({
-      roomNumber: roomData.roomId,
-      defaultTitle: roomData.roomName,
-      categoryName,
-      categoryCode,
-      isTeller: true,
-      isHost: true,
-    });
-    console.log(userData);
-    sessionStorage.setItem("userData", userData);
-    navigate(`/room/${roomData.roomId}`);
+  const createRoomBtnClick = () => {
+    createRoom();
   };
 
   let categoryIcon;
@@ -76,14 +77,14 @@ function SubHeader({ categoryName, categoryCode }) {
       break;
   }
   return (
-    <div className="absolute flex justify-between w-full h-[10.03vh] items-center px-[18.7vw] z-[1] backdrop-blur-[4px] bg-black-transparent transition-[background-color]">
+    <div className="absolute top-[72px] flex justify-between w-full h-[120px] items-center px-[18.7vw] z-[1] backdrop-blur-[4px] bg-black-transparent transition-[background-color]">
       {categoryName ? (
         <div
           onClick={goCategoryHandler}
           className="flex items-center gap-[0.5vw] cursor-pointer"
         >
-          <icon.ArrowBack className="w-[2.01vh] h-[2.01vh]" />
-          <div className="text-[#C6C6C6] text-[1.25vh] font-bold">
+          <icon.ArrowBack className="w-[24px] h-[24px]" />
+          <div className="text-[#C6C6C6] text-[15px] font-bold">
             카테고리 선택
           </div>
         </div>
@@ -92,16 +93,16 @@ function SubHeader({ categoryName, categoryCode }) {
           onClick={goHomeHandler}
           className="flex items-center gap-[0.5vw] cursor-pointer"
         >
-          <icon.ArrowBack className="w-[2.01vh] h-[2.01vh]" />
-          <div className="text-[#C6C6C6] text-[1.25vh] font-bold">메인으로</div>
+          <icon.ArrowBack className="w-[24px] h-[24px]" />
+          <div className="text-[#C6C6C6] text-[15px] font-bold">메인으로</div>
         </div>
       )}
       {categoryName ? (
         categoryIcon
       ) : (
-        <icon.SubHeaderDefault className="h-[2.51vh]" />
+        <icon.SubHeaderDefault className="h-[30px]" />
       )}
-      {categoryName && localStorage.getItem("kakaoId") === "1" ? (
+      {categoryName && sessionStorage.getItem("kakaoId") === "1" ? (
         <icon.SubHeaderMakeRoomButton
           onClick={createRoomBtnClick}
           className={makeRoomBtnStyle + " cursor-pointer"}

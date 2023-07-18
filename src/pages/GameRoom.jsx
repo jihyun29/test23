@@ -28,7 +28,7 @@ function GameRoom() {
   // 타이틀 설정 시 사용되는 상태
   const [title, setTitle] = useState(defaultTitle);
   // 호스트 변경 시 사용
-  const [isHost, setIsHost] = useState(state.isHost);
+  const [isHost, setIsHost] = useState(false);
   // 배심원이 토론자로 변경될 시 사용할 예정
   const isTeller = useMemo(() => state.isTeller, [state.isTeller]);
   // const [isTeller, setIsTeller] = useState(state.isTeller);
@@ -64,16 +64,6 @@ function GameRoom() {
 
   // 투표 시 남은 시간 설정
   const [remainTime, setRemainTime] = useState("30");
-
-  /*   // 유저 로딩 창 만들기
-  const countReadyBox = () => {
-    // const count = 5 - userNickname.length;
-    const count = 5 - jurorInfo.length;
-    console.log(count);
-    return Array(count).fill(<Lottie animationData={lottie.loading} />);
-  };
-  // 유저 로딩 창 결과 캐싱
-  const readyBox = useMemo(countReadyBox, [jurorInfo]); */
 
   // 룰렛 React DOM을 point하기 위한 Ref
   const roulette = useRef(null);
@@ -225,10 +215,18 @@ function GameRoom() {
   useEffect(() => {
     // 1. 방에 입장한 유저 닉네임 리스트 받아오기 [ 전체 수신 ]
     socket.on("roomJoined", (data) => {
+      console.log("데이터 = ", data);
+      console.log("로컬스토리지 값", sessionStorage.getItem("Authorization"));
+      const { userId: myUserId } = jwt_decode(
+        sessionStorage.getItem("Authorization")
+      );
+      console.log("내 아이디 = ", myUserId);
+      console.log("내 아이디 = ", typeof myUserId);
       const jurorList = [];
       let debaterList = {};
       let hostList = {};
       data.forEach((userInfo) => {
+        console.log("받아온 개별 유저정보", userInfo);
         const { host, debater } = userInfo;
         if (!debater) {
           jurorList.push({
@@ -237,10 +235,19 @@ function GameRoom() {
           });
         }
         if (host && debater) {
+          console.log("host 유저ID", userInfo.userId);
+          console.log("host 유저ID", typeof userInfo.userId);
           hostList = {
             nickName: userInfo.nickName,
             avatar: JSON.parse(userInfo.avatar),
           };
+          if (userInfo.userId === myUserId) {
+            setIsHost(true);
+          } else {
+            if (isHost) {
+              setIsHost(false);
+            }
+          }
         } else if (!host && debater) {
           debaterList = {
             nickName: userInfo.nickName,
@@ -325,16 +332,8 @@ function GameRoom() {
       setDebaterPosition(debatersInfo);
     });
 
-    // 5. 호스트 변경 발생 [ 전체 수신 ]
-    socket.on("changeHost", (id) => {
-      const { userId } = jwt_decode(localStorage.getItem("Authorization"));
-      if (userId === id) {
-        setIsHost(true);
-      }
-    });
-
     // 6. 투표 결과 받기 [ 전체 수신 ]
-    socket.on("voteResult", (result, done) => {
+    socket.on("voteResult", (result) => {
       setRemainTime("30");
       setIsVoteEnd(true);
       setWinnerNick(result.winnerNickName);
@@ -349,7 +348,7 @@ function GameRoom() {
       */
       if (!result.winner) {
         setIsDraw(true);
-        done();
+        // done();
       } else {
         /*
       case 2 : 승자 / 패자 있는 경우
@@ -362,7 +361,7 @@ function GameRoom() {
       */
         // 승자 있을 경우 jwt에서 userId가져와서 어느 유저가 승리자인지 확인
         const { userId: myUserId } = jwt_decode(
-          localStorage.getItem("Authorization")
+          sessionStorage.getItem("Authorization")
         );
         console.log(myUserId);
         if (result.winner === myUserId) {
@@ -376,7 +375,7 @@ function GameRoom() {
 
     // 7. 토론에서 진 유저 추방하기 [ 전체 수신 ]
     socket.on("loserExit", (exitUserId) => {
-      const { userId } = jwt_decode(localStorage.getItem("Authorization"));
+      const { userId } = jwt_decode(sessionStorage.getItem("Authorization"));
       if (userId === exitUserId) {
         socket.disconnect();
         setIsLoser(true);
@@ -389,7 +388,7 @@ function GameRoom() {
 
     // 방 폭파 시 배심원들 나가게 하기 위한 로직
     socket.on("userDisconnected", (jurorUserId) => {
-      const { userId } = jwt_decode(localStorage.getItem("Authorization"));
+      const { userId } = jwt_decode(sessionStorage.getItem("Authorization"));
       if (userId === jurorUserId) {
         socket.disconnect();
         navigate("/");
@@ -402,7 +401,7 @@ function GameRoom() {
       setHostDivDesign("bg-black");
       setDebaterDivDesign("bg-black");
     });
-  }, [navigate, socket]);
+  }, [navigate, socket, isHost]);
   // ******************************************************************************
 
   // ********************************************************************** Web RTC
@@ -442,6 +441,7 @@ function GameRoom() {
       Stream.getVideoTracks().forEach(
         (track) => (track.enabled = !track.enabled)
       );
+      console.log(Stream.getVideoTracks());
       return Stream;
     } catch (e) {
       console.log(e);
@@ -471,6 +471,11 @@ function GameRoom() {
   const hideStartBtn = !isStartGame
     ? { visibility: "visible" }
     : { display: "none" };
+
+  const hoverStyleOnGameStartBtn =
+    hostInfo.nickName && debaterInfo.nickName && jurorInfo.length !== 0
+      ? "hover:shadow-[#EFFF364D] hover:shadow-xl"
+      : "";
 
   const goHomeBtnClickHandler = () => {
     socket.disconnect();
@@ -511,8 +516,8 @@ function GameRoom() {
           <canvas
             ref={roulette}
             className="w-[90%] h-[90%] border-[2px] border-[#5523BE] outline outline-[2.2vh] outline-[#7A48DE] rounded-[100%]"
-            width="450px"
-            height="450px"
+            width="680px"
+            height="680px"
           />
           <div className="absolute flex flex-col justify-center items-center gap-[1vmin] w-[20%] h-[20%] bg-black rounded-full z-[4]">
             <button
@@ -523,7 +528,7 @@ function GameRoom() {
               START!
             </button>
           </div>
-          <div className="absolute w-fit h-fit top-0 left-[50%] translate-x-[-50%] z-[4]">
+          <div className="absolute w-fit h-fit top-0 left-[50%] translate-x-[-50%] translate-y-[-10%] z-[4]">
             <icon.RoulettePin className="w-[10vmin] h-[10vmin]" />
           </div>
         </div>
@@ -836,7 +841,10 @@ function GameRoom() {
                   jurorInfo.length !== 0
                 )
               }
-              className=" flex justify-center items-center w-[20%] h-full bg-[#EFFE37] rounded-full ml-auto text-[2.01vh] font-semibold disabled:bg-[#919191] disabled:text-[#505050]"
+              className={
+                hoverStyleOnGameStartBtn +
+                " flex justify-center items-center w-[20%] h-full bg-[#EFFE37] rounded-full ml-auto text-[2.01vh] font-semibold disabled:bg-[#919191] disabled:text-[#505050]"
+              }
             >
               <p>시작</p>
               {hostInfo.nickName &&
@@ -978,16 +986,6 @@ function UserBox({ nickname, avatar }) {
     </div>
   );
 }
-
-// 빈 배심원 자리에 보여주는 컴포넌트
-/* function UserLoadingBox() {
-  return (
-    <div className="flex flex-col h-full text-white justify-center items-center text-[2vmin] overflow-hidden">
-      <div className="w-[6vmin] h-[6vmin] rounded-full bg-gray-300"></div>
-      <div className="w-full h-[2vmin] mt-[1vmin] text-center whitespace-nowrap overflow-hidden overflow-ellipsis bg-gray-300"></div>
-    </div>
-  );
-} */
 
 // 토론자 및 호스트 유저아이콘 컴포넌트
 function TellerIcon({ userInfo, divDesign }) {

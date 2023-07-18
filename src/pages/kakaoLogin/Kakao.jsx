@@ -10,12 +10,10 @@ const Kakao = (props) => {
     // 현재 URL에서 쿼리 파라미터 추출
     const urlParams = new URLSearchParams(window.location.search);
     const token = urlParams.get("token");
-    console.log("urlparan", urlParams);
 
     if (token) {
-      localStorage.setItem("Authorization", `Bearer ${token}`);
-      localStorage.setItem("kakaoId", "1");
-      console.log(typeof localStorage.getItem("Authorization"));
+      sessionStorage.setItem("Authorization", `Bearer ${token}`);
+      sessionStorage.setItem("kakaoId", "1");
       navigate("/");
     }
     // 추출한 토큰을 로컬 스토리지에 저장

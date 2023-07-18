@@ -12,23 +12,23 @@ module.exports = {
             transform: "translateX(0px)",
           },
           "100%": {
-            transform: "translateX(-25%)",
+            transform: "translateX(-100%)",
           },
         },
         textToRightLoop: {
           "0%": {
-            transform: "translateX(0px)",
+            transform: "translateX(-100%)",
           },
           "100%": {
-            transform: "translateX(25%)",
+            transform: "translateX(0px)",
           },
         },
       },
       animation: {
-        flowTextToLeft: "textToLeftLoop 10s linear infinite",
-        flowTextToRight: "textToRightLoop 10s linear infinite",
+        flowTextToLeft: "textToLeftLoop 15s linear infinite",
+        flowTextToRight: "textToRightLoop 15s linear infinite",
       },
     },
   },
-  plugins: [],
+  plugins: [require("tailwind-scrollbar-hide")],
 };

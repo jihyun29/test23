@@ -51,7 +51,7 @@ function RoomList() {
       console.log(roomList);
       setRoomList(roomList);
     });
-  });
+  }, [roomListSocket]);
 
   // 페이지네이션 관련 변수들
   const limit = 10;
@@ -97,12 +97,12 @@ function RoomList() {
   return (
     <>
       <Header />
-      <div className="relative w-full h-[93.98vh]">
-        <SubHeader categoryName={categoryName} categoryCode={categoryCode} />
-        <div
-          ref={roomListPageContainerRef}
-          className="flex flex-col items-center w-full h-full px-[18.7vw] overflow-x-hidden overflow-y-auto"
-        >
+      <SubHeader categoryName={categoryName} categoryCode={categoryCode} />
+      <div
+        ref={roomListPageContainerRef}
+        className="relative w-full h-full overflow-x-hidden overflow-y-auto scrollbar-hide"
+      >
+        <div className="flex flex-col items-center w-full h-full px-[18.7vw]">
           {/* 핫한 방 리스트 */}
           <div className="flex flex-col w-full mt-[18.64vh]">
             <div className="flex text-[1.5vh] gap-[1.04vw]">

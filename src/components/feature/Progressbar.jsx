@@ -1,4 +1,3 @@
-import React from "react";
 import { useCallback } from "react";
 import { useState } from "react";
 import { useEffect } from "react";
@@ -40,14 +39,14 @@ function TestProgressComp({ endGameSignalHandler }) {
       <div className="mx-auto w-full px-[2.97vw]">
         <div className="relative bg-[#2F3131] w-full h-[3px] translate-y-[50%] rounded-full">
           <div
-            className="absolute top-[25%] bg-[#EFFE37] h-[50%] w-full rounded-full z-[2]"
+            className="absolute top-[25%] bg-[#EFFE37] h-[50%] w-full rounded-full z-[3]"
             style={{
               width: `${progressbarPercent}%`,
               transition: "width 0.5s",
             }}
           >
             <div
-              className="absolute right-0 top-1/2 transform -translate-y-1/2 w-5 h-5 rounded-full bg-[#EFFE37] z-[3]"
+              className="absolute right-0 top-1/2 transform -translate-y-1/2 w-5 h-5 rounded-full bg-[#EFFE37] z-[4]"
               style={{
                 transition: "width 1s",
               }}

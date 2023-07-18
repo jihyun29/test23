@@ -6,7 +6,7 @@ export const useSocket = () => {
   const socket = io(URL, {
     withCredentials: true,
     query: {
-      token: localStorage.getItem("Authorization"),
+      token: sessionStorage.getItem("Authorization"),
     },
   });
   return socket;
@@ -16,7 +16,7 @@ export const useRoomListSocket = () => {
   const socket = io(`${URL}/roomList`, {
     withCredentials: true,
     query: {
-      token: localStorage.getItem("Authorization"),
+      token: sessionStorage.getItem("Authorization"),
     },
   });
   return socket;

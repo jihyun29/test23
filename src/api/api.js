@@ -45,11 +45,11 @@ export const chatgpt = {
 export const game = {
   createRoom: async (category) =>
     await instance.post(`/api/roomlist/${category}`, null, {
-      headers: { Authorization: localStorage.getItem("Authorization") },
+      headers: { Authorization: sessionStorage.getItem("Authorization") },
     }),
   selectCategory: async () =>
     await instance.put("api/user", null, {
-      headers: { Authorization: localStorage.getItem("Authorization") },
+      headers: { Authorization: sessionStorage.getItem("Authorization") },
     }),
 };
 
