@@ -16,6 +16,7 @@ import Progressbar from "../components/feature/Progressbar";
 
 import lottie from "../lottie";
 import icon from "../icons";
+import TestProgressbar from "../components/feature/TestProgressbar";
 
 function GameRoom() {
   const navigate = useNavigate();
@@ -76,8 +77,6 @@ function GameRoom() {
   // BackEnd에 카테고리별 주제 받아오는 Ref
   const titleList = useRef([]);
 
-  // 뒤로가기 막기 & 새로고침 시 게임진행 중이면 잘못된 접속으로 홈페이지로 이동
-  useNotGoBack(state);
   // ************************************************ 채팅 창 스크롤 최신 채팅으로 맞추기
   const chatContainerRef = useRef(null);
 
@@ -116,6 +115,9 @@ function GameRoom() {
   //서버와 연결된 소켓 캐싱
   const socket = useMemo(useSocket, []);
 
+  // 뒤로가기 막기 & 새로고침 시 게임진행 중이면 잘못된 접속으로 홈페이지로 이동
+  useNotGoBack(state);
+
   /* 0. 소켓 연결 성공 시 : 방에 입장
   - 토론자일 시 : joinDebate 이벤트 밣생
   - 배심원일 시 : joinJuror 이벤트 발생 */
@@ -135,6 +137,9 @@ function GameRoom() {
         setIsFirstLoading(false);
       });
     }
+    // ------------ TEST
+    socket.emit("isGameStart", roomNumber);
+    // --------------
   }, [categoryCode, categoryName, isTeller, navigate, roomNumber, socket]);
   // });
 
@@ -216,15 +221,15 @@ function GameRoom() {
     // 1. 방에 입장한 유저 닉네임 리스트 받아오기 [ 전체 수신 ]
     socket.on("roomJoined", (data) => {
       console.log("데이터 = ", data);
-      console.log("로컬스토리지 값", sessionStorage.getItem("Authorization"));
       const { userId: myUserId } = jwt_decode(
         sessionStorage.getItem("Authorization")
       );
       console.log("내 아이디 = ", myUserId);
-      console.log("내 아이디 = ", typeof myUserId);
       const jurorList = [];
       let debaterList = {};
       let hostList = {};
+      // let hostStream = null;
+      // let debaterStream = null;
       data.forEach((userInfo) => {
         console.log("받아온 개별 유저정보", userInfo);
         const { host, debater } = userInfo;
@@ -236,11 +241,14 @@ function GameRoom() {
         }
         if (host && debater) {
           console.log("host 유저ID", userInfo.userId);
-          console.log("host 유저ID", typeof userInfo.userId);
           hostList = {
             nickName: userInfo.nickName,
             avatar: JSON.parse(userInfo.avatar),
           };
+          // if(userInfo.hostStream){
+          //    myVideoBox.current.srcObject = "hostStream"
+          // }
+
           if (userInfo.userId === myUserId) {
             setIsHost(true);
           } else {
@@ -253,6 +261,9 @@ function GameRoom() {
             nickName: userInfo.nickName,
             avatar: JSON.parse(userInfo.avatar),
           };
+          // if(userInfo.debaterStream){
+          //   yourVideoBox.current,srcObject = "debaterStream"
+          // }
         }
       });
       setJurorInfo(jurorList);
@@ -401,7 +412,7 @@ function GameRoom() {
       setHostDivDesign("bg-black");
       setDebaterDivDesign("bg-black");
     });
-  }, [navigate, socket, isHost]);
+  }, []);
   // ******************************************************************************
 
   // ********************************************************************** Web RTC
@@ -490,7 +501,7 @@ function GameRoom() {
   };
 
   return (
-    <div className="relative flex gap-3 w-[100vw] h-[100vh] bg-black">
+    <div className="relative flex justify-center gap-[20px] w-full h-[100vh] min-h-[683px] bg-black">
       {/* ========================================= 로딩 모달 창 ================================================ */}
       {isFirstLoading && (
         <div className="absolute flex justify-center items-center w-[100vw] h-[100vh] top-0 left-0 bg-black z-[3]">
@@ -734,7 +745,7 @@ function GameRoom() {
       {/* ================================================================================================ */}
 
       {/* ========================================== 게임 창 ================================================ */}
-      <div className="flex flex-col gap-[1%] w-[75%] h-full py-[1%] pl-[1%]">
+      <div className="flex flex-col gap-[1%] w-[75%] max-w-[1040px] min-w-[787px] h-full py-[20px] pl-[20px]">
         <div className="flex flex-col gap-[2%] h-[68%] p-[1%] bg-[#1E1E1E] rounded-2xl">
           {/* 1. 주제 */}
           <div className="w-full h-[8%]">
@@ -782,7 +793,7 @@ function GameRoom() {
           <div className="relative flex flex-col justify-evenly items-center w-full h-[32%] rounded-2xl text-white">
             <div className="flex w-full justify-evenly items-center">
               {isStartGame ? (
-                <Progressbar endGameSignalHandler={endGameSignalHandler} />
+                <TestProgressbar endGameSignalHandler={endGameSignalHandler} />
               ) : (
                 <>
                   <div className="w-full px-[2.97vw]">
@@ -790,6 +801,7 @@ function GameRoom() {
                   </div>
                 </>
               )}
+              {/* <Progressbar endGameSignalHandler={endGameSignalHandler} /> */}
             </div>
             {/*---------------------------------- */}
 
@@ -915,7 +927,7 @@ function GameRoom() {
       {/* =============================================================================================== */}
 
       {/* ========================================= 채팅 박스 ================================================ */}
-      <div className="flex w-[25%] flex-col my-[1%]">
+      <div className="flex w-[25%] max-w-[380px] min-w-[282px] flex-col my-[20px] mr-[20px]">
         <div className="w-full h-[5%] px-[1.34vh] pt-[1.34vh] bg-[#1B1B1B] text-white text-[2vmin] rounded-t-[12px]">
           <p className="w-fit">채팅</p>
         </div>
