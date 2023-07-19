@@ -23,10 +23,22 @@ module.exports = {
             transform: "translateX(0px)",
           },
         },
+        blink: {
+          "0%": {
+            opacity: 1,
+          },
+          "50%": {
+            opacity: 0,
+          },
+          "100%": {
+            opacity: 1,
+          },
+        },
       },
       animation: {
         flowTextToLeft: "textToLeftLoop 15s linear infinite",
         flowTextToRight: "textToRightLoop 15s linear infinite",
+        blink: "blink 1s ease-in-out infinite",
       },
     },
   },

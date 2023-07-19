@@ -2,9 +2,10 @@ import { useCallback } from "react";
 import { useState } from "react";
 import { useEffect } from "react";
 
-function TestProgressComp({ endGameSignalHandler }) {
+function Progressbar({ endGameSignalHandler }) {
   // gameTime : 게임시간 (초 단위)
-  const gameTime = 7;
+  const gameTime = 10;
+  const gameStepTime = [1.5, 2, 3.5, 4, 5.5, 6, 7.5, 8, 10];
   const [runningTime, setRunningTime] = useState(0);
   const [remainingTime, setRemainingTime] = useState(gameTime);
 
@@ -38,29 +39,33 @@ function TestProgressComp({ endGameSignalHandler }) {
     <>
       <div className="mx-auto w-full px-[2.97vw]">
         <div className="relative bg-[#2F3131] w-full h-[3px] translate-y-[50%] rounded-full">
+          <div className="absolute left-[15%] translate-y-[-20%] w-[5px] h-[5px] rounded-full bg-gray-300 z-[3]" />
+          <div className="absolute left-[20%] translate-y-[-20%] w-[5px] h-[5px] rounded-full bg-gray-300 z-[3]" />
+          <div className="absolute left-[35%] translate-y-[-20%] w-[5px] h-[5px] rounded-full bg-gray-300 z-[3]" />
+          <div className="absolute left-[40%] translate-y-[-20%] w-[5px] h-[5px] rounded-full bg-gray-300 z-[3]" />
+          <div className="absolute left-[55%] translate-y-[-20%] w-[5px] h-[5px] rounded-full bg-gray-300 z-[3]" />
+          <div className="absolute left-[60%] translate-y-[-20%] w-[5px] h-[5px] rounded-full bg-gray-300 z-[3]" />
+          <div className="absolute left-[75%] translate-y-[-20%] w-[5px] h-[5px] rounded-full bg-gray-300 z-[3]" />
+          <div className="absolute left-[80%] translate-y-[-20%] w-[5px] h-[5px] rounded-full bg-gray-300 z-[3]" />
+          <div className="absolute left-[100%] translate-y-[-20%] w-[5px] h-[5px] rounded-full bg-gray-300 z-[3]" />
           <div
-            className="absolute top-[25%] bg-[#EFFE37] h-[50%] w-full rounded-full z-[3]"
+            className="absolute top-[25%] bg-[#EFFE37] h-[50%] w-full rounded-full z-[4]"
             style={{
               width: `${progressbarPercent}%`,
               transition: "width 0.5s",
             }}
           >
             <div
-              className="absolute right-0 top-1/2 transform -translate-y-1/2 w-5 h-5 rounded-full bg-[#EFFE37] z-[4]"
+              className="absolute right-0 transform translate-y-[-20%] w-[5px] h-[5px] rounded-full bg-[#EFFE37] z-[5]"
               style={{
                 transition: "width 1s",
               }}
-            ></div>
+            />
           </div>
         </div>
       </div>
-      {/* <div className="text-[#C6C6C6] font-bold rounded-2xl text-[2vh] right-10 mx-auto">
-        <p>
-          {minutes}:{seconds}
-        </p>
-      </div> */}
     </>
   );
 }
 
-export default TestProgressComp;
+export default Progressbar;
