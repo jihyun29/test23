@@ -21,3 +21,13 @@ export const useRoomListSocket = () => {
   });
   return socket;
 };
+
+export const useMediaSocket = () => {
+  const mediaSocket = io(`${URL}/mediasoup`, {
+    withCredentials: true,
+    query: {
+      token: sessionStorage.getItem("Authorization"),
+    },
+  });
+  return mediaSocket;
+};
