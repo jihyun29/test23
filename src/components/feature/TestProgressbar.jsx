@@ -1,7 +1,7 @@
 import React from "react";
 import { useEffect, useState, useRef } from "react";
 
-function TestProgressbar({ endGameSignalHandler, isStartGame }) {
+function TestProgressbar({ endGameSignalHandler }) {
   const [progress, setProgress] = useState("first");
   const totalGameTime = 240;
   const [progressbarPercent, setProgressbarPercent] = useState(0);
