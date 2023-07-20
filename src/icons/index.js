@@ -1,5 +1,5 @@
 import { ReactComponent as Debate } from "./debate.svg";
-import { ReactComponent as Profile } from "./profile.svg";
+import { ReactComponent as Profile } from "./profile_basic.svg";
 import { ReactComponent as Versus } from "./versus.svg";
 import { ReactComponent as Exit } from "./exit.svg";
 import { ReactComponent as MoveRoom } from "./moveRoom.svg";
@@ -95,7 +95,17 @@ import { ReactComponent as ArrowRightDisabled } from "./ArrowRightDisabled.svg";
 import { ReactComponent as UpperNoRoom } from "./UpperNoRoom.svg";
 import { ReactComponent as LowerNoRoom } from "./LowerNoRoom.svg";
 
+// 게임 창 프롬프트
+import { ReactComponent as PromptAgree } from "./PromptAgree.svg";
+import { ReactComponent as PromptDisagree } from "./PromptDisagree.svg";
+import { ReactComponent as PromptTogether } from "./PromptTogether.svg";
+import { ReactComponent as PromptOpposite } from "./PromptOpposite.svg";
+
 export const icon = {
+  PromptAgree,
+  PromptDisagree,
+  PromptTogether,
+  PromptOpposite,
   Debate,
   Profile,
   Versus,

@@ -111,7 +111,7 @@ function Room({
           disabled={panelBtn || gameStart}
           className={
             jurorBtnStyleByGameStart +
-            " w-full rounded-br-3xl p-[0.2vh] text-[18px] font-semibold]"
+            " w-full rounded-br-3xl p-[0.2vh] text-[18px] font-semibold"
           }
         >
           배심원으로 참여

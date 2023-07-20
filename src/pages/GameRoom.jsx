@@ -603,15 +603,15 @@ function GameRoom() {
                 onClick={voteFirstPersonHandler}
                 className={
                   hostDivDesign +
-                  " flex justify-between items-center gap-[0.67vh] w-[50%] h-[4.68vh] px-[1.77vw] py-[0.67vh] text-white font-bold rounded-[16px] cursor-pointer"
+                  " flex justify-center items-center gap-[0.67vh] w-[50%] h-[4.68vh] px-[1.77vw] py-[0.67vh] text-white font-bold rounded-[16px] cursor-pointer"
                 }
               >
-                <Avatar
-                  name={hostInfo.avatar?.name}
+                {/* <Avatar
+                  name={hostInfo.avatar.name}
                   variant="beam"
-                  color={hostInfo.avatar?.color[0].split(",")}
+                  color={hostInfo.avatar.color[0].split(",")}
                   className="h-[2.68vh]"
-                />
+                /> */}
                 <div className="w-[70%] flex flex-col justify-center">
                   {hostDivDesign === "bg-[#14B5FF]" ? (
                     <p>찬성 발언자</p>
@@ -627,15 +627,15 @@ function GameRoom() {
                 onClick={voteSecondPersonHandler}
                 className={
                   debaterDivDesign +
-                  " flex justify-between items-center gap-[0.67vh] w-[50%] h-[4.68vh] px-[1.77vw] py-[0.67vh] text-white font-bold rounded-[16px] cursor-pointer"
+                  " flex justify-center items-center gap-[0.67vh] w-[50%] h-[4.68vh] px-[1.77vw] py-[0.67vh] text-white font-bold rounded-[16px] cursor-pointer"
                 }
               >
-                <Avatar
-                  name={debaterInfo.avatar?.name}
+                {/* <Avatar
+                  name={debaterInfo.avatar.name}
                   variant="beam"
-                  color={debaterInfo.avatar?.color[0].split(",")}
+                  color={debaterInfo.avatar.color[0].split(",")}
                   className="h-[2.68vh]"
-                />
+                /> */}
                 <div className="w-[70%] flex flex-col justify-center">
                   {debaterDivDesign === "bg-[#14B5FF]" ? (
                     <p>찬성 발언자</p>
@@ -669,7 +669,7 @@ function GameRoom() {
       {/* ========================================== 투표 결과 모달 창 ================================================ */}
       {isVoteEnd && (
         <div className="absolute flex justify-center items-center w-[100vw] h-[100vh] top-0 left-0 bg-slate-200/40 z-[3]">
-          <div className="absolute flex flex-col items-center justify-evenly w-[25.83%] h-[53.43%] p-[4.01vh] bg-[#2F3131]">
+          <div className="absolute flex flex-col items-center justify-evenly w-[592px] h-[61.45vh] p-[4.01vh] bg-[#2F3131]">
             <div className="flex items-center h-[14%]">
               {isTeller ? (
                 isDraw ? (
@@ -685,9 +685,32 @@ function GameRoom() {
                 <p className="text-[5.52vh] text-white font-bold">FIN</p>
               )}
             </div>
-            <p className="w-full h-[2.51vh] text-[2.01vh] text-center text-white font-bold whitespace-between overflow-hidden overflow-ellipsis">
+            {/* <p className="w-full h-[2.51vh] text-[2.01vh] text-center text-white font-bold whitespace-between overflow-hidden overflow-ellipsis">
               패배는 다음의 승리를 위한 발돋움일 뿐
-            </p>
+            </p> */}
+            {isTeller ? (
+              isDraw ? (
+                <p className="w-full h-[2.51vh] text-[2.01vh] text-center text-white font-bold whitespace-between overflow-hidden overflow-ellipsis">
+                  막상막하, 둘 다 정말 만만치 않은 실력이네요
+                </p>
+              ) : isWinner ? (
+                <p className="w-full h-[2.51vh] text-[2.01vh] text-center text-white font-bold whitespace-between overflow-hidden overflow-ellipsis">
+                  열띤 토론의 우승자는 바로 당신!
+                </p>
+              ) : (
+                <p className="w-full h-[2.51vh] text-[2.01vh] text-center text-white font-bold whitespace-between overflow-hidden overflow-ellipsis">
+                  패배는 다음의 승리를 위한 발돋움일 뿐
+                </p>
+              )
+            ) : isDraw ? (
+              <p className="w-full h-[2.51vh] text-[2.01vh] text-center text-white font-bold whitespace-between overflow-hidden overflow-ellipsis">
+                막상막하, 둘 다 정말 만만치 않은 실력이네요
+              </p>
+            ) : (
+              <p className="w-full h-[2.51vh] text-[2.01vh] text-center text-white font-bold whitespace-between overflow-hidden overflow-ellipsis">
+                토론이 끝났습니다!
+              </p>
+            )}
             <div className="relative w-full h-[39.17%] overflow-hidden">
               {isTeller ? (
                 isDraw ? (
@@ -806,7 +829,7 @@ function GameRoom() {
             {/*---------------------------------- */}
 
             {/*-------------- 프롬프트 --------------*/}
-            <div className="flex justify-center items-center w-full h-[50%] text-[#C6C6C6] rounded-2xl text-[1.59vh]">
+            <div className="flex flex-col justify-center items-center w-full h-[50%] text-[#C6C6C6] rounded-2xl text-[1.59vh]">
               {isStartGame ? (
                 <Prompt title={title} />
               ) : (
@@ -944,28 +967,44 @@ function GameRoom() {
               {totalChat?.map((chat, index) => {
                 if (chat.split(":")[0] === "You") {
                   return (
-                    <li
-                      key={index}
-                      className="w-fit max-w-[80%] ml-auto bg-[#2F3131] px-[0.5vh] mt-[0.5vh] text-[#C6C6C6] text-[1.7vh] rounded-[1vh]"
-                    >
-                      {chat.split(":")[1]}
-                    </li>
+                    <>
+                      <li
+                        key={chat}
+                        className="w-fit max-w-[80%] text-white text-[1.7vh] ml-auto mt-[2.01vh] px-[0.5vh] rounded-[1vh]"
+                      >
+                        {chat.split(":")[0]}
+                      </li>
+                      <li
+                        key={index}
+                        className="w-fit max-w-[80%] bg-[#2F3131] text-[#C6C6C6] text-[1.7vh] ml-auto mt-[0.67vh] px-[0.8vh] py-[0.5vh] rounded-[1vh]"
+                      >
+                        {chat.split(":")[1]}
+                      </li>
+                    </>
                   );
                 }
                 return (
-                  <li
-                    key={index}
-                    className="w-fit max-w-[80%] bg-[#2F3131] text-[#C6C6C6] text-[1.7vh] mt-[0.5vh] px-[0.5vh] rounded-[1vh]"
-                  >
-                    {chat}
-                  </li>
+                  <>
+                    <li
+                      key={chat}
+                      className="w-fit max-w-[80%] text-white text-[1.7vh] mt-[2.01vh] px-[0.5vh] rounded-[1vh]"
+                    >
+                      {chat.split(":")[0]}
+                    </li>
+                    <li
+                      key={index}
+                      className="w-fit max-w-[80%] bg-[#2F3131] text-[#C6C6C6] text-[1.7vh] mt-[0.67vh] px-[0.8vh] py-[0.5vh] rounded-[1vh]"
+                    >
+                      {chat.split(":")[1]}
+                    </li>
+                  </>
                 );
               })}
             </ul>
           </div>
           {/* <div className="flex w-full h-[5%] border border-[#C6C6C6] gap-[10px] p-2 mt-2 rounded-2xl active:outline-[2px] active:outline-[#D7E33B]"> */}
           <input
-            className="w-full h-[5%] px-[1.17vh] border border-[#C6C6C6] rounded-2xl bg-[#1B1B1B] text-white text-[1.17vh] font-medium focus:outline-[2px] focus:outline-[#D7E33B] focus:border focus:border-transparent"
+            className="w-full h-[5%] px-[1.17vh] border border-[#C6C6C6] rounded-2xl bg-[#1B1B1B] text-white text-[1.17vh] font-medium focus:outline focus:outline-[#D2DE37] focus:border focus:border-[#D2DE37] focus:ring-0"
             ref={chatInputValue}
             type="text"
             required

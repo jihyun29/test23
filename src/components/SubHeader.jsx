@@ -77,7 +77,7 @@ function SubHeader({ categoryName, categoryCode }) {
       break;
   }
   return (
-    <div className="absolute top-[72px] flex justify-between w-full h-[120px] items-center px-[18.7vw] z-[1] backdrop-blur-[4px] bg-black-transparent transition-[background-color]">
+    <div className="absolute top-[72px] flex justify-between w-full h-[120px] items-center px-[18.7vw] z-[1] overflow-hidden backdrop-blur-[4px] bg-black-transparent transition-[background-color]">
       {categoryName ? (
         <div
           onClick={goCategoryHandler}

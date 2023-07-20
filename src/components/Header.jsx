@@ -15,6 +15,9 @@ function Header() {
     sessionStorage.removeItem("kakaoId");
     navigate("/");
   };
+  const goHomeBtnClickHandler = () => {
+    navigate("/");
+  };
   const userIcon =
     sessionStorage.getItem("kakaoId") === "1" ? (
       <div
@@ -43,7 +46,10 @@ function Header() {
     );
   return (
     <div className="relative flex justify-between items-center w-full h-[72px] border-b border-[#464747]">
-      <div className="flex items-center h-[28px] ml-[18.7vw]">
+      <div
+        onClick={goHomeBtnClickHandler}
+        className="flex items-center h-[28px] ml-[18.7vw] cursor-pointer"
+      >
         <icon.DebatoryLogo className="w-[100%] h-[100%]" />
       </div>
       {userIcon}

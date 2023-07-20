@@ -1,21 +1,89 @@
 import React, { useEffect, useState, useMemo } from "react";
+import icon from "../../icons";
 
 const Prompt = ({ title }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const iconStyle = "h-[3.93vh]";
+  const iconStyle2 = "h-[2.67vh]";
+  const AgreeMentStyle = "text-[#14B5FF]";
+  const DisagreeMentStyle = "text-[#FA3C3C]";
 
   const Ment = useMemo(
     () => [
-      { timer: 3, message: "먼저, 찬성 측 첫번째 발언해주시겠습니까?" },
-      { timer: 1, message: "반대 측 반론 있으시면 발언해주세요" },
-      { timer: 3, message: "네, 이번에는 반대 측 의견을 말씀해 주세요" },
-      { timer: 1, message: "찬성 측 반론 있으시면 발언해주세요" },
-      { timer: 3, message: "먼저, 찬성 측 첫번째 발언해주시겠습니까?" },
-      { timer: 1, message: "반대 측 반론 있으시면 발언해주세요" },
-      { timer: 3, message: "네, 이번에는 반대 측 의견을 말씀해 주세요" },
-      { timer: 1, message: "찬성 측 반론 있으시면 발언해주세요" },
-      { timer: 4, message: "추가로 의견을 제시하실 분은 말씀해주세요" },
+      {
+        timer: 3,
+        ment: `"찬성입장 : ${title}"`,
+        message1: "찬성 측의 발언 시간이예요!",
+        message2: "와 같은 의견을 말씀해주세요.",
+        icon: <icon.PromptAgree className={iconStyle} />,
+        mentStyle: AgreeMentStyle,
+      },
+      {
+        timer: 1,
+        ment: `방금 찬성 측에서의 발언`,
+        message1: "찬성 측 입장에 대한 반론 시간이에요.",
+        message2: "에 반대되는 반론을 말씀해주세요.",
+        icon: <icon.PromptOpposite className={iconStyle2} />,
+        mentStyle: AgreeMentStyle,
+      },
+      {
+        timer: 3,
+        ment: `"반대입장 : ${title}"`,
+        message1: "반대 측의 발언 시간이에요!",
+        message2: "와 같은 의견을 말씀해주세요.",
+        icon: <icon.PromptDisagree className={iconStyle} />,
+        mentStyle: DisagreeMentStyle,
+      },
+      {
+        timer: 1,
+        ment: "방금 반대 측에서의 발언",
+        message1: "반대 측 입장에 대한 반론 시간이에요.",
+        message2: "에 반대되는 반론을 말씀해주세요.",
+        icon: <icon.PromptOpposite className={iconStyle2} />,
+        mentStyle: DisagreeMentStyle,
+      },
+      {
+        timer: 3,
+        ment: `"찬성입장 : ${title}"`,
+        message1: "찬성 측의 발언 시간이예요!",
+        message2: "와 같은 의견을 말씀해주세요.",
+        icon: <icon.PromptAgree className={iconStyle} />,
+        mentStyle: AgreeMentStyle,
+      },
+      {
+        timer: 1,
+        ment: "방금 찬성 측에서의 발언",
+        message1: "찬성 측 입장에 대한 반론 시간이에요.",
+        message2: "에 반대되는 반론을 말씀해주세요.",
+        icon: <icon.PromptOpposite className={iconStyle2} />,
+        mentStyle: AgreeMentStyle,
+      },
+      {
+        timer: 3,
+        ment: `"반대입장 : ${title}"`,
+        message1: "반대 측의 발언 시간이에요!",
+        message2: "와 같은 의견을 말씀해주세요.",
+        icon: <icon.PromptDisagree className={iconStyle} />,
+        mentStyle: DisagreeMentStyle,
+      },
+      {
+        timer: 1,
+        ment: "방금 반대 측에서의 발언",
+        message1: "반대 측 입장에 대한 반론 시간이에요.",
+        message2: "에 반대되는 반론을 말씀해주세요.",
+        icon: <icon.PromptOpposite className={iconStyle2} />,
+        mentStyle: DisagreeMentStyle,
+      },
+      {
+        timer: 4,
+        ment: `토론주제 "${title}"`,
+        message1: "최종 발언 시간이에요.",
+        message2: "에 대한 자신의 찬반 의견을 말씀해주세요.",
+        icon: <icon.PromptTogether className={iconStyle2} />,
+        mentStyle: "text-[#EFFE37]",
+      },
     ],
-    []
+    [title]
   );
 
   useEffect(() => {
@@ -28,7 +96,18 @@ const Prompt = ({ title }) => {
     }
   }, [currentIndex, Ment]);
 
-  return <p>{Ment[currentIndex].message}</p>;
+  return (
+    <>
+      {Ment[currentIndex].icon}
+      <p className="mt-[1.34vh]">{Ment[currentIndex].message1}</p>
+      <p>
+        <span className={Ment[currentIndex].mentStyle + " font-bold"}>
+          {Ment[currentIndex].ment}
+        </span>
+        {Ment[currentIndex].message2}
+      </p>
+    </>
+  );
 };
 
 export default Prompt;
