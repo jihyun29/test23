@@ -500,7 +500,7 @@ function GameRoom() {
   };
 
   return (
-    <div className="relative flex justify-center gap-[20px] w-full h-[100vh] min-h-[683px] bg-black">
+    <div className="relative flex justify-center gap-[20px] w-full h-full bg-black">
       {/* ========================================= 로딩 모달 창 ================================================ */}
       {isFirstLoading && (
         <div className="absolute flex justify-center items-center w-[100vw] h-[100vh] top-0 left-0 bg-black z-[3]">
@@ -726,7 +726,7 @@ function GameRoom() {
               )}
             </div>
             <div className="w-full flex flex-col items-center gap-[2.03%]">
-              <p className="w-full text-[#EFFE37] text-[1.76vh] font-medium whitespace-nowrap overflow-hidden overflow-ellipsis">
+              <p className="w-full text-[#EFFE37] text-[1.76vh] font-medium whitespace-nowrap overflow-hidden overflow-ellipsis text-center">
                 {title}
               </p>
               {!isDraw ? (
@@ -1066,10 +1066,10 @@ function TellerIcon({ userInfo, divDesign }) {
     >
       <div className="flex items-center gap-[1.59%] ml-[1.59%]">
         <Avatar
+          size="2.67vh"
           name={userInfo.avatar.name}
           variant="beam"
           colors={userInfo.avatar.color[0].split(",")}
-          className="h-[2.67vh]"
         />
         <div className="flex flex-col justify-center ml-[0.42vw]">
           <p style={modifierStyle} className="text-[1.17vh] font-medium">
