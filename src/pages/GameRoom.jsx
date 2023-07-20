@@ -1018,6 +1018,7 @@ function GameRoom() {
           <input
             className="w-full h-[5%] px-[1.17vh] border border-[#C6C6C6] rounded-2xl bg-[#1B1B1B] text-white text-[1.17vh] font-medium focus:outline focus:outline-[#D2DE37] focus:border focus:border-[#D2DE37] focus:ring-0"
             ref={chatInputValue}
+            disabled={isStartGame && !isTeller}
             type="text"
             required
             placeholder="메세지를 입력해주세요"
