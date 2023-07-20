@@ -33,17 +33,8 @@ function SubHeader({ categoryName, categoryCode }) {
         sessionStorage.setItem("userData", userData);
         navigate(`/room/${roomData.roomId}`);
       },
-      onError: (err) => {
-        alert(err);
-      },
     }
   );
-
-  // 방생성 함수 : 지금은 랜덤으로 생성 & 내 화면에만 표시됨으로 향후 수정 필요
-  // createRoom mustation으로 들어가도록 설정 필요
-  const createRoomBtnClick = () => {
-    createRoom();
-  };
 
   let categoryIcon;
   switch (categoryName) {
@@ -104,7 +95,9 @@ function SubHeader({ categoryName, categoryCode }) {
       )}
       {categoryName && sessionStorage.getItem("kakaoId") === "1" ? (
         <icon.SubHeaderMakeRoomButton
-          onClick={createRoomBtnClick}
+          onClick={() => {
+            createRoom();
+          }}
           className={makeRoomBtnStyle + " cursor-pointer"}
         />
       ) : (
