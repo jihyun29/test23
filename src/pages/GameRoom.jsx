@@ -101,6 +101,9 @@ function GameRoom() {
 
   // 게임 종료
   const endGameSignalHandler = () => {
+    setInterval(() => {
+      setIsGameEnd(false);
+    }, 30000);
     setIsStartGame(false);
     setIsGameEnd(true);
     socket.emit("voteStart", roomNumber, categoryCode, () => {
