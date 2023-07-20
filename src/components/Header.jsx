@@ -45,7 +45,7 @@ function Header() {
       </Link>
     );
   return (
-    <div className="relative flex justify-between items-center w-full h-[72px] border-b border-[#464747]">
+    <div className="absolute top-0 flex justify-between items-center w-full h-[72px] bg-[#1B1B1B] border-b border-[#464747] z-[50]">
       <div
         onClick={goHomeBtnClickHandler}
         className="flex items-center h-[28px] ml-[18.7vw] cursor-pointer"

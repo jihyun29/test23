@@ -12,7 +12,6 @@ import { useSocket } from "../util/useSocket";
 import { decrypt } from "../util/cryptoJs";
 
 import Prompt from "../components/feature/Prompt";
-import Progressbar from "../components/feature/Progressbar";
 
 import lottie from "../lottie";
 import icon from "../icons";
@@ -137,9 +136,6 @@ function GameRoom() {
         setIsFirstLoading(false);
       });
     }
-    // ------------ TEST
-    socket.emit("isGameStart", roomNumber);
-    // --------------
   }, [categoryCode, categoryName, isTeller, navigate, roomNumber, socket]);
   // });
 
@@ -834,11 +830,24 @@ function GameRoom() {
                 <Prompt title={title} />
               ) : (
                 <div className="flex flex-col text-center">
-                  <p>아래 시작 버튼을 눌러 시작해주세요!</p>
-                  <p className="text-[#EFFE37]">
-                    단, 토론자 2명과 배심원이 적어도 1명 들어와야 시작이
-                    가능합니다.
-                  </p>
+                  {hostInfo.nickName &&
+                  debaterInfo.nickName &&
+                  jurorInfo.length !== 0 ? (
+                    <p className="text-[#EFFE37] font-semibold">
+                      아래 시작 버튼을 눌러 시작해주세요!
+                    </p>
+                  ) : (
+                    <>
+                      <p>
+                        안녕하세요. 다른 참가자들이 들어오기까지 좀 더
+                        기다려주세요
+                      </p>
+                      <p className="text-[#EFFE37] font-semibold">
+                        (토론자 2명과 배심원이 적어도 1명 들어와야 시작이
+                        가능합니다.)
+                      </p>
+                    </>
+                  )}
                 </div>
               )}
             </div>
@@ -1040,6 +1049,11 @@ function UserBox({ nickname, avatar }) {
 
 // 토론자 및 호스트 유저아이콘 컴포넌트
 function TellerIcon({ userInfo, divDesign }) {
+  console.log("발언자 아이콘 디자인", divDesign);
+  const modifierStyle =
+    divDesign === "bg-black" ? { display: "none" } : { visibility: "visible" };
+  let modifier = "";
+  modifier = divDesign === "bg-[#14B5FF]" ? "찬성 발언자" : "반대 발언자";
   return (
     <div
       className={
@@ -1054,8 +1068,13 @@ function TellerIcon({ userInfo, divDesign }) {
           colors={userInfo.avatar.color[0].split(",")}
           className="h-[2.67vh]"
         />
-        <div className="w-full text-center whitespace-nowrap overflow-hidden overflow-ellipsis text-[1.34vh] text-white font-bold">
-          {userInfo.nickName}
+        <div className="flex flex-col justify-center ml-[0.42vw]">
+          <p style={modifierStyle} className="text-[1.17vh] font-medium">
+            {modifier}
+          </p>
+          <div className="w-full text-center whitespace-nowrap overflow-hidden overflow-ellipsis text-[1.34vh] text-white font-bold">
+            {userInfo.nickName}
+          </div>
         </div>
       </div>
 

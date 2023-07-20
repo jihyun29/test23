@@ -17,7 +17,7 @@ function Home() {
     <>
       <Header />
       <div className="w-full h-full overflow-x-hidden overflow-y-auto scrollbar-hide">
-        <div className="relative flex flex-col justify-center mt-[150px] items-center w-[3202px] h-[214px] whitespace-nowrap overflow-hidden">
+        <div className="relative flex flex-col justify-center mt-[222px] items-center w-[3202px] h-[214px] whitespace-nowrap overflow-hidden">
           <div className="absoulte flex w-full h-full animate-flowTextToLeft">
             <div className="flex w-full h-full items-center">
               <icon.Top />

@@ -163,7 +163,7 @@ function Category() {
           {/* Center */}
           <div className="w-[44.01vw] h-full">
             <div className="w-full h-[100vh] flex flex-col items-center">
-              <div className="flex justify-between w-[787px] mt-[177px] py-[8px] px-[16px] bg-[#464747] font-semibold text-[20px] rounded-2xl text-[#C6C6C6]">
+              <div className="flex justify-between w-[787px] mt-[249px] py-[8px] px-[16px] bg-[#464747] font-semibold text-[20px] rounded-2xl text-[#C6C6C6]">
                 <p>
                   내가 최근에 입장한 토론 주제는{" "}
                   <span className="bg-black py-[0.3vmin] px-[0.5vmin] rounded-xl">

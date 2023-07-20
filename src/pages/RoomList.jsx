@@ -104,7 +104,7 @@ function RoomList() {
       >
         <div className="flex flex-col items-center w-full h-full px-[18.7vw]">
           {/* 핫한 방 리스트 */}
-          <div className="flex flex-col w-full mt-[18.64vh]">
+          <div className="flex flex-col w-full mt-[220px]">
             <div className="flex text-[1.5vh] gap-[1.04vw]">
               <button
                 onClick={have2TellerBtnClickHandler}
