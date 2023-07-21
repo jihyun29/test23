@@ -5,7 +5,7 @@ export function useNotGoBack(state) {
   const { roomNumber } = state;
   const navigate = useNavigate();
   useEffect(() => {
-    console.log("방에 입장하셨습니다.");
+    // console.log("방에 입장하셨습니다.");
     const handlePopstate = () => {
       console.log("popstate");
       console.log(window.history);
@@ -26,7 +26,7 @@ export function useNotGoBack(state) {
     return async () => {
       window.removeEventListener("popstate", handlePopstate);
       // window.removeEventListener("beforeunload", handleBeforeUnload);
-      console.log("나가졌습니다.");
+      // console.log("나가졌습니다.");
     };
   }, [navigate, roomNumber]);
 }

@@ -24,7 +24,7 @@ function Room({
       categoryCode,
       isTeller: true,
     });
-    console.log(userData);
+    // console.log(userData);
     sessionStorage.setItem("userData", userData);
     navigate(`/room/${roomId}`);
   };

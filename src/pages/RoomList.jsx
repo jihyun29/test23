@@ -27,13 +27,13 @@ function RoomList() {
     roomListSocket.emit("update", categoryCode);
     return () => {
       roomListSocket.disconnect();
-      console.log("네임스페이스 소켓의 연결이 끊어졌습니다.");
+      // console.log("네임스페이스 소켓의 연결이 끊어졌습니다.");
     };
   }, [categoryCode, roomListSocket]);
 
   // 뒤로가기 막기
   useEffect(() => {
-    console.log("방에 입장하셨습니다.");
+    // console.log("방에 입장하셨습니다.");
     const handlePopstate = () => {
       console.log("popstate");
       console.log(window.history);
@@ -48,7 +48,7 @@ function RoomList() {
 
   useEffect(() => {
     roomListSocket.on("update_roomList", (roomList) => {
-      console.log(roomList);
+      // console.log(roomList);
       setRoomList(roomList);
     });
   }, [roomListSocket]);

@@ -53,7 +53,7 @@ function Category() {
   const example = "게임/프로게이머";
 
   useEffect(() => {
-    console.log("방에 입장하셨습니다.");
+    // console.log("방에 입장하셨습니다.");
     const handlePopstate = () => {
       console.log("popstate");
       console.log(window.history);
@@ -150,7 +150,7 @@ function Category() {
   // 카테고리 클릭
   // 하위 컴포넌트에서 선택된 카테고리를 state에 저장
   const categoryBtnClickHandler = (categoryName) => {
-    console.log(categoryName);
+    // console.log(categoryName);
     setSelectedCategory(categoryName);
   };
 

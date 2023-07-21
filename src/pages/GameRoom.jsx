@@ -219,18 +219,18 @@ function GameRoom() {
   useEffect(() => {
     // 1. 방에 입장한 유저 닉네임 리스트 받아오기 [ 전체 수신 ]
     socket.on("roomJoined", (data) => {
-      console.log("데이터 = ", data);
+      // console.log("데이터 = ", data);
       const { userId: myUserId } = jwt_decode(
         sessionStorage.getItem("Authorization")
       );
-      console.log("내 아이디 = ", myUserId);
+      // console.log("내 아이디 = ", myUserId);
       const jurorList = [];
       let debaterList = {};
       let hostList = {};
       // let hostStream = null;
       // let debaterStream = null;
       data.forEach((userInfo) => {
-        console.log("받아온 개별 유저정보", userInfo);
+        // console.log("받아온 개별 유저정보", userInfo);
         const { host, debater } = userInfo;
         if (!debater) {
           jurorList.push({
@@ -239,7 +239,7 @@ function GameRoom() {
           });
         }
         if (host && debater) {
-          console.log("host 유저ID", userInfo.userId);
+          // console.log("host 유저ID", userInfo.userId);
           hostList = {
             nickName: userInfo.nickName,
             avatar: JSON.parse(userInfo.avatar),
@@ -326,17 +326,17 @@ function GameRoom() {
       if (hostPosition.debatePosition === 1) {
         setHostDivDesign("bg-[#14B5FF]");
         setDebaterDivDesign("bg-[#FA3C3C]");
-        console.log("호스트 찬성");
+        // console.log("호스트 찬성");
       } else {
         setHostDivDesign("bg-[#FA3C3C]");
         setDebaterDivDesign("bg-[#14B5FF]");
-        console.log("호스트 반대");
+        // console.log("호스트 반대");
       }
     };
 
     // 3 - 4 - 2. 이벤트 수신 후 룰렛 닫기 [ 전체 수신 ]
     socket.on("close_roulette", (result, debatersInfo) => {
-      console.log(debatersInfo);
+      // console.log(debatersInfo);
       setIsRoulette(result);
       setTimeout(startGameSignalHandler, 100);
       setDebaterPosition(debatersInfo);
@@ -451,7 +451,7 @@ function GameRoom() {
       Stream.getVideoTracks().forEach(
         (track) => (track.enabled = !track.enabled)
       );
-      console.log(Stream.getVideoTracks());
+      // console.log(Stream.getVideoTracks());
       return Stream;
     } catch (e) {
       console.log(e);
@@ -1053,7 +1053,7 @@ function UserBox({ nickname, avatar }) {
 
 // 토론자 및 호스트 유저아이콘 컴포넌트
 function TellerIcon({ userInfo, divDesign }) {
-  console.log("발언자 아이콘 디자인", divDesign);
+  // console.log("발언자 아이콘 디자인", divDesign);
   const modifierStyle =
     divDesign === "bg-black" ? { display: "none" } : { visibility: "visible" };
   let modifier = "";
