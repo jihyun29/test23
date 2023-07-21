@@ -166,7 +166,7 @@ function GameRoom() {
 
   // 3 - 1 - 1. 게임 시작 버튼 클릭 시 룰렛 보여줌
   const gameStartBtnClickHandler = () => {
-    console.log("버튼이 클릭되었습니다.");
+    // console.log("버튼이 클릭되었습니다.");
     socket.emit("show_roulette", true, categoryCode);
   };
 
@@ -283,17 +283,17 @@ function GameRoom() {
     const setTitleFunc = async (ran) => {
       currentTitle = titleList.current[ran];
       const canvas = roulette.current;
-      console.log(canvas);
+      // console.log(canvas);
       canvas.style.transform = `initial`;
       canvas.style.transition = `initial`;
-      console.log(canvas.style.transform);
-      console.log(canvas.style.transition);
+      // console.log(canvas.style.transform);
+      // console.log(canvas.style.transition);
 
       // 룰렛 애니메이션 작동안하는 이유 : 초기화 후 순차적으로 진행 필요? setTimeout 적용하니 해결됨
       setTimeout(() => {
         const arc = 360 / titleList.current.length;
         const rotate = ran * arc + 3600 + arc * 3 - arc / 2;
-        console.log(rotate);
+        // console.log(rotate);
 
         canvas.style.transform = `rotate(-${rotate}deg)`;
         canvas.style.transition = `2s`;
@@ -307,7 +307,7 @@ function GameRoom() {
 
     // 3 - 2 - 2. 룰렛 애니메이션 시작 [ 전체 수신 ]
     socket.on("start_roulette", (randomSubjectIndex) => {
-      console.log(roulette.current);
+      // console.log(roulette.current);
       // 룰렛 애니메이션 함수
       setTitleFunc(randomSubjectIndex);
     });
@@ -373,7 +373,7 @@ function GameRoom() {
         const { userId: myUserId } = jwt_decode(
           sessionStorage.getItem("Authorization")
         );
-        console.log(myUserId);
+        // console.log(myUserId);
         if (result.winner === myUserId) {
           setIsWinner(true);
         }

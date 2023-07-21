@@ -34,6 +34,9 @@ function TestProgressbar({ endGameSignalHandler }) {
           break;
       }
     }, 1000);
+    return () => {
+      clearInterval(test);
+    };
   }, []);
 
   return (
