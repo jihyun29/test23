@@ -154,11 +154,6 @@ function GameRoom() {
     chatInputValue.current.value = "";
   };
 
-  // 2 - 2. 상대 방이 보낸 채팅 가져와서 화면에 표기
-  socket.on("new_chat", (chat) => {
-    setTotalChat([...totalChat, chat]);
-  });
-
   // 3. 룰렛
 
   // 룰렛 그려주는 함수 - useEffect()
@@ -186,11 +181,6 @@ function GameRoom() {
     socket.emit("close_result", false, roomNumber, categoryCode);
   };
 
-  // 4. 유저 나갔을 시 발생하는 알람
-  socket.on("roomLeft", (nickname) => {
-    setTotalChat([...totalChat, `Alarm : ${nickname}님이 나가셨습니다.`]);
-  });
-
   // 5 - 1. Host 투표
   const voteFirstPersonHandler = () => {
     socket.emit("vote", roomNumber, 1, categoryCode);
@@ -217,6 +207,17 @@ function GameRoom() {
 
   // 백 웹 소켓 서버에서 이벤트 받는 함수 (매번 생성할 필요 없이 페이지 마운트 시 한 번만 생성할 함수)
   useEffect(() => {
+    // 2 - 2. 상대 방이 보낸 채팅 가져와서 화면에 표기
+    socket.on("new_chat", (chat) => {
+      setTotalChat((prevChat) => [...prevChat, chat]);
+    });
+    // 4. 유저 나갔을 시 발생하는 알람
+    socket.on("roomLeft", (nickname) => {
+      setTotalChat((prevChat) => [
+        ...prevChat,
+        `Alarm : ${nickname}님이 나가셨습니다.`,
+      ]);
+    });
     // 1. 방에 입장한 유저 닉네임 리스트 받아오기 [ 전체 수신 ]
     socket.on("roomJoined", (data) => {
       // console.log("데이터 = ", data);
