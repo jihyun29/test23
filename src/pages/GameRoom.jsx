@@ -230,10 +230,11 @@ function GameRoom() {
       // let hostStream = null;
       // let debaterStream = null;
       data.forEach((userInfo) => {
-        // console.log("받아온 개별 유저정보", userInfo);
+        console.log("받아온 개별 유저정보", userInfo);
         const { host, debater } = userInfo;
         if (!debater) {
           jurorList.push({
+            userId: userInfo.userId,
             nickName: userInfo.nickName,
             avatar: JSON.parse(userInfo.avatar),
           });
@@ -241,6 +242,7 @@ function GameRoom() {
         if (host && debater) {
           // console.log("host 유저ID", userInfo.userId);
           hostList = {
+            userId: userInfo.userId,
             nickName: userInfo.nickName,
             avatar: JSON.parse(userInfo.avatar),
           };
@@ -257,6 +259,7 @@ function GameRoom() {
           }
         } else if (!host && debater) {
           debaterList = {
+            userId: userInfo.userId,
             nickName: userInfo.nickName,
             avatar: JSON.parse(userInfo.avatar),
           };
@@ -868,9 +871,14 @@ function GameRoom() {
         <div className="grid grid-cols-5 grid-rows-1 w-full h-[15%] gap-2">
           {jurorInfo &&
             jurorInfo.map((userInfo) => {
-              const { nickName, avatar } = userInfo;
+              const { nickName, avatar, userId } = userInfo;
               return (
-                <UserBox key={nickName} nickname={nickName} avatar={avatar} />
+                <UserBox
+                  key={nickName}
+                  nickname={nickName}
+                  avatar={avatar}
+                  userId={userId}
+                />
               );
             })}
         </div>
@@ -1035,16 +1043,27 @@ function GameRoom() {
 export default GameRoom;
 
 // 배심원으로 들어온 유저 보여주는 컴포넌트
-function UserBox({ nickname, avatar }) {
+function UserBox({ nickname, avatar, userId }) {
+  const { userId: myUserId } = jwt_decode(
+    sessionStorage.getItem("Authorization")
+  );
+  const meModifier =
+    myUserId === userId ? { visibility: "visible" } : { display: "none" };
   return (
     <div className="relative flex flex-col h-full rounded-lg text-white justify-center items-center text-[2vmin]">
+      <p
+        style={meModifier}
+        className="absolute top-0 left-[15%] text-[1.4vh] text-[#EFFE37] font-bold"
+      >
+        나
+      </p>
       <Avatar
         size="6vh"
         name={avatar.name}
         variant="beam"
         colors={avatar.color[0].split(",")}
       />
-      <div className="w-full text-[2vmin] mt-[1vmin] text-center whitespace-nowrap overflow-hidden overflow-ellipsis">
+      <div className="w-full text-[1.8vmin] mt-[1vmin] text-center whitespace-nowrap overflow-hidden overflow-ellipsis">
         {nickname}
       </div>
     </div>
@@ -1053,7 +1072,14 @@ function UserBox({ nickname, avatar }) {
 
 // 토론자 및 호스트 유저아이콘 컴포넌트
 function TellerIcon({ userInfo, divDesign }) {
-  // console.log("발언자 아이콘 디자인", divDesign);
+  const { userId: myUserId } = jwt_decode(
+    sessionStorage.getItem("Authorization")
+  );
+  const meModifier =
+    myUserId === userInfo.userId
+      ? { visibility: "visible" }
+      : { display: "none" };
+
   const modifierStyle =
     divDesign === "bg-black" ? { display: "none" } : { visibility: "visible" };
   let modifier = "";
@@ -1076,7 +1102,13 @@ function TellerIcon({ userInfo, divDesign }) {
           <p style={modifierStyle} className="text-[1.17vh] font-medium">
             {modifier}
           </p>
-          <div className="w-full text-center whitespace-nowrap overflow-hidden overflow-ellipsis text-[1.34vh] text-white font-bold">
+          <div className="w-full text-center whitespace-nowrap overflow-hidden overflow-ellipsis text-[1.4vh] text-white font-bold">
+            <span
+              style={meModifier}
+              className="mr-[4px] text-[1.4vh] text-[#EFFE37] font-bold"
+            >
+              나
+            </span>
             {userInfo.nickName}
           </div>
         </div>
