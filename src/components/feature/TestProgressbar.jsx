@@ -12,7 +12,7 @@ function TestProgressbar({ endGameSignalHandler }) {
     let counter = 0;
     const test = setInterval(() => {
       counter += 1;
-      console.log(counter);
+      // console.log(counter);
       setProgressbarPercent((counter / totalGameTime) * 100);
       switch (counter) {
         case 90:

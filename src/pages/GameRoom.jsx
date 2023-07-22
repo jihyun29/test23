@@ -748,7 +748,7 @@ function GameRoom() {
                 </p>
               )}
             </div>
-            <div class="flex w-full gap-[2.42%]">
+            <div class="flex justify-center w-full gap-[2.42%]">
               <button
                 onClick={goHomeBtnClickHandler}
                 className="w-[50%] p-[2.36%] bg-[#777777] text-[#C6C6C6] font-bold rounded-[1.34vh]"
