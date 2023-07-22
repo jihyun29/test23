@@ -716,16 +716,16 @@ function GameRoom() {
             <div className="relative w-full h-[39.17%] overflow-hidden">
               {isTeller ? (
                 isDraw ? (
-                  <icon.DrawIcon className="absolute w-[250%] h-[300%] top-[50%] left-[50%] translate-y-[-50%] translate-x-[-50%]" />
+                  <icon.DrawIcon className="absolute w-[300%] h-[300%] top-[50%] left-[50%] translate-y-[-50%] translate-x-[-50%]" />
                 ) : isWinner ? (
-                  <icon.WinIcon className="absolute w-[300%] h-[300%] top-[50%] left-[50%] translate-y-[-50%] translate-x-[-50%]" />
+                  <icon.WinIcon className="absolute w-[300%] h-[270%] top-[50%] left-[50%] translate-y-[-50%] translate-x-[-50%]" />
                 ) : (
-                  <icon.LoseIcon className="absolute w-[300%] h-[300%] top-[50%] left-[50%] translate-y-[-50%] translate-x-[-50%]" />
+                  <icon.LoseIcon className="absolute w-[300%] h-[270%] top-[50%] left-[50%] translate-y-[-51.2%] translate-x-[-50%]" />
                 )
               ) : isDraw ? (
                 <icon.DrawIcon className="absolute w-[300%] h-[300%] top-[50%] left-[50%] translate-y-[-50%] translate-x-[-50%]" />
               ) : (
-                <icon.WinIcon className="absolute w-[300%] h-[300%] top-[50%] left-[50%] translate-y-[-50%] translate-x-[-50%]" />
+                <icon.WinIcon className="absolute w-[300%] h-[270%] top-[50%] left-[50%] translate-y-[-50%] translate-x-[-50%]" />
               )}
             </div>
             <div className="w-full flex flex-col items-center gap-[2.03%]">
@@ -1053,7 +1053,7 @@ function UserBox({ nickname, avatar, userId }) {
     <div className="relative flex flex-col h-full rounded-lg text-white justify-center items-center text-[2vmin]">
       <p
         style={meModifier}
-        className="absolute top-0 left-[15%] text-[1.4vh] text-[#EFFE37] font-bold"
+        className="absolute top-0 left-0 text-[1.8vh] text-[#EFFE37] font-bold"
       >
         나
       </p>
