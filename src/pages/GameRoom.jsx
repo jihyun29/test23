@@ -980,7 +980,7 @@ function GameRoom() {
         >
           <div
             ref={chatContainerRef}
-            className="h-[95%] break-words overflow-x-hidden overflow-y-auto "
+            className="h-[95%] break-words overflow-x-hidden overflow-y-auto scrollbar-hide"
           >
             {/* ul tag의 이름으로 nickName state를 배열로 만들어 마지막 값이 들어오도록 */}
             <ul>
@@ -1024,7 +1024,7 @@ function GameRoom() {
           </div>
           {/* <div className="flex w-full h-[5%] border border-[#C6C6C6] gap-[10px] p-2 mt-2 rounded-2xl active:outline-[2px] active:outline-[#D7E33B]"> */}
           <input
-            className="w-full h-[5%] px-[1.17vh] border border-[#C6C6C6] rounded-2xl bg-[#1B1B1B] text-white text-[1.17vh] font-medium focus:outline focus:outline-[#D2DE37] focus:border focus:border-[#D2DE37] focus:ring-0"
+            className="w-full h-[5%] px-[1.17vh] mt-[2vh] border border-[#C6C6C6] rounded-2xl bg-[#1B1B1B] text-white text-[1.17vh] font-medium focus:outline focus:outline-[#D2DE37] focus:border focus:border-[#D2DE37] focus:ring-0"
             ref={chatInputValue}
             disabled={isStartGame && !isTeller}
             type="text"
