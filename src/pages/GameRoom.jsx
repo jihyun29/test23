@@ -53,11 +53,14 @@ function GameRoom() {
         maxBitrate: 300000,
         scalabilityMode: "S1T3",
       },
+      ////필요없어보이는데
       {
         rid: "r2",
         maxBitrate: 900000,
         scalabilityMode: "S1T3",
       },
+      //consumer rtpParameters.encodings 예시
+      { ssrc: 222220, scalabilityMode: "L4T3" },
     ],
     // https://mediasoup.org/documentation/v3/mediasoup-client/api/#ProducerCodecOptions
     codecOptions: {
@@ -195,14 +198,14 @@ function GameRoom() {
 
   const newDebate = async () => {
     mediaSocket.on("connection-success", ({ socketId }) => {
-      console.log("토론자아이디::", socketId);
+      console.log("토론자 소켓::", socketId);
       getLocalStream();
     });
   };
 
   const newJuror = async () => {
     mediaSocket.on("connection-success-juror", ({ socketId }) => {
-      console.log("배심원:::::::::", socketId);
+      console.log("배심원 소켓:::::::::", socketId);
       newJurorRTPcreate();
     });
   };
@@ -215,34 +218,13 @@ function GameRoom() {
     } else {
       //발언자일 때 실행되는 함수
       newDebate();
-      console.log("화상채팅 발언자입니다");
+      console.log("화상채팅 발언자입니다-------------------");
     }
   }, [isTeller]);
 
-  //////////////////////////isTeller일시에 프로듀서 기능//////////////////////////////////
-  //첫 연결, sokiet ID 받기
-  // const newDebate = () => {
-  //   socket.on("connection-success", ({ socketId }) => {
-  //     console.log("socketId:::::::", socketId);
-  //     getLocalStream();
-  //   });
-  // };
-
-  //프로듀서 소켓연결시 audio 와 video 설정
-  // const getLocalStream = async () => {
-  //   console.log("?????", navigator.mediaDevices);
-
-  //   const stream = await navigator.mediaDevices.getUserMedia({
-  //     audio: true,
-  //     video: true,
-  //   });
-  //   streamSuccess(stream);
-  //   console.log("이건되나???");
-  // };
-
-  const getLocalStream = async () => {
+  const getLocalStream = () => {
     // Get local stream logic
-    console.log("?????", navigator.mediaDevices);
+    console.log("---------------1. localstream 생성", navigator.mediaDevices);
     navigator.mediaDevices
       .getUserMedia({ audio: true, video: true })
       .then(streamSuccess)
@@ -252,8 +234,8 @@ function GameRoom() {
   };
 
   //오디오 및 비디오 받아오기
-  const streamSuccess = async (stream) => {
-    console.log("스트림?????????????????", stream);
+  const streamSuccess = (stream) => {
+    console.log("1-2 스트림", stream);
 
     localVideoRef.current.srcObject = stream;
 
@@ -261,45 +243,33 @@ function GameRoom() {
     videoParams = { track: stream.getVideoTracks()[0], ...videoParams };
 
     //방 입장 실행
+
+    console.log("joinRoom 직전 콘솔이지롱~");
     joinRoom();
   };
 
   //방생성 보내기 (라우터(/server) + (1) RTP Capabilities + (2) Device + (3) transport생성)
 
-  // const joinRoom = async () => {
-  //   console.log("조인룸???????");
+  const joinRoom = () => {
+    console.log("2. 방 입장");
 
-  //   socket.emit("joinRoom", { roomName }, (data) => {
-  //     console.log("라우터???????", roomName);
-  //     try {
-  //       console.log("룸네임뭐야", roomName);
-  //       console.log(`Router RTP Capabilities... ${data.rtpCapabilities}`);
-  //       // local변수에 할당
-  //       // the client Device를 loading할 때 사용 (see createDevice)
-  //       rtpCapabilities = data.rtpCapabilities;
-
-  //       createDevice();
-  //       console.log("되나???????");
-  //     } catch (error) {
-  //       console.log("joinRoom 소켓 에러");
-  //       console.log(error);
-  //       console.log("-----------");
-  //     }
-  //   });
-  // };//////////
-
-  // 2. 방에 입장후 rtp요청 //생각
-  const joinRoom = async () => {
-    console.log("조인룸????????????");
     mediaSocket.emit("joinRoom", { roomName }, (data) => {
-      console.log(`Router RTP Capabilities... ${data.rtpCapabilities}`);
-      // we assign to local variable and will be used when
-      // loading the client Device (see createDevice above)
-      rtpCapabilities = data.rtpCapabilities;
+      console.log("2-1. 방 이름은?", roomName);
+      try {
+        console.log("2-2 룸네임뭐야", roomName);
+        console.log("2-3 Router RTP Capabilities", data.rtpCapabilities);
+        // local변수에 할당
+        // the client Device를 loading할 때 사용 (see createDevice)
+        //mediasoup 또는 엔드포인트가 미디어 수준에서 수신할 수 있는 것을 정의
+        rtpCapabilities = data.rtpCapabilities;
 
-      console.log("난조인룸알티피?????????", rtpCapabilities);
-      // once we have rtpCapabilities from the Router, crearte Device
-      createDevice();
+        createDevice();
+        console.log("2-4. 디바이스 생성 완료");
+      } catch (error) {
+        console.log("joinRoom 소켓 에러");
+        console.log(error);
+        console.log("-----------");
+      }
     });
   };
 
@@ -307,7 +277,7 @@ function GameRoom() {
   // device는 미디어를 전송/수신하기 위해
   // 서버 측의 라우터에 연결하는 엔드포인트입니다.
   const createDevice = async () => {
-    console.log("만들었나?");
+    console.log("3. Device 만들기 실행 시작");
     try {
       device = new mediasoupClient.Device();
 
@@ -318,7 +288,7 @@ function GameRoom() {
         routerRtpCapabilities: rtpCapabilities,
       });
 
-      console.log("Device RTP Capabilities", device.rtpCapabilities);
+      console.log("3-1. Device RTP Capabilities = ", device.rtpCapabilities);
 
       // (3)
       // device가 한번 load되면 , transport 생성
@@ -333,8 +303,8 @@ function GameRoom() {
   ///////////여기까지 프로듀서 확인
 
   // (3) 서버쪽에서 프로듀서 트랜스포트가 만들어지면 이제 클라이언트 프로듀서 Transport 생성
-  const createSendTransport = async () => {
-    console.log("여긴 이제 프로듀서 트랜스포트만들때야");
+  const createSendTransport = () => {
+    console.log("4. 프로듀서 트랜스포트만들기 시작  params = ", params);
     // 서버에 params 를 콜백받으면은 로컬프로듀서 생성되서 프로듀서와 커넥트 이벤트발생
     mediaSocket.emit(
       "createWebRtcTransport",
@@ -344,17 +314,16 @@ function GameRoom() {
 
         // 만약 받은 params에 문제가 있다면..
         if (params.error) {
-          console.log(params.error);
+          console.log("에러", params.error);
           return;
         }
 
-        console.log("정상", params);
+        console.log("4-1. transport 정상 생성..", params);
 
         // client side의 Producer Transport 생성
         // 서버에서 다시 받은 params기반으로 생성됨
         producerTransport = device.createSendTransport(params);
-        console.log("파람??", params);
-        console.log("왜안와");
+        console.log("4-2. server에서 params 받아옴 = ", params);
         // 이 이벤트는 transport.products에 대한 첫 번째 호출이 이루어질 때 발생
         // see connectSendTransport() below
 
@@ -368,7 +337,7 @@ function GameRoom() {
               mediaSocket.emit("transport-connect", {
                 dtlsParameters,
               });
-              console.log("dtl", dtlsParameters);
+              console.log("5. transport connect 요청 / dtl = ", dtlsParameters);
 
               // 매개변수가 변경되었음을 알림
               callback();
@@ -382,7 +351,7 @@ function GameRoom() {
         producerTransport.on(
           "produce",
           async (parameters, callback, errback) => {
-            console.log(parameters);
+            console.log("5. 프로듀스 파라미터스 = ", parameters);
 
             try {
               // Producer 생성 알림
@@ -402,8 +371,9 @@ function GameRoom() {
                   // (producersExist) : 방에 처음 생긴 producer인지 추가된사람인지 알려줌
 
                   callback({ id });
-
+                  console.log("5. 콜백 받은 아이디 = ", id);
                   // if producers exist, then join room
+                  console.log("producersExist = ", producersExist);
                   if (producersExist) getProducers(); // 첫 producer(방만든사람)일경우 실행
                 }
               );
@@ -422,13 +392,13 @@ function GameRoom() {
   const connectSendTransport = async () => {
     // Router에 media 전송
     // 이것은 the 'connect' & 'produce' 이벤트를 유도
-
+    console.log("6. 'connect' & 'produce' 이벤트를 유도 ");
     audioProducer = await producerTransport.produce(audioParams);
     videoProducer = await producerTransport.produce(videoParams);
 
     audioProducer.on("trackended", () => {
       console.log("audio track ended");
-
+      console.log("오디오트랙????????");
       // close audio track
     });
 
@@ -454,41 +424,22 @@ function GameRoom() {
   //////////////////컨슈머 기능시작////////////////////////
   // 방에 이미 producer가 있는 경우, producer id 정보들을 가져옴
   const getProducers = () => {
-    console.log("겟프로듀서????");
+    console.log("7. producer 존재");
     mediaSocket.emit("getProducers", (producerIds) => {
       //producer의 모든 Id 가져옴
-      console.log(producerIds);
+      console.log("7. 기존프로듀서아이디", producerIds);
       // new producer에 대한 consumer 각각 생성
       // producerIds.forEach(id => signalNewConsumerTransport(id))
       producerIds.forEach(signalNewConsumerTransport); // produce Id에 대하여 각각의 consumer을 생성
     });
   };
 
-  // //배심원이 새로 참가하여 new consumer 를 생성하는 경우
-  // //첫 연결, sokiet ID 받기
-
-  // const newJuror = useCallback(() => {
-  //   // Your logic for newJuror
-  // }, []);
-
-  // useEffect(() => {
-  //   if (!isTeller) {
-  //     console.log("화상채팅 배심원");
-  //     // 배심원일 때 실행되는 함수
-  //     newJuror();
-  //   } else {
-  //     // 발언자일 때 실행되는 함수
-  //     newDebate();
-  //     console.log("화상채팅 발언자입니다");
-  //   }
-  // }, [isTeller, newDebate, newJuror]);
-
   //1번 rtp 요청 - 콜백으로 받기
   const newJurorRTPcreate = () => {
     mediaSocket.emit("newJuror", { roomName }, (data) => {
       // rtp capability 발급
       try {
-        console.log(`Router RTP Capabilities... ${data.rtpCapabilities}`);
+        console.log("소비자 Router RTP Capabilities...", data.rtpCapabilities);
         // local변수에 할당
         // the client Device를 loading할 때 사용 (see createDevice)
         rtpCapabilities = data.rtpCapabilities;
@@ -515,7 +466,7 @@ function GameRoom() {
         routerRtpCapabilities: rtpCapabilities,
       });
 
-      console.log("Device RTP Capabilities", device.rtpCapabilities);
+      console.log("나는 배심원Device RTP Capabilities", device.rtpCapabilities);
 
       // 방에 있는 모든 producer Id가져와서 각각의 consumer 생성
       getProducers();
@@ -527,7 +478,7 @@ function GameRoom() {
     }
   };
 
-  /////////////////// 새로운 발언자 입장
+  /////////////////// 새로운 발언자 입장////////////////////////
 
   // 기존의 peer에게 서버에서 새로운 producer 알림 및 새로운 consumer 생성
   // 즉 1개의 consumer만 생성하는 코드
@@ -537,6 +488,7 @@ function GameRoom() {
 
   // 새로운 peer가 들어와서 consumer를 첫 생성할 때 코드
   const signalNewConsumerTransport = async (remoteProducerId) => {
+    console.log("???여기");
     //이미 remoteProducerId를 사용하고 있는지 확인
     if (consumingTransports.includes(remoteProducerId)) return;
     consumingTransports.push(remoteProducerId);
@@ -552,7 +504,7 @@ function GameRoom() {
           console.log(params.error);
           return;
         }
-        console.log(`PARAMS... ${params}`);
+        console.log("컨슈머 PARAMS:::", params);
 
         let consumerTransport;
         try {
@@ -608,7 +560,7 @@ function GameRoom() {
           return;
         }
 
-        console.log(`Consumer Params ${params}`);
+        console.log("컨슈머파람", params);
         // consumer를 생성하는 local consumer transport를 consume ??
         const consumer = await consumerTransport.consume({
           id: params.id,
@@ -626,7 +578,7 @@ function GameRoom() {
             consumer,
           },
         ];
-
+        console.log("consumer", consumer);
         /////////////////////////////////////////////////////
 
         // 인원마다 늘어나는 vido 창이 아니므로 삭제?
@@ -657,6 +609,34 @@ function GameRoom() {
             return <video id={remoteProducerId} autoPlay className="video" />;
           }
         };
+
+        const RemoteStreamComponent = ({ remoteProducerId, kind }) => {
+          useEffect(() => {
+            const newElem = document.createElement("div");
+            newElem.setAttribute("id", `td-${remoteProducerId}`);
+
+            if (kind === "audio") {
+              // append to the audio container
+              newElem.innerHTML = `<audio id="${remoteProducerId}" autoplay></audio>`;
+            } else {
+              // append to the video container
+              newElem.setAttribute("class", "remoteVideo");
+              newElem.innerHTML = `<video id="${remoteProducerId}" autoplay class="video"></video>`;
+            }
+
+            const videoContainer = document.getElementById("videoContainer");
+            videoContainer.appendChild(newElem);
+
+            // 컴포넌트가 언마운트되면 DOM에서 해당 엘리먼트를 제거합니다.
+            return () => {
+              videoContainer.removeChild(newElem);
+            };
+          }, [remoteProducerId, kind]);
+
+          // 이 컴포넌트는 실제로 렌더링 결과를 반환하지 않으며, DOM 조작만 수행합니다.
+          return null;
+        };
+        //dd
 
         // destructure and retrieve the video track from the producer
         const { track } = consumer; //여기까지 삭제
@@ -963,7 +943,7 @@ function GameRoom() {
 
   // 내 오디오 음소거 함수
   const muteClickHandler = async () => {
-    (await myStream)
+    (await getLocalStream) //이걸로바꿔도디나
       .getAudioTracks()
       .forEach((track) => (track.enabled = !track.enabled));
     if (!isMuted) {
@@ -975,7 +955,7 @@ function GameRoom() {
 
   // 내 비디오 끄기 함수
   const cameraOffClickHandler = async () => {
-    (await myStream)
+    (await getLocalStream)
       .getVideoTracks()
       .forEach((track) => (track.enabled = !track.enabled));
     if (!isVideoOff) {
@@ -1005,7 +985,7 @@ function GameRoom() {
 
   // 컴포넌트 첫 마운트 시에 myStream 정보를 캐싱 후 바꾸지 않음
   // 향후 반장이 바뀔 때 의존성으로 사용할 수 있을 것 같음
-  const myStream = useMemo(getLocalStream, []);
+  // const myStream = useMemo(getLocalStream, []);
 
   // // isMuted 와 isVideoOff 상태를 의존성을 가지며 2개의 상태값이 변할 때마다 캐싱된 myStream 값을 가져와서 video의 srcObject로 입력해줌
   // useEffect(() => {
@@ -1331,6 +1311,12 @@ function GameRoom() {
                 playsInline
                 muted
               />
+              <div id="videoContainer" className="  w-full h-full rounded-2xl">
+                <RemoteStreamComponent
+                  remoteProducerId={remoteProducerId}
+                  kind={kind}
+                />
+              </div>
             </div>
           </div>
           {/*----------- Progress bar --------- */}
