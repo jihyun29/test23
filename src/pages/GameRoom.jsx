@@ -230,7 +230,7 @@ function GameRoom() {
       // let hostStream = null;
       // let debaterStream = null;
       data.forEach((userInfo) => {
-        console.log("받아온 개별 유저정보", userInfo);
+        // console.log("받아온 개별 유저정보", userInfo);
         const { host, debater } = userInfo;
         if (!debater) {
           jurorList.push({
