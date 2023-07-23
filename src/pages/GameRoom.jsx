@@ -555,6 +555,8 @@ function GameRoom() {
         serverConsumerTransportId,
       },
       async ({ params }) => {
+        console.log("params???????", params);
+
         if (params.error) {
           console.log("Cannot Consume");
           return;
@@ -578,9 +580,9 @@ function GameRoom() {
             consumer,
           },
         ];
-        console.log("consumer", consumer);
+        console.log("거의끝남consumer", consumer);
         /////////////////////////////////////////////////////
-
+        let videoContainer;
         // 인원마다 늘어나는 vido 창이 아니므로 삭제?
         // 새로운 consumer media를 위한 div element 생성
         // const newElem = document.createElement("div");
@@ -636,13 +638,14 @@ function GameRoom() {
         //   // 이 컴포넌트는 실제로 렌더링 결과를 반환하지 않으며, DOM 조작만 수행합니다.
         //   return null;
         // };
-        //dd
 
         // destructure and retrieve the video track from the producer
         const { track } = consumer; //여기까지 삭제
 
+        // document.getElementById(remoteProducerId).srcObject = new MediaStream([
+        //   track,
+        // ]);
         remoteVideoRef.current.srcObject = new MediaStream([track]);
-        // remoteVideoRef.current.srcObject = new MediaStream([track]);
 
         // 서버 소비자가 미디어를 일시 중지한 상태에서 시작했기 때문에
         // 서버에 다시 시작하도록 알려야 함
@@ -1311,12 +1314,10 @@ function GameRoom() {
                 playsInline
                 muted
               />
-              {/* <div id="videoContainer" className="  w-full h-full rounded-2xl">
-                <RemoteStreamComponent
-                  remoteProducerId={remoteProducerId}
-                  kind={kind}
-                />
-              </div> */}
+              <div
+                id="videoContainer"
+                className="  w-full h-full rounded-2xl"
+              ></div>
             </div>
           </div>
           {/*----------- Progress bar --------- */}
