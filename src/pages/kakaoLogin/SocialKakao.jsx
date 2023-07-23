@@ -31,7 +31,8 @@ const SocialKakao = () => {
           카카오톡 소셜 로그인을 통해 내 계정 정보로 접속할 수 있습니다.
         </p>
         <div className="w-[60%] mx-auto">
-          <a href="http://localhost:3001/auth/kakao/callback">
+{/*           <a href="http://localhost:3001/auth/kakao/callback"> */}
+          <a href="https://simsimhaestore.com/auth/kakao/callback">
             <icon.kakaologin alt="카카오로그인" width="100%" height="20%" />
           </a>
         </div>
