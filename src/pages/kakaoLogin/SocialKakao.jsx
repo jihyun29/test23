@@ -32,7 +32,7 @@ const SocialKakao = () => {
         </p>
         <div className="w-[60%] mx-auto">
 {/*           <a href="http://localhost:3001/auth/kakao/callback"> */}
-          <a href="https://simsimhaestore.com/auth/kakao/callback">
+          <a href="https://simsimhae.store/auth/kakao/callback">
             <icon.kakaologin alt="카카오로그인" width="100%" height="20%" />
           </a>
         </div>
