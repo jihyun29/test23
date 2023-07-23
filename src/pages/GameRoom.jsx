@@ -601,41 +601,41 @@ function GameRoom() {
 
         // videoContainer.appendChild(newElem);
 
-        ///
-        const remoteStream = ({ remoteProducerId, kind }) => {
-          if (kind === "audio") {
-            return <audio id={remoteProducerId} autoPlay />;
-          } else {
-            return <video id={remoteProducerId} autoPlay className="video" />;
-          }
-        };
+        // ///
+        // const remoteStream = ({ remoteProducerId, kind }) => {
+        //   if (kind === "audio") {
+        //     return <audio id={remoteProducerId} autoPlay />;
+        //   } else {
+        //     return <video id={remoteProducerId} autoPlay className="video" />;
+        //   }
+        // };
 
-        const RemoteStreamComponent = ({ remoteProducerId, kind }) => {
-          useEffect(() => {
-            const newElem = document.createElement("div");
-            newElem.setAttribute("id", `td-${remoteProducerId}`);
+        // const RemoteStreamComponent = ({ remoteProducerId, kind }) => {
+        //   useEffect(() => {
+        //     const newElem = document.createElement("div");
+        //     newElem.setAttribute("id", `td-${remoteProducerId}`);
 
-            if (kind === "audio") {
-              // append to the audio container
-              newElem.innerHTML = `<audio id="${remoteProducerId}" autoplay></audio>`;
-            } else {
-              // append to the video container
-              newElem.setAttribute("class", "remoteVideo");
-              newElem.innerHTML = `<video id="${remoteProducerId}" autoplay class="video"></video>`;
-            }
+        //     if (kind === "audio") {
+        //       // append to the audio container
+        //       newElem.innerHTML = `<audio id="${remoteProducerId}" autoplay></audio>`;
+        //     } else {
+        //       // append to the video container
+        //       newElem.setAttribute("class", "remoteVideo");
+        //       newElem.innerHTML = `<video id="${remoteProducerId}" autoplay class="video"></video>`;
+        //     }
 
-            const videoContainer = document.getElementById("videoContainer");
-            videoContainer.appendChild(newElem);
+        //     const videoContainer = document.getElementById("videoContainer");
+        //     videoContainer.appendChild(newElem);
 
-            // 컴포넌트가 언마운트되면 DOM에서 해당 엘리먼트를 제거합니다.
-            return () => {
-              videoContainer.removeChild(newElem);
-            };
-          }, [remoteProducerId, kind]);
+        //     // 컴포넌트가 언마운트되면 DOM에서 해당 엘리먼트를 제거합니다.
+        //     return () => {
+        //       videoContainer.removeChild(newElem);
+        //     };
+        //   }, [remoteProducerId, kind]);
 
-          // 이 컴포넌트는 실제로 렌더링 결과를 반환하지 않으며, DOM 조작만 수행합니다.
-          return null;
-        };
+        //   // 이 컴포넌트는 실제로 렌더링 결과를 반환하지 않으며, DOM 조작만 수행합니다.
+        //   return null;
+        // };
         //dd
 
         // destructure and retrieve the video track from the producer
@@ -955,7 +955,7 @@ function GameRoom() {
 
   // 내 비디오 끄기 함수
   const cameraOffClickHandler = async () => {
-    (await getLocalStream)
+    getLocalStream
       .getVideoTracks()
       .forEach((track) => (track.enabled = !track.enabled));
     if (!isVideoOff) {
@@ -1311,12 +1311,12 @@ function GameRoom() {
                 playsInline
                 muted
               />
-              <div id="videoContainer" className="  w-full h-full rounded-2xl">
+              {/* <div id="videoContainer" className="  w-full h-full rounded-2xl">
                 <RemoteStreamComponent
                   remoteProducerId={remoteProducerId}
                   kind={kind}
                 />
-              </div>
+              </div> */}
             </div>
           </div>
           {/*----------- Progress bar --------- */}
