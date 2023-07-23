@@ -48,7 +48,7 @@ export const game = {
       headers: { Authorization: sessionStorage.getItem("Authorization") },
     }),
   selectCategory: async () =>
-    await instance.put("api/user", null, {
+    await instance.put("/api/user", null, {
       headers: { Authorization: sessionStorage.getItem("Authorization") },
     }),
 };
