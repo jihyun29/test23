@@ -6,10 +6,7 @@ import icon from "../../icons";
 
 //restapi 방법
 const SocialKakao = () => {
-  // const kakaoLogin = `${process.env.REACT_APP_BACKEND_SERVER_URL}/auth/kakao/callback`;
-  // const kakaoLogin = `/auth/kakao/callback`;
-  // console.log("?????????????????????", kakaologin);
-
+  const kakaoLogin = `${process.env.REACT_APP_BACKEND_SERVER_URL}/auth/kakao/callback`;
   const { search } = useLocation();
   const token = queryString.parse(search);
 
@@ -31,8 +28,7 @@ const SocialKakao = () => {
           카카오톡 소셜 로그인을 통해 내 계정 정보로 접속할 수 있습니다.
         </p>
         <div className="w-[60%] mx-auto">
-{/*           <a href="http://localhost:3001/auth/kakao/callback"> */}
-          <a href="https://simsimhae.store/auth/kakao/callback">
+   <a href={kakaoLogin}>
             <icon.kakaologin alt="카카오로그인" width="100%" height="20%" />
           </a>
         </div>
